@@ -271,10 +271,7 @@ const handleChangePassword = (event) => {
 };
 
 
-  const handleLogout = () => {
-    localStorage.removeItem(ADMIN_KEY);
-    navigate('/admin');
-  };
+  
 
   const handleFormChange = (event) => {
     const { name, value } = event.target;
