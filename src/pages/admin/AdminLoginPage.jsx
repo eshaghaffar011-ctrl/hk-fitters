@@ -2,6 +2,8 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 const ADMIN_KEY = 'hkfitters_admin';
+const ADMIN_PASSWORD_KEY = 'hkfitters_admin_password';
+const DEFAULT_ADMIN_PASSWORD = 'admin123';
 
 function AdminLoginPage() {
   const [password, setPassword] = useState('');
@@ -16,7 +18,11 @@ function AdminLoginPage() {
       return;
     }
 
-    if (password === 'admin123') {
+    const savedPassword =
+      localStorage.getItem(ADMIN_PASSWORD_KEY) ||
+      DEFAULT_ADMIN_PASSWORD;
+
+    if (password === savedPassword) {
       localStorage.setItem(ADMIN_KEY, 'true');
       setError('');
       navigate('/admin/dashboard');
@@ -29,11 +35,38 @@ function AdminLoginPage() {
   return (
     <div className="page">
       <section className="section auth-page">
-        <form className="auth-card" onSubmit={handleSubmit} noValidate>
+        <form
+          className="auth-card"
+          onSubmit={handleSubmit}
+          noValidate
+        >
           <h2>Admin Login</h2>
-          {error && <p style={{ color: '#b80c0c', marginBottom: '12px' }}>{error}</p>}
-          <input type="password" placeholder="Admin Password" value={password} onChange={(e) => setPassword(e.target.value)} required />
-          <button className="btn btn-primary full" type="submit">Enter Dashboard</button>
+
+          {error && (
+            <p
+              style={{
+                color: '#b80c0c',
+                marginBottom: '12px',
+              }}
+            >
+              {error}
+            </p>
+          )}
+
+          <input
+            type="password"
+            placeholder="Admin Password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            required
+          />
+
+          <button
+            className="btn btn-primary full"
+            type="submit"
+          >
+            Enter Dashboard
+          </button>
         </form>
       </section>
     </div>

@@ -13,6 +13,7 @@ import {
 } from '../../data/inquiries';
 
 const ADMIN_KEY = 'hkfitters_admin';
+const ADMIN_PASSWORD_KEY = 'hkfitters_admin_password';
 
 const cards = [
   { title: 'Products', text: 'Add, edit, delete products' },
@@ -55,6 +56,11 @@ function AdminDashboardPage() {
   const [customerCountry, setCustomerCountry] = useState('All');
 
   const [showReports, setShowReports] = useState(false);
+  const [showPasswordForm, setShowPasswordForm] = useState(false);
+  const [oldPassword, setOldPassword] = useState('');
+  const [newPassword, setNewPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
+  const [passwordMessage, setPasswordMessage] = useState('');
 
   const [showForm, setShowForm] = useState(false);
   const [showOrders, setShowOrders] = useState(false);
@@ -215,6 +221,55 @@ const reportCountries = [
       .filter(Boolean)
   ),
 ];
+
+
+const handleChangePassword = (event) => {
+  event.preventDefault();
+
+  setPasswordMessage('');
+
+  const savedPassword =
+    localStorage.getItem(ADMIN_PASSWORD_KEY) ||
+    'admin123';
+
+  if (oldPassword !== savedPassword) {
+    setPasswordMessage('Old password is incorrect.');
+    return;
+  }
+
+  if (!newPassword.trim()) {
+    setPasswordMessage('Please enter a new password.');
+    return;
+  }
+
+  if (newPassword.length < 6) {
+    setPasswordMessage(
+      'New password must be at least 6 characters.'
+    );
+    return;
+  }
+
+  if (newPassword !== confirmPassword) {
+    setPasswordMessage(
+      'New password and confirm password do not match.'
+    );
+    return;
+  }
+
+  localStorage.setItem(
+    ADMIN_PASSWORD_KEY,
+    newPassword
+  );
+
+  setOldPassword('');
+  setNewPassword('');
+  setConfirmPassword('');
+
+  setPasswordMessage(
+    'Password changed successfully.'
+  );
+};
+
 
   const handleLogout = () => {
     localStorage.removeItem(ADMIN_KEY);
@@ -543,12 +598,77 @@ const handleGalleryUpload = (event) => {
           </h1>
 
           <button
-            type="button"
-            className="btn btn-secondary"
-            onClick={handleLogout}
-          >
-            Logout
-          </button>
+  type="button"
+  className="btn btn-secondary"
+  onClick={() => {
+    setShowPasswordForm((current) => !current);
+    setPasswordMessage('');
+  }}
+>
+  {showPasswordForm ? 'Close Password Settings' : 'Change Password'}
+</button>
+
+{showPasswordForm && (
+  <form
+    className="auth-card"
+    onSubmit={handleChangePassword}
+    style={{
+      marginTop: '16px',
+      marginBottom: '24px',
+    }}
+  >
+    <h3>Change Admin Password</h3>
+
+    {passwordMessage && (
+      <p
+        style={{
+          marginBottom: '12px',
+          fontWeight: '600',
+        }}
+      >
+        {passwordMessage}
+      </p>
+    )}
+
+    <input
+      type="password"
+      placeholder="Old Password"
+      value={oldPassword}
+      onChange={(event) =>
+        setOldPassword(event.target.value)
+      }
+      required
+    />
+
+    <input
+      type="password"
+      placeholder="New Password"
+      value={newPassword}
+      onChange={(event) =>
+        setNewPassword(event.target.value)
+      }
+      required
+    />
+
+    <input
+      type="password"
+      placeholder="Confirm New Password"
+      value={confirmPassword}
+      onChange={(event) =>
+        setConfirmPassword(event.target.value)
+      }
+      required
+    />
+
+    <button
+      type="submit"
+      className="btn btn-primary"
+      style={{ marginTop: '12px' }}
+    >
+      Update Password
+    </button>
+  </form>
+)}
         </div>
 
        {/* DASHBOARD CARDS */}
