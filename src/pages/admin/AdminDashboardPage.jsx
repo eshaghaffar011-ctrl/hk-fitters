@@ -1,7 +1,6 @@
 import { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { getProducts,
-   saveProducts,
   fetchProductsFromAPI,
 createProductAPI,
 updateProductAPI,
@@ -47,7 +46,7 @@ function AdminDashboardPage() {
 
   const [products, setProducts] = useState(() => getProducts());
   const [inquiries, setInquiries] = useState([]);
-  const [inquiriesLoading, setInquiriesLoading] = useState(true);
+
 
   const [searchTerm, setSearchTerm] = useState('');
   const [statusFilter, setStatusFilter] = useState('All');
@@ -91,13 +90,11 @@ function AdminDashboardPage() {
     refreshInquiries();
   }, []);
 
-  const refreshProducts = () => {
-    setProducts(getProducts());
-  };
+  
 
   const refreshInquiries = async () => {
   try {
-    setInquiriesLoading(true);
+   
 
     const data = await getInquiries();
 
@@ -106,7 +103,7 @@ function AdminDashboardPage() {
     console.error('Failed to load inquiries:', error);
     setInquiries([]);
   } finally {
-    setInquiriesLoading(false);
+    
   }
 };
   const filteredInquiries = inquiries.filter((inquiry) => {
