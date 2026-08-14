@@ -23,17 +23,29 @@ function ProductCard({ product }) {
   return (
     <article className="product-card shop-card">
       <div className="product-card-top">
-        <span className={`badge $ {
-        product.badge?.toLowerCase()||.replace(/\s+/g, '-') ||"
-        }`}
-        >
-          {product.badge}
-        </span>
+        <span
+  className={`badge ${
+    product.badge?.toLowerCase().replace(/\s+/g, '-') || ''
+  }`}
+>
+  {product.badge}
+</span>
         <span className="stock-pill">{product.stock}</span>
       </div>
 
       <div className="product-media modern-media">
-        <img src={productImage} alt={product.name} onError={handleImageError} />
+        <img 
+        src={productImage} 
+        alt={product.name} 
+        onError={handleImageError}
+        style={{
+          width: '100%',
+          height: 'auto',
+          display: 'block',
+          objectFit: 'contain',
+      
+        }}
+        />
       </div>
 
       <div className="product-body">

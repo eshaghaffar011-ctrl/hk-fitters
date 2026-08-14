@@ -15,7 +15,6 @@ function ShopPage() {
     searchParams.get('category') || 'All'
   );
   const [selectedSize, setSelectedSize] = useState('All');
-  const [priceRange, setPriceRange] = useState(220);
   const [searchText, setSearchText] = useState('');
   const [sortBy, setSortBy] = useState('newest');
   const [visibleCount, setVisibleCount] = useState(PAGE_SIZE);
@@ -93,7 +92,7 @@ function ShopPage() {
     }
 
     return items;
-  }, [products, priceRange, searchText, selectedCategory, selectedSize, sortBy]);
+  }, [products, searchText, selectedCategory, selectedSize, sortBy]);
 
   const visibleProducts = filteredProducts.slice(0, visibleCount);
   const hasMore = visibleCount < filteredProducts.length;
@@ -113,8 +112,6 @@ function ShopPage() {
           setSelectedCategory={setSelectedCategory}
           selectedSize={selectedSize}
           setSelectedSize={setSelectedSize}
-          priceRange={priceRange}
-          setPriceRange={setPriceRange}
           searchText={searchText}
           setSearchText={setSearchText}
           sortBy={sortBy}

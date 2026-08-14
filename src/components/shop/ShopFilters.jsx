@@ -3,8 +3,6 @@ function ShopFilters({
   setSelectedCategory,
   selectedSize,
   setSelectedSize,
-  priceRange,
-  setPriceRange,
   searchText,
   setSearchText,
   sortBy,
@@ -43,18 +41,7 @@ function ShopFilters({
         </select>
       </div>
 
-      <div>
-        <label>Price Range</label>
-        <input
-          type="range"
-          min="50"
-          max="220"
-          step="5"
-          value={priceRange}
-          onChange={(e) => setPriceRange(Number(e.target.value))}
-        />
-        <span>Up to ${priceRange}</span>
-      </div>
+      
 
       <div>
         <label>Sort By</label>
