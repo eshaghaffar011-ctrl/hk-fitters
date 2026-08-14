@@ -8,7 +8,7 @@ const app = express();
 const PORT = process.env.PORT || 5000;
 
 app.use(cors());
-app.use(express.json());
+app.use(express.json({limit:'20mb'}));
 
 app.get('/', (req, res) => {
   res.json({
@@ -271,6 +271,7 @@ app.get('/api/products', (req, res) => {
         : ['#111111'],
       stock: product.stock || 'In Stock',
       badge: product.badge || 'New',
+      featured: Boolean(product.featured),
       rating: Number(product.rating) || 4.5,
       reviews: Number(product.reviews) || 0,
     }));
@@ -308,6 +309,7 @@ app.post('/api/products', (req, res) => {
         color,
         stock,
         badge,
+        featured,
         rating,
         reviews
       )
@@ -322,6 +324,7 @@ app.post('/api/products', (req, res) => {
         @color,
         @stock,
         @badge,
+        @featured,
         @rating,
         @reviews
       )
@@ -338,6 +341,7 @@ app.post('/api/products', (req, res) => {
       color: product.color || '',
       stock: product.stock || 'In Stock',
       badge: product.badge || 'New',
+      featured: product.featured ? 1:0,
       rating: Number(product.rating) || 4.5,
       reviews: Number(product.reviews) || 0,
     });
@@ -362,6 +366,10 @@ app.put('/api/products/:id', (req, res) => {
     const { id } = req.params;
     const product = req.body;
 
+    console.log('PUT PRODUCT RECEIVED:',
+      product.featured, product
+    );
+
     const result = db.prepare(`
       UPDATE products
       SET
@@ -376,7 +384,8 @@ app.put('/api/products/:id', (req, res) => {
         stock = @stock,
         badge = @badge,
         rating = @rating,
-        reviews = @reviews
+        reviews = @reviews,
+        featured = @featured
       WHERE id = @id
     `).run({
       id,
@@ -390,6 +399,7 @@ app.put('/api/products/:id', (req, res) => {
       color: product.color || '',
       stock: product.stock || 'In Stock',
       badge: product.badge || 'New',
+      featured: product.featured ? 1:0,
       rating: Number(product.rating) || 4.5,
       reviews: Number(product.reviews) || 0,
     });

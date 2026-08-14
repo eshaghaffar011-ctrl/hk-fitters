@@ -1,6 +1,6 @@
-import { useMemo, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
-import { getProducts } from '../data/products';
+import { fetchProductsFromAPI } from '../data/products';
 import contactInfo from '../config/contact';
 import { useCartWishlist } from '../context/CartWishlistContext';
 
@@ -58,8 +58,32 @@ const reviewCards = [
 
 function ProductDetailPage() {
   const { id } = useParams();
-  const products = useMemo(() => getProducts(), []);
-  const product = products.find((item) => item.id === Number(id));
+  const [products, setProducts] = useState([]);
+const [product, setProduct] = useState(null);
+const [loading, setLoading] = useState(true);
+
+useEffect(() => {
+  const loadProduct = async () => {
+    try {
+      const data = await fetchProductsFromAPI();
+
+      setProducts(data);
+
+      const foundProduct = data.find(
+        (item) => Number(item.id) === Number(id)
+      );
+
+      setProduct(foundProduct || null);
+    } catch (error) {
+      console.error('Failed to load product:', error);
+      setProduct(null);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  loadProduct();
+}, [id]);
   const { addToCart, toggleWishlist, wishlistItems } = useCartWishlist();
   const productGallery = Array.isArray(product?.gallery) && product.gallery.length ? product.gallery : [product?.image || FALLBACK_DETAIL_IMAGE];
   const availableColors = Array.isArray(product?.colors) && product.colors.length
@@ -70,6 +94,16 @@ function ProductDetailPage() {
   const [selectedColor, setSelectedColor] = useState(product?.color || availableColors[0]?.name || 'Black');
   const [quantity, setQuantity] = useState(1);
   const isWishlisted = wishlistItems.some((item) => item.id === product?.id);
+
+  if (loading) {
+  return (
+    <div className="page">
+      <section className="section">
+        <h1>Loading product...</h1>
+      </section>
+    </div>
+  );
+}
 
   if (!product) {
     return (

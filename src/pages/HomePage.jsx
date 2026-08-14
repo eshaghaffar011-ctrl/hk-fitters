@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
+import { fetchProductsFromAPI } from '../data/products';
 
 const featuredCategories = [
   { title: 'Men', subtitle: 'Tailored athletic essentials and elevated layering.', accent: 'Precision tailoring' },
@@ -7,16 +8,6 @@ const featuredCategories = [
   { title: 'Accessories', subtitle: 'Refined pieces to complete every global wardrobe.', accent: 'Signature details' }
 ];
 
-const featuredProducts = [
-  { name: 'Apex Runner Jacket', price: '$180', badge: 'New' },
-  { name: 'Elite Compression Tee', price: '$95', badge: 'Best Seller' },
-  { name: 'Velocity Shorts', price: '$78', badge: 'Limited' }
-];
-
-const bestSellers = [
-  { name: 'Monarch Track Set', price: '$210', note: 'New Arrival' },
-  { name: 'Vanta Training Cap', price: '$42', note: 'Best Seller' }
-];
 
 const testimonials = [
   { quote: 'The quality is exceptional and the fit is flawless for every trip and training session.', author: 'Mina K.', role: 'Founder, Studio North' },
@@ -26,6 +17,23 @@ const testimonials = [
 
 function HomePage() {
   const [activeReview, setActiveReview] = useState(0);
+
+  const [products, setProducts] = useState([]);
+  console.log('HOME PRODUCTS:', products);
+
+  useEffect(() => {
+    const loadProducts = async () => {
+      try {
+        const data = await fetchProductsFromAPI();
+        setProducts(data);
+      } catch (error) {
+        console.error('Failed to load home products:', error);
+        setProducts([]);
+      }
+    };
+
+    loadProducts();
+  }, []);
 
   useEffect(() => {
     const intervalId = window.setInterval(() => {
@@ -84,28 +92,45 @@ function HomePage() {
           </div>
         </section>
 
-        <section className="section home-section alt-panel">
-          <div className="section-title">
-            <div>
-              <p className="section-label">Featured products</p>
-              <h2>Modern essentials with elevated performance.</h2>
-            </div>
-            <p>Precision fabrics, sophisticated silhouettes, and a finish that turns heads worldwide.</p>
-          </div>
-          <div className="featured-grid">
-            {featuredProducts.map((product, index) => (
-              <article className="product-card featured-product-card" key={product.name}>
-                <div className={`product-image product-image-${index + 1}`} aria-hidden="true" />
-                <div className="product-body">
-                  <span className="product-badge">{product.badge}</span>
-                  <h3>{product.name}</h3>
-                  
-                </div>
-              </article>
-            ))}
-          </div>
-        </section>
+       <section className="section home-section alt-panel">
+  <div className="section-title">
+    <div>
+      <p className="section-label">Featured products</p>
+      <h2>Modern essentials with elevated performance.</h2>
+    </div>
 
+    <p>
+      Precision fabrics, sophisticated silhouettes, and a finish that turns
+      heads worldwide.
+    </p>
+  </div>
+
+  <div className="featured-grid">
+    {products
+    .filter((product)=> product.featured === true)
+    .map((product, index) => (
+        <article
+          className="product-card featured-product-card"
+          key={product.name}
+        >
+          <div
+            className={`product-image product-image-${index + 1}`}
+            style={{
+              backgroundImage: `url(${product.image})`,
+              backgroundSize: "cover",
+              backgroundPosition: "center",
+            }}
+            aria-hidden="true"
+          />
+
+          <div className="product-body">
+            <span className="product-badge">{product.badge}</span>
+            <h3>{product.name}</h3>
+          </div>
+        </article>
+      ))}
+  </div>
+</section>
         <section className="section home-section">
           <div className="section-title">
             <div>
@@ -152,13 +177,12 @@ function HomePage() {
               <h2>Signature pieces arriving for the season ahead.</h2>
               <p>Seasonal drops designed to stand at the intersection of athletic performance and elevated luxury.</p>
               <div className="insight-list">
-                {bestSellers.map((item) => (
+                {products.filter((product) => product.badge === 'Best Seller').map((item) => (
                   <div className="insight-item" key={item.name}>
                     <div>
                       <strong>{item.name}</strong>
-                      <p>{item.note}</p>
+                      <p>{item.badge}</p>
                     </div>
-                    <span className="price">{item.price}</span>
                   </div>
                 ))}
               </div>

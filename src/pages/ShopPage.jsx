@@ -1,13 +1,14 @@
 import { useEffect, useMemo, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
-import { getProducts } from '../data/products';
+import { fetchProductsFromAPI } from '../data/products';
 import ProductCard from '../components/shop/ProductCard';
 import ShopFilters from '../components/shop/ShopFilters';
 
 const PAGE_SIZE = 6;
 
 function ShopPage() {
-  const products = useMemo(() => getProducts(), []);
+  const[products, setProducts] = useState([]);
+  const[loading, setLoading] = useState(true);
   const [searchParams] = useSearchParams();
   const [selectedCategory, setSelectedCategory] = 
   useState(
@@ -18,6 +19,26 @@ function ShopPage() {
   const [searchText, setSearchText] = useState('');
   const [sortBy, setSortBy] = useState('newest');
   const [visibleCount, setVisibleCount] = useState(PAGE_SIZE);
+
+  useEffect(() => {
+  const loadProducts = async () => {
+    try {
+      setLoading(true);
+
+      const data = await fetchProductsFromAPI();
+      console.log('SHOP API PRODUCTS:', data);
+
+      setProducts(data);
+    } catch (error) {
+      console.error('Failed to load shop products:', error);
+      setProducts([]);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  loadProducts();
+}, []);
 
   const categoryFromUrl = searchParams.get('category') || 'All';
 
@@ -54,7 +75,6 @@ function ShopPage() {
       items = items.filter((product) => product.size.includes(selectedSize));
     }
 
-    items = items.filter((product) => product.price <= priceRange);
 
     if (sortBy === 'price-low') {
       items.sort((a, b) => a.price - b.price);
@@ -102,11 +122,20 @@ function ShopPage() {
           allSizes={allSizes}
         />
 
-        <div className="card-grid shop-grid">
-          {visibleProducts.map((product) => (
-            <ProductCard key={product.id} product={product} />
-          ))}
-        </div>
+        {loading ? (
+  <div className="empty-state">
+    Loading products...
+  </div>
+) : (
+  <div className="card-grid shop-grid">
+    {visibleProducts.map((product) => (
+      <ProductCard
+        key={product.id}
+        product={product}
+      />
+    ))}
+  </div>
+)}
 
         {filteredProducts.length === 0 ? (
           <div className="empty-state">No products match your current filters.</div>

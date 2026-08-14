@@ -23,7 +23,12 @@ function ProductCard({ product }) {
   return (
     <article className="product-card shop-card">
       <div className="product-card-top">
-        <span className="badge">{product.badge}</span>
+        <span className={`badge $ {
+        product.badge?.toLowerCase()||.replace(/\s+/g, '-') ||"
+        }`}
+        >
+          {product.badge}
+        </span>
         <span className="stock-pill">{product.stock}</span>
       </div>
 

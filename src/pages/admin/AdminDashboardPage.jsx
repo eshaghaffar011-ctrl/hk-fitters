@@ -28,11 +28,12 @@ const defaultProductForm = {
   category: 'Men',
   description: '',
   image: '',
-  gallery:'',
+  gallery:[],
   sizes: 'S,M,L',
   colors: '#111111,#e10600,#ffffff',
   stock: 'In Stock',
   badge: 'New',
+  featured: false,
 };
 
 const toArray = (value) =>
@@ -330,6 +331,7 @@ const handleGalleryUpload = (event) => {
   };
 
   const handleOpenEditForm = (product) => {
+    console.log('EDIT PRODUCT:', product);
   setEditingId(Number(product.id));
 
   setForm({
@@ -338,8 +340,8 @@ const handleGalleryUpload = (event) => {
     description: product.description || '',
     image: product.image || '',
     gallery: Array.isArray(product.gallery)
-      ? product.gallery.join(', ')
-      : '',
+      ? product.gallery
+      : toArray(product.gallery),
     sizes: Array.isArray(product.size)
       ? product.size.join(', ')
       : 'S,M,L',
@@ -348,13 +350,14 @@ const handleGalleryUpload = (event) => {
       : product.color || '#111111',
     stock: product.stock || 'In Stock',
     badge: product.badge || 'New',
+    featured: Boolean(product.featured),
   });
 
   setShowForm(true);
 };
-  const handleSubmitProduct = async (event) => {
+  const handleSubmitProduct = async (event) => { 
   event.preventDefault();
-
+  console.log('FEATURED DEFORE SAVE:', form.featured);
   const name = form.name.trim();
   const description = form.description.trim();
   const image = form.image || '';
@@ -385,6 +388,7 @@ const handleGalleryUpload = (event) => {
     category: [
       'Men',
       'Women',
+      'Kids',
       'Accessories',
     ].includes(form.category)
       ? form.category
@@ -412,6 +416,7 @@ const handleGalleryUpload = (event) => {
 
     badge: form.badge || 'New',
     stock: form.stock || 'In Stock',
+    featured: form.featured || false,
   };
 
   try {
@@ -690,8 +695,6 @@ const handleGalleryUpload = (event) => {
             if (nextShowOrders) {
               refreshInquiries();
             }
-
-            setShowOrders(nextShowOrders);
           }}
         >
           {showOrders
@@ -1288,6 +1291,10 @@ const handleGalleryUpload = (event) => {
                   Women
                 </option>
 
+                <option value="Kids">
+                  Kids
+                </option>
+
                 <option value="Accessories">
                   Accessories
                 </option>
@@ -1317,11 +1324,13 @@ const handleGalleryUpload = (event) => {
     src={form.image}
     alt="Product preview"
     style={{
-      width: '180px',
-      height: '180px',
-      objectFit: 'cover',
+      width: '330px',
+      height: 'auto',
+      maxHeight: '400px',
+      objectFit: 'contain',
       borderRadius: '12px',
       marginTop: '8px',
+      background: '#f7f4ef'
     }}
   />
 )}
@@ -1383,13 +1392,41 @@ const handleGalleryUpload = (event) => {
                 placeholder="Stock / availability"
               />
 
-              <input
-                name="badge"
-                value={form.badge}
-                onChange={handleFormChange}
-                placeholder="Badge"
-              />
+              <select
+  name="badge"
+  value={form.badge}
+  onChange={handleFormChange}
+>
+  <option value="New">New</option>
+  <option value="Sale">Sale</option>
+  <option value="Featured">Featured</option>
+  <option value="Best Seller">Best Seller</option>
+  <option value="">No Badge</option>
+</select>
             </div>
+
+            <label
+  style={{
+    display: 'flex',
+    alignItems: 'center',
+    gap: '8px',
+    cursor: 'pointer',
+  }}
+>
+  <input
+    type="checkbox"
+    name="featured"
+    checked={form.featured}
+    onChange={(event) =>
+      setForm((current) => ({
+        ...current,
+        featured: event.target.checked,
+      }))
+    }
+  />
+
+  <strong>Featured Product</strong>
+</label>
 
             <div
               style={{
@@ -1436,11 +1473,24 @@ const handleGalleryUpload = (event) => {
               overflow: 'hidden',
             }}
             >
-              <img
-                src={product.image || product.gallery?.[0] || 'https://images.unsplash.com/photo-1521572267360-ee0c2909d518?auto=format&fit=crop&w=900&q=80'}
-                alt={product.name}
-                style={{ width: '100%', height: '180px', objectFit: 'cover', display: 'block', marginBottom: '12px' }}
-              />
+             <img
+  src={
+    product.image ||
+    product.gallery?.[0] ||
+    'https://images.unsplash.com/photo-1521572267360-ee0c2909d518?auto=format&fit=crop&w=900&q=80'
+  }
+  alt={product.name}
+  style={{
+    width: '100%',
+    height: 'auto',
+    maxHeight: '320px',
+    objectFit: 'contain',
+    display: 'block',
+    marginBottom: '12px',
+    borderRadius: '12px',
+    background: '#f7f4ef',
+  }}
+/>
 
             <h3>{product.name}</h3>
 

@@ -39,10 +39,22 @@ db.exec(`
     color TEXT,
     stock TEXT,
     badge TEXT,
+    featured INTEGER DEFAULT 0,
     rating REAL DEFAULT 4.5,
     reviews INTEGER DEFAULT 0
   )
 `);
+
+try {
+  db.exec(`
+    ALTER TABLE products
+    ADD COLUMN featured INTEGER DEFAULT 0
+  `);
+} catch (error) {
+  if (!error.message.includes('duplicate column name')) {
+    throw error;
+  }
+}
 
 console.log('HK FITTERS database connected.');
 
