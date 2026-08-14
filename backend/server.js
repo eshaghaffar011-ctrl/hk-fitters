@@ -454,6 +454,6 @@ app.delete('/api/products/:id', (req, res) => {
   }
 });
 
-app.listen(PORT, () => {
+app.listen(PORT, '0.0.0.0',() => {
   console.log(`HK FITTERS backend running on port ${PORT}`);
 });
