@@ -1,4 +1,4 @@
-const PRODUCTS_API_URL = 'http://localhost:5000/api/products';
+const PRODUCTS_API_URL = 'http://hk-fitters-backend.onrender.com/api/products';
 
 /*
   Convert values like:

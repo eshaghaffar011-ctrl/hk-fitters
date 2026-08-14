@@ -114,14 +114,13 @@ function HomePage() {
           key={product.name}
         >
           <div
-            className={`product-image product-image-${index + 1}`}
-            style={{
-              backgroundImage: `url(${product.image})`,
-              backgroundSize: "cover",
-              backgroundPosition: "center",
-            }}
+            className={`product-image product-image-${index + 1}`}>
+            <img
+            src={product.image}
+            alt={product.name}
+            />
             aria-hidden="true"
-          />
+          </div>
 
           <div className="product-body">
             <span className="product-badge">{product.badge}</span>

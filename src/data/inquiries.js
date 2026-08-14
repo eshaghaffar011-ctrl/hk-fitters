@@ -1,4 +1,4 @@
-const API_URL = 'http://localhost:5000/api/inquiries';
+const API_URL = 'http://hk-fitters-backend.onrender.com/api/inquiries';
 
 export const getInquiries = async () => {
   try {
