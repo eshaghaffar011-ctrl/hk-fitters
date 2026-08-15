@@ -56,29 +56,7 @@ function HomePage() {
     setActiveReview((current) => (current - 1 + testimonials.length) % testimonials.length);
   };
 
-  const handleNewsletterSubmit = async (event) => {
-  event.preventDefault();
-
-  const email = event.target.email.value.trim();
-
-  if (!email) {
-    return;
-  }
-
-  try {
-    await subscribeToNewsletter(email);
-
-    window.alert('Successfully subscribed!');
-
-    event.target.reset();
-  } catch (error) {
-    console.error('Newsletter subscription failed:', error);
-
-    window.alert(
-      error.message || 'Unable to subscribe. Please try again.'
-    );
-  }
-};
+ 
 
   return (
     <div className="page home-page">
