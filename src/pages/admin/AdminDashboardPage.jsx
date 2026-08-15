@@ -11,6 +11,7 @@ import {
   updateInquiryStatus,
   deleteInquiry,
 } from '../../data/inquiries';
+import { getSubscribers, deleteSubscriber, } from '../../data/newsletter';
 
 const ADMIN_KEY = 'hkfitters_admin';
 const ADMIN_PASSWORD_KEY = 'hkfitters_admin_password';
@@ -19,6 +20,7 @@ const cards = [
   { title: 'Products', text: 'Add, edit, delete products' },
   { title: 'Orders', text: 'Manage incoming orders' },
   { title: 'Customers', text: 'View customer records' },
+  { title: 'Subscribers', text: 'View newsletter subscribers' },
   { title: 'Reports', text: 'Track sales activity' },
 ];
 
@@ -48,6 +50,9 @@ function AdminDashboardPage() {
 
   const [products, setProducts] = useState(() => getProducts());
   const [inquiries, setInquiries] = useState([]);
+
+  const [subscribers, setSubscribers] = useState([]);
+const [showSubscribers, setShowSubscribers] = useState(false);
 
 
   const [searchTerm, setSearchTerm] = useState('');
@@ -97,6 +102,10 @@ function AdminDashboardPage() {
     refreshInquiries();
   }, []);
 
+   useEffect(() => {
+    refreshSubscribers();
+  }, []);
+
   
 
   const refreshInquiries = async () => {
@@ -113,6 +122,59 @@ function AdminDashboardPage() {
     
   }
 };
+
+const refreshSubscribers = async () => {
+  try {
+    const response = await fetch(
+      `${process.env.REACT_APP_API_URL || 'http://localhost:5000'}/api/subscribers`
+    );
+
+    if (!response.ok) {
+      throw new Error('Failed to fetch subscribers');
+    }
+
+    const data = await response.json();
+
+    setSubscribers(Array.isArray(data) ? data : []);
+  } catch (error) {
+    console.error('Failed to load subscribers:', error);
+    setSubscribers([]);
+  }
+};
+
+const handleDeleteSubscriber = async (subscriberId) => {
+  const subscriber = subscribers.find(
+    (item) => Number(item.id) === Number(subscriberId)
+  );
+
+  if (!subscriber) {
+    return;
+  }
+
+  const confirmed = window.confirm(
+    `Delete ${subscriber.email}? This cannot be undone.`
+  );
+
+  if (!confirmed) {
+    return;
+  }
+
+  try {
+    await deleteSubscriber(subscriberId);
+
+    await refreshSubscribers();
+  } catch (error) {
+    console.error(
+      'Failed to delete subscriber:',
+      error
+    );
+
+    window.alert(
+      'Failed to delete subscriber.'
+    );
+  }
+};
+
   const filteredInquiries = inquiries.filter((inquiry) => {
   const customerName = inquiry.customer?.fullName || '';
   const customerCountry = inquiry.customer?.country || '';
@@ -702,6 +764,25 @@ const handleGalleryUpload = (event) => {
             : `Open (${inquiries.length})`}
         </button>
 
+        ) : card.title === 'Subscribers' ? (
+  <button
+    type="button"
+    className="btn btn-secondary small"
+    onClick={() => {
+      const nextShowSubscribers = !showSubscribers;
+
+      setShowSubscribers(nextShowSubscribers);
+
+      if (nextShowSubscribers) {
+        refreshSubscribers();
+      }
+    }}
+  >
+    {showSubscribers
+      ? 'Close'
+      : `Open (${subscribers.length})`}
+  </button>
+
       ) : card.title === 'Customers' ? (
         <button
           type="button"
@@ -964,6 +1045,97 @@ const handleGalleryUpload = (event) => {
             )}
           </section>
         )}
+
+        {/* ========================= */}
+{/* SUBSCRIBERS */}
+{/* ========================= */}
+
+{showSubscribers && (
+  <section
+    style={{
+      marginTop: '40px',
+      marginBottom: '40px',
+    }}
+  >
+    <div
+      className="section-heading"
+      style={{
+        marginBottom: '16px',
+      }}
+    >
+      <div>
+        <p className="eyebrow">
+          Newsletter Management
+        </p>
+
+        <h2>
+          Subscribers
+        </h2>
+
+        <p>
+          People who subscribed to the HK FITTERS newsletter.
+        </p>
+      </div>
+    </div>
+
+    {subscribers.length === 0 ? (
+      <div className="empty-state">
+        <h3>No subscribers yet</h3>
+
+        <p>
+          Newsletter subscribers will appear here
+          after someone subscribes.
+        </p>
+      </div>
+    ) : (
+      <div
+        style={{
+          display: 'grid',
+          gridTemplateColumns:
+            'repeat(auto-fit, minmax(260px, 1fr))',
+          gap: '16px',
+        }}
+      >
+        {subscribers.map((subscriber) => (
+          <article
+            className="product-card"
+            key={subscriber.id}
+            style={{
+              padding: '20px',
+            }}
+          >
+            <p className="eyebrow">
+              Newsletter Subscriber
+            </p>
+
+            <h3>
+              {subscriber.email}
+            </h3>
+
+            <p>
+              <strong>Subscribed:</strong>{' '}
+              {subscriber.created_at
+                ? new Date(subscriber.created_at
+                ).toLocaleString()
+                :'N/A'}
+            </p>
+
+             <button
+  type="button"
+  className="btn btn-secondary small"
+  onClick={() =>
+    handleDeleteSubscriber(subscriber.id)
+  }
+  style={{ marginTop: '12px' }}
+>
+  Delete Subscriber
+</button>
+          </article>
+        ))}
+      </div>
+    )}
+  </section>
+)}
 
          {/* ========================= */}
 {/* CUSTOMERS */}

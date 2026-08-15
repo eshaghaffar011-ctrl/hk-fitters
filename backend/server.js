@@ -454,6 +454,89 @@ app.delete('/api/products/:id', (req, res) => {
   }
 });
 
+
+// =========================
+// SUBSCRIBERS API
+// =========================
+
+app.get('/api/subscribers', (req, res) => {
+  try {
+    const subscribers = db
+      .prepare(`
+        SELECT *
+        FROM subscribers
+        ORDER BY created_at DESC
+      `)
+      .all();
+
+    res.json(subscribers);
+  } catch (error) {
+    console.error('Get subscribers error:', error);
+
+    res.status(500).json({
+      message: 'Failed to get subscribers',
+    });
+  }
+});
+
+
+app.post('/api/subscribers', (req, res) => {
+  try {
+    const { email } = req.body;
+
+    if (!email || !email.trim()) {
+      return res.status(400).json({
+        message: 'Email is required',
+      });
+    }
+
+    const cleanEmail = email.trim().toLowerCase();
+
+    const existing = db
+      .prepare(`
+        SELECT id
+        FROM subscribers
+        WHERE email = ?
+      `)
+      .get(cleanEmail);
+
+    if (existing) {
+      return res.status(409).json({
+        message: 'Email is already subscribed',
+      });
+    }
+
+    const result = db
+      .prepare(`
+        INSERT INTO subscribers (
+          email,
+          created_at
+        )
+        VALUES (
+          ?,
+          ?
+        )
+      `)
+      .run(
+        cleanEmail,
+        new Date().toISOString()
+      );
+
+    res.status(201).json({
+      success: true,
+      message: 'Subscribed successfully',
+      id: result.lastInsertRowid,
+    });
+
+  } catch (error) {
+    console.error('Create subscriber error:', error);
+
+    res.status(500).json({
+      message: 'Failed to save subscriber',
+    });
+  }
+});
+
 app.listen(PORT, '0.0.0.0',() => {
   console.log(`HK FITTERS backend running on port ${PORT}`);
 });

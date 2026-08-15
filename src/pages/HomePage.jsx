@@ -19,6 +19,10 @@ function HomePage() {
   const [activeReview, setActiveReview] = useState(0);
 
   const [products, setProducts] = useState([]);
+
+  const [subscriberEmail, setSubscriberEmail] = useState('');
+  const [subscribeMessage, setSubscribeMessage] = useState('');
+  const [isSubscribing, setIsSubscribing] = useState(false);
   console.log('HOME PRODUCTS:', products);
 
   useEffect(() => {
@@ -245,10 +249,76 @@ function HomePage() {
               <h2>Join the HK FITTERS newsletter.</h2>
               <p>Receive early access to new arrivals, private offers, and exclusive export drops.</p>
             </div>
-            <form className="newsletter-form">
-              <input type="email" placeholder="Your email address" />
-              <button type="submit">Subscribe</button>
-            </form>
+            <form
+  className="newsletter-form"
+  onSubmit={async (e) => {
+    e.preventDefault();
+
+    if (!subscriberEmail.trim()) {
+      setSubscribeMessage('Please enter your email address.');
+      return;
+    }
+
+    try {
+      setIsSubscribing(true);
+      setSubscribeMessage('');
+
+      const response = await fetch(
+        `${process.env.REACT_APP_API_URL || 'http://localhost:5000'}/api/subscribers`,
+        {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            email: subscriberEmail,
+          }),
+        }
+      );
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        setSubscribeMessage(
+          data.message || 'Subscription failed.'
+        );
+        return;
+      }
+
+      setSubscribeMessage(
+        'Subscribed successfully! Thank you.'
+      );
+
+      setSubscriberEmail('');
+    } catch (error) {
+      console.error('Subscribe error:', error);
+
+      setSubscribeMessage(
+        'Unable to subscribe right now. Please try again.'
+      );
+    } finally {
+      setIsSubscribing(false);
+    }
+  }}
+>
+  <input
+    type="email"
+    placeholder="Your email address"
+    value={subscriberEmail}
+    onChange={(e) => setSubscriberEmail(e.target.value)}
+    required
+  />
+
+  <button type="submit" disabled={isSubscribing}>
+    {isSubscribing ? 'Subscribing...' : 'Subscribe'}
+  </button>
+
+  {subscribeMessage && (
+    <p style={{ marginTop: '8px' }}>
+      {subscribeMessage}
+    </p>
+  )}
+</form>
           </div>
         </section>
       </main>
