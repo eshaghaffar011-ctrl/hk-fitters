@@ -113,14 +113,12 @@ function HomePage() {
           className="product-card featured-product-card"
           key={product.name}
         >
-          <div
-            className={`product-image product-image-${index + 1}`}>
-            <img
-            src={product.image}
-            alt={product.name}
-            />
-            aria-hidden="true"
-          </div>
+         <div className={`product-image product-image-${index + 1}`}>
+  <img
+    src={product.image}
+    alt={product.name}
+  />
+</div>
 
           <div className="product-body">
             <span className="product-badge">{product.badge}</span>
