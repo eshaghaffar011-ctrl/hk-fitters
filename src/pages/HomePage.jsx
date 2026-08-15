@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { fetchProductsFromAPI } from '../data/products';
-import { subscribeToNewsletter } from '../data/newsletter';
+
 
 const featuredCategories = [
   { title: 'Men', subtitle: 'Tailored athletic essentials and elevated layering.', accent: 'Precision tailoring' },
