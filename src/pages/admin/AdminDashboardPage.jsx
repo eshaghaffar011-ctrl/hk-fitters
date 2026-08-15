@@ -11,7 +11,8 @@ import {
   updateInquiryStatus,
   deleteInquiry,
 } from '../../data/inquiries';
-import { getSubscribers, deleteSubscriber, } from '../../data/newsletter';
+import {
+   getSubscribers, deleteSubscriber, } from '../../data/newsletter';
 
 const ADMIN_KEY = 'hkfitters_admin';
 const ADMIN_PASSWORD_KEY = 'hkfitters_admin_password';
@@ -103,8 +104,8 @@ const [showSubscribers, setShowSubscribers] = useState(false);
   }, []);
 
    useEffect(() => {
-    refreshSubscribers();
-  }, []);
+  refreshSubscribers();
+}, []);
 
   
 
@@ -125,19 +126,17 @@ const [showSubscribers, setShowSubscribers] = useState(false);
 
 const refreshSubscribers = async () => {
   try {
-    const response = await fetch(
-      `${process.env.REACT_APP_API_URL || 'http://localhost:5000'}/api/subscribers`
+    const data = await getSubscribers();
+
+    setSubscribers(
+      Array.isArray(data) ? data : []
+    );
+  } catch (error) {
+    console.error(
+      'Failed to load subscribers:',
+      error
     );
 
-    if (!response.ok) {
-      throw new Error('Failed to fetch subscribers');
-    }
-
-    const data = await response.json();
-
-    setSubscribers(Array.isArray(data) ? data : []);
-  } catch (error) {
-    console.error('Failed to load subscribers:', error);
     setSubscribers([]);
   }
 };
