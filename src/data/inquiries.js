@@ -1,4 +1,4 @@
-const API_URL = 'http://hk-fitters-backend.onrender.com/api/inquiries';
+const PRODUCTS_API_URL = 'https://hk-fitters-backend.onrender.com/api/inquiries';
 
 export const getInquiries = async () => {
   try {
