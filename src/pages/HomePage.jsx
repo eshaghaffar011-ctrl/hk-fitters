@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { fetchProductsFromAPI } from '../data/products';
+import { subscribeToNewsletter } from '../data/newsletter';
 
 const featuredCategories = [
   { title: 'Men', subtitle: 'Tailored athletic essentials and elevated layering.', accent: 'Precision tailoring' },
@@ -54,6 +55,30 @@ function HomePage() {
   const previousReview = () => {
     setActiveReview((current) => (current - 1 + testimonials.length) % testimonials.length);
   };
+
+  const handleNewsletterSubmit = async (event) => {
+  event.preventDefault();
+
+  const email = event.target.email.value.trim();
+
+  if (!email) {
+    return;
+  }
+
+  try {
+    await subscribeToNewsletter(email);
+
+    window.alert('Successfully subscribed!');
+
+    event.target.reset();
+  } catch (error) {
+    console.error('Newsletter subscription failed:', error);
+
+    window.alert(
+      error.message || 'Unable to subscribe. Please try again.'
+    );
+  }
+};
 
   return (
     <div className="page home-page">
@@ -263,8 +288,8 @@ function HomePage() {
       setIsSubscribing(true);
       setSubscribeMessage('');
 
-      const response = await fetch(
-        `${process.env.REACT_APP_API_URL || 'http://localhost:5000'}/api/subscribers`,
+     const response = await fetch(
+  'https://hk-fitters-backend.onrender.com/api/subscribers',
         {
           method: 'POST',
           headers: {
@@ -279,24 +304,24 @@ function HomePage() {
       const data = await response.json();
 
       if (!response.ok) {
-        setSubscribeMessage(
-          data.message || 'Subscription failed.'
-        );
-        return;
-      }
+  setSubscribeMessage(
+    `Error ${response.status}: ${data.message || 'Subscription failed.'}`
+  );
+  return;
+}
 
       setSubscribeMessage(
         'Subscribed successfully! Thank you.'
       );
 
       setSubscriberEmail('');
-    } catch (error) {
-      console.error('Subscribe error:', error);
+   } catch (error) {
+  console.error('Subscribe error:', error);
 
-      setSubscribeMessage(
-        'Unable to subscribe right now. Please try again.'
-      );
-    } finally {
+  setSubscribeMessage(
+    `Connection error: ${error.message}`
+  );
+} finally {
       setIsSubscribing(false);
     }
   }}
