@@ -223,33 +223,6 @@ app.delete('/api/inquiries/:id', async (req, res) => {
   }
 });
 
-// ==============
-// TEMPORARY
-// ==============
-
-app.get('/api/setup-product-details', async (req, res) => {
-  try {
-    await db.query(`
-      ALTER TABLE products
-      ADD COLUMN IF NOT EXISTS features TEXT,
-      ADD COLUMN IF NOT EXISTS care_instructions TEXT,
-      ADD COLUMN IF NOT EXISTS shipping_information TEXT,
-      ADD COLUMN IF NOT EXISTS return_policy TEXT
-    `);
-
-    res.json({
-      success: true,
-      message: 'Product detail columns are ready.',
-    });
-  } catch (error) {
-    console.error('Product detail setup error:', error);
-
-    res.status(500).json({
-      success: false,
-      message: error.message,
-    });
-  }
-});
 
 
 // =========================
