@@ -58,7 +58,7 @@ const reviewCards = [
 
 function ProductDetailPage() {
   const { id } = useParams();
-  const [products, setProducts] = useState([]);
+  
 const [product, setProduct] = useState(null);
 const [loading, setLoading] = useState(true);
 
@@ -67,7 +67,7 @@ useEffect(() => {
     try {
       const data = await fetchProductsFromAPI();
 
-      setProducts(data);
+     
 
       const foundProduct = data.find(
         (item) => Number(item.id) === Number(id)
@@ -153,13 +153,7 @@ useEffect(() => {
     });
   };
 
-  const productFeatures = [
-    'Ultra-lightweight technical construction',
-    'Performance-fit silhouette for movement and comfort',
-    'Premium finish designed for export-ready retail presentation',
-    'Tailored for modern athletic and luxury lifestyle demand',
-  ];
-
+  
   const sizeGuideRows = [
     { size: 'S', chest: '34–36 in', waist: '28–30 in' },
     { size: 'M', chest: '37–39 in', waist: '31–33 in' },
@@ -336,53 +330,61 @@ useEffect(() => {
         </div>
       </section>
 
-      <section className="section detail-content-grid">
-        <div className="detail-panel">
-          <h3>Product Features</h3>
-          <ul>
-            {productFeatures.map((feature) => (
-              <li key={feature}>{feature}</li>
-            ))}
-          </ul>
-        </div>
+      <section className="section product-detail-extra">
+  <div className="detail-column">
+    <div className="detail-panel">
+      <h3>Size Guide</h3>
 
-        <div className="detail-panel">
-          <h3>Size Guide</h3>
-          <table className="size-guide-table">
-            <thead>
-              <tr>
-                <th>Size</th>
-                <th>Chest</th>
-                <th>Waist</th>
-              </tr>
-            </thead>
-            <tbody>
-              {sizeGuideRows.map((row) => (
-                <tr key={row.size}>
-                  <td>{row.size}</td>
-                  <td>{row.chest}</td>
-                  <td>{row.waist}</td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
+      <table className="size-guide-table">
+        <thead>
+          <tr>
+            <th>Size</th>
+            <th>Chest</th>
+            <th>Waist</th>
+          </tr>
+        </thead>
 
-        <div className="detail-panel">
-          <h3>Care Instructions</h3>
-          <p>Machine wash cold with like colors. Avoid bleach. Line dry and iron on low heat if needed. Store in a cool, dry place.</p>
-        </div>
+        <tbody>
+          {sizeGuideRows.map((row) => (
+            <tr key={row.size}>
+              <td>{row.size}</td>
+              <td>{row.chest}</td>
+              <td>{row.waist}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
 
-        <div className="detail-panel">
-          <h3>Shipping Information</h3>
-          <p>International delivery in 4–7 business days for standard export orders. Express shipping and bulk freight options are available upon request.</p>
-        </div>
+    <div className="detail-panel">
+      <h3>Shipping Information</h3>
+      <p>
+        International delivery in 4–7 business days for standard export
+        orders. Express shipping and bulk freight options are available
+        upon request.
+      </p>
+    </div>
+  </div>
 
-        <div className="detail-panel">
-          <h3>Return Policy</h3>
-          <p>Complimentary exchanges are available within 14 days for unused items in original packaging. Returns are reviewed case by case for export wholesale orders.</p>
-        </div>
-      </section>
+  <div className="detail-column">
+    <div className="detail-panel">
+      <h3>Care Instructions</h3>
+      <p>
+        Machine wash cold with like colors. Avoid bleach. Line dry and iron
+        on low heat if needed. Store in a cool, dry place.
+      </p>
+    </div>
+
+    <div className="detail-panel">
+      <h3>Return Policy</h3>
+      <p>
+        Complimentary exchanges are available within 14 days for unused
+        items in original packaging. Returns are reviewed case by case for
+        export wholesale orders.
+      </p>
+    </div>
+  </div>
+</section>
 
       <section className="section review-section">
         <div className="section-heading">
