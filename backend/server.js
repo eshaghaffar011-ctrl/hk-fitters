@@ -23,21 +23,19 @@ app.get('/api/health', (req, res) => {
   });
 });
 
-// =========================
+/// =========================
 // INQUIRY API
 // =========================
 
-app.get('/api/inquiries', (req, res) => {
+app.get('/api/inquiries', async (req, res) => {
   try {
-    const inquiries = db
-      .prepare(`
-        SELECT *
-        FROM inquiries
-        ORDER BY created_at DESC
-      `)
-      .all();
+    const result = await db.query(`
+      SELECT *
+      FROM inquiries
+      ORDER BY created_at DESC
+    `);
 
-    const formatted = inquiries.map((inquiry) => ({
+    const formatted = result.rows.map((inquiry) => ({
       id: inquiry.id,
       createdAt: inquiry.created_at,
       status: inquiry.status,
@@ -61,13 +59,15 @@ app.get('/api/inquiries', (req, res) => {
     res.json(formatted);
   } catch (error) {
     console.error('Get inquiries error:', error);
+
     res.status(500).json({
       message: 'Failed to get inquiries',
     });
   }
 });
 
-app.post('/api/inquiries', (req, res) => {
+
+app.post('/api/inquiries', async (req, res) => {
   try {
     const inquiry = req.body;
 
@@ -77,7 +77,8 @@ app.post('/api/inquiries', (req, res) => {
 
     const customer = inquiry.customer || {};
 
-    const insert = db.prepare(`
+    await db.query(
+      `
       INSERT INTO inquiries (
         id,
         created_at,
@@ -95,39 +96,26 @@ app.post('/api/inquiries', (req, res) => {
         total
       )
       VALUES (
-        @id,
-        @createdAt,
-        @status,
-        @customerName,
-        @country,
-        @city,
-        @address,
-        @postalCode,
-        @email,
-        @phone,
-        @items,
-        @subtotal,
-        @shipping,
-        @total
+        $1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14
       )
-    `);
-
-    insert.run({
-      id,
-      createdAt,
-      status: inquiry.status || 'New',
-      customerName: customer.fullName || '',
-      country: customer.country || '',
-      city: customer.city || '',
-      address: customer.address || '',
-      postalCode: customer.postalCode || '',
-      email: customer.email || '',
-      phone: customer.phone || '',
-      items: JSON.stringify(inquiry.items || []),
-      subtotal: Number(inquiry.subtotal || 0),
-      shipping: Number(inquiry.shipping || 0),
-      total: Number(inquiry.total || 0),
-    });
+      `,
+      [
+        id,
+        createdAt,
+        inquiry.status || 'New',
+        customer.fullName || '',
+        customer.country || '',
+        customer.city || '',
+        customer.address || '',
+        customer.postalCode || '',
+        customer.email || '',
+        customer.phone || '',
+        JSON.stringify(inquiry.items || []),
+        Number(inquiry.subtotal || 0),
+        Number(inquiry.shipping || 0),
+        Number(inquiry.total || 0),
+      ]
+    );
 
     res.status(201).json({
       success: true,
@@ -148,7 +136,7 @@ app.post('/api/inquiries', (req, res) => {
 // UPDATE INQUIRY STATUS
 // =========================
 
-app.patch('/api/inquiries/:id/status', (req, res) => {
+app.patch('/api/inquiries/:id/status', async (req, res) => {
   try {
     const { id } = req.params;
     const { status } = req.body;
@@ -165,15 +153,16 @@ app.patch('/api/inquiries/:id/status', (req, res) => {
       });
     }
 
-    const result = db
-      .prepare(`
-        UPDATE inquiries
-        SET status = ?
-        WHERE id = ?
-      `)
-      .run(status, id);
+    const result = await db.query(
+      `
+      UPDATE inquiries
+      SET status = $1
+      WHERE id = $2
+      `,
+      [status, id]
+    );
 
-    if (result.changes === 0) {
+    if (result.rowCount === 0) {
       return res.status(404).json({
         message: 'Inquiry not found',
       });
@@ -200,18 +189,19 @@ app.patch('/api/inquiries/:id/status', (req, res) => {
 // DELETE INQUIRY
 // =========================
 
-app.delete('/api/inquiries/:id', (req, res) => {
+app.delete('/api/inquiries/:id', async (req, res) => {
   try {
     const { id } = req.params;
 
-    const result = db
-      .prepare(`
-        DELETE FROM inquiries
-        WHERE id = ?
-      `)
-      .run(id);
+    const result = await db.query(
+      `
+      DELETE FROM inquiries
+      WHERE id = $1
+      `,
+      [id]
+    );
 
-    if (result.changes === 0) {
+    if (result.rowCount === 0) {
       return res.status(404).json({
         message: 'Inquiry not found',
       });
@@ -232,20 +222,18 @@ app.delete('/api/inquiries/:id', (req, res) => {
     });
   }
 });
-
 // =========================
 // PRODUCT API
 // =========================
-
-app.get('/api/products', (req, res) => {
+app.get('/api/products', async (req, res) => {
   try {
-    const products = db
-      .prepare(`
-        SELECT *
-        FROM products
-        ORDER BY id DESC
-      `)
-      .all();
+    const result = await db.query(`
+      SELECT *
+      FROM products
+      ORDER BY id DESC
+    `);
+
+    const products = result.rows;
 
     const formatted = products.map((product) => ({
       id: product.id,
@@ -277,6 +265,7 @@ app.get('/api/products', (req, res) => {
     }));
 
     res.json(formatted);
+
   } catch (error) {
     console.error('Get products error:', error);
 
@@ -286,8 +275,7 @@ app.get('/api/products', (req, res) => {
   }
 });
 
-
-app.post('/api/products', (req, res) => {
+app.post('/api/products', async (req, res) => {
   try {
     const product = req.body;
 
@@ -297,7 +285,8 @@ app.post('/api/products', (req, res) => {
       });
     }
 
-    const insert = db.prepare(`
+    const result = await db.query(
+      `
       INSERT INTO products (
         name,
         description,
@@ -314,43 +303,33 @@ app.post('/api/products', (req, res) => {
         reviews
       )
       VALUES (
-        @name,
-        @description,
-        @image,
-        @gallery,
-        @category,
-        @sizes,
-        @colors,
-        @color,
-        @stock,
-        @badge,
-        @featured,
-        @rating,
-        @reviews
+        $1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13
       )
-    `);
-
-    const result = insert.run({
-      name: product.name,
-      description: product.description || '',
-      image: product.image || '',
-      gallery: JSON.stringify(product.gallery || []),
-      category: product.category || 'Men',
-      sizes: JSON.stringify(product.sizes || product.size || []),
-      colors: JSON.stringify(product.colors || []),
-      color: product.color || '',
-      stock: product.stock || 'In Stock',
-      badge: product.badge || 'New',
-      featured: product.featured ? 1:0,
-      rating: Number(product.rating) || 4.5,
-      reviews: Number(product.reviews) || 0,
-    });
+      RETURNING id
+      `,
+      [
+        product.name,
+        product.description || '',
+        product.image || '',
+        JSON.stringify(product.gallery || []),
+        product.category || 'Men',
+        JSON.stringify(product.sizes || product.size || []),
+        JSON.stringify(product.colors || []),
+        product.color || '',
+        product.stock || 'In Stock',
+        product.badge || 'New',
+        product.featured ? 1 : 0,
+        Number(product.rating) || 4.5,
+        Number(product.reviews) || 0,
+      ]
+    );
 
     res.status(201).json({
       success: true,
       message: 'Product created successfully',
-      id: result.lastInsertRowid,
+      id: result.rows[0].id,
     });
+
   } catch (error) {
     console.error('Create product error:', error);
 
@@ -361,50 +340,55 @@ app.post('/api/products', (req, res) => {
 });
 
 
-app.put('/api/products/:id', (req, res) => {
+app.put('/api/products/:id', async (req, res) => {
   try {
     const { id } = req.params;
     const product = req.body;
 
-    console.log('PUT PRODUCT RECEIVED:',
-      product.featured, product
+    console.log(
+      'PUT PRODUCT RECEIVED:',
+      product.featured,
+      product
     );
 
-    const result = db.prepare(`
+    const result = await db.query(
+      `
       UPDATE products
       SET
-        name = @name,
-        description = @description,
-        image = @image,
-        gallery = @gallery,
-        category = @category,
-        sizes = @sizes,
-        colors = @colors,
-        color = @color,
-        stock = @stock,
-        badge = @badge,
-        rating = @rating,
-        reviews = @reviews,
-        featured = @featured
-      WHERE id = @id
-    `).run({
-      id,
-      name: product.name || '',
-      description: product.description || '',
-      image: product.image || '',
-      gallery: JSON.stringify(product.gallery || []),
-      category: product.category || 'Men',
-      sizes: JSON.stringify(product.sizes || product.size || []),
-      colors: JSON.stringify(product.colors || []),
-      color: product.color || '',
-      stock: product.stock || 'In Stock',
-      badge: product.badge || 'New',
-      featured: product.featured ? 1:0,
-      rating: Number(product.rating) || 4.5,
-      reviews: Number(product.reviews) || 0,
-    });
+        name = $1,
+        description = $2,
+        image = $3,
+        gallery = $4,
+        category = $5,
+        sizes = $6,
+        colors = $7,
+        color = $8,
+        stock = $9,
+        badge = $10,
+        rating = $11,
+        reviews = $12,
+        featured = $13
+      WHERE id = $14
+      `,
+      [
+        product.name || '',
+        product.description || '',
+        product.image || '',
+        JSON.stringify(product.gallery || []),
+        product.category || 'Men',
+        JSON.stringify(product.sizes || product.size || []),
+        JSON.stringify(product.colors || []),
+        product.color || '',
+        product.stock || 'In Stock',
+        product.badge || 'New',
+        Number(product.rating) || 4.5,
+        Number(product.reviews) || 0,
+        product.featured ? 1 : 0,
+        id,
+      ]
+    );
 
-    if (result.changes === 0) {
+    if (result.rowCount === 0) {
       return res.status(404).json({
         message: 'Product not found',
       });
@@ -414,6 +398,7 @@ app.put('/api/products/:id', (req, res) => {
       success: true,
       message: 'Product updated successfully',
     });
+
   } catch (error) {
     console.error('Update product error:', error);
 
@@ -423,19 +408,19 @@ app.put('/api/products/:id', (req, res) => {
   }
 });
 
-
-app.delete('/api/products/:id', (req, res) => {
+app.delete('/api/products/:id', async (req, res) => {
   try {
     const { id } = req.params;
 
-    const result = db
-      .prepare(`
-        DELETE FROM products
-        WHERE id = ?
-      `)
-      .run(id);
+    const result = await db.query(
+      `
+      DELETE FROM products
+      WHERE id = $1
+      `,
+      [id]
+    );
 
-    if (result.changes === 0) {
+    if (result.rowCount === 0) {
       return res.status(404).json({
         message: 'Product not found',
       });
@@ -445,6 +430,7 @@ app.delete('/api/products/:id', (req, res) => {
       success: true,
       message: 'Product deleted successfully',
     });
+
   } catch (error) {
     console.error('Delete product error:', error);
 
@@ -454,22 +440,20 @@ app.delete('/api/products/:id', (req, res) => {
   }
 });
 
-
 // =========================
 // SUBSCRIBERS API
 // =========================
 
-app.get('/api/subscribers', (req, res) => {
+app.get('/api/subscribers', async (req, res) => {
   try {
-    const subscribers = db
-      .prepare(`
-        SELECT *
-        FROM subscribers
-        ORDER BY created_at DESC
-      `)
-      .all();
+    const result = await db.query(`
+      SELECT *
+      FROM subscribers
+      ORDER BY created_at DESC
+    `);
 
-    res.json(subscribers);
+    res.json(result.rows);
+
   } catch (error) {
     console.error('Get subscribers error:', error);
 
@@ -479,8 +463,7 @@ app.get('/api/subscribers', (req, res) => {
   }
 });
 
-
-app.post('/api/subscribers', (req, res) => {
+app.post('/api/subscribers', async (req, res) => {
   try {
     const { email } = req.body;
 
@@ -492,40 +475,40 @@ app.post('/api/subscribers', (req, res) => {
 
     const cleanEmail = email.trim().toLowerCase();
 
-    const existing = db
-      .prepare(`
-        SELECT id
-        FROM subscribers
-        WHERE email = ?
-      `)
-      .get(cleanEmail);
+    const existing = await db.query(
+      `
+      SELECT id
+      FROM subscribers
+      WHERE email = $1
+      `,
+      [cleanEmail]
+    );
 
-    if (existing) {
+    if (existing.rows.length > 0) {
       return res.status(409).json({
         message: 'Email is already subscribed',
       });
     }
 
-    const result = db
-      .prepare(`
-        INSERT INTO subscribers (
-          email,
-          created_at
-        )
-        VALUES (
-          ?,
-          ?
-        )
-      `)
-      .run(
+    const result = await db.query(
+      `
+      INSERT INTO subscribers (
+        email,
+        created_at
+      )
+      VALUES ($1, $2)
+      RETURNING id
+      `,
+      [
         cleanEmail,
-        new Date().toISOString()
-      );
+        new Date().toISOString(),
+      ]
+    );
 
     res.status(201).json({
       success: true,
       message: 'Subscribed successfully',
-      id: result.lastInsertRowid,
+      id: result.rows[0].id,
     });
 
   } catch (error) {
@@ -536,23 +519,23 @@ app.post('/api/subscribers', (req, res) => {
     });
   }
 });
-
 // =========================
 // DELETE SUBSCRIBER
 // =========================
 
-app.delete('/api/subscribers/:id', (req, res) => {
+app.delete('/api/subscribers/:id', async (req, res) => {
   try {
     const { id } = req.params;
 
-    const result = db
-      .prepare(`
-        DELETE FROM subscribers
-        WHERE id = ?
-      `)
-      .run(id);
+    const result = await db.query(
+      `
+      DELETE FROM subscribers
+      WHERE id = $1
+      `,
+      [id]
+    );
 
-    if (result.changes === 0) {
+    if (result.rowCount === 0) {
       return res.status(404).json({
         message: 'Subscriber not found',
       });
@@ -562,11 +545,9 @@ app.delete('/api/subscribers/:id', (req, res) => {
       success: true,
       message: 'Subscriber deleted successfully',
     });
+
   } catch (error) {
-    console.error(
-      'Delete subscriber error:',
-      error
-    );
+    console.error('Delete subscriber error:', error);
 
     res.status(500).json({
       message: 'Failed to delete subscriber',

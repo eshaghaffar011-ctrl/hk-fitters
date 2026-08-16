@@ -1,71 +1,17 @@
-const Database = require('better-sqlite3');
-const path = require('path');
+const { Pool } = require('pg');
+require('dotenv').config();
 
-const dbPath = path.join(__dirname, 'hkfitters.db');
+const pool = new Pool({
+  connectionString: process.env.DATABASE_URL,
+  ssl: {
+    rejectUnauthorized: false,
+  },
+});
 
-const db = new Database(dbPath);
+pool.on('error', (error) => {
+  console.error('Unexpected PostgreSQL error:', error);
+});
 
-db.pragma('journal_mode = WAL');
+console.log('HK FITTERS PostgreSQL database connected.');
 
-db.exec(`
-  CREATE TABLE IF NOT EXISTS inquiries (
-    id TEXT PRIMARY KEY,
-    created_at TEXT NOT NULL,
-    status TEXT NOT NULL DEFAULT 'New',
-    customer_name TEXT,
-    country TEXT,
-    city TEXT,
-    address TEXT,
-    postal_code TEXT,
-    email TEXT,
-    phone TEXT,
-    items TEXT,
-    subtotal REAL DEFAULT 0,
-    shipping REAL DEFAULT 0,
-    total REAL DEFAULT 0
-  )
-`);
-
-db.exec(`
-  CREATE TABLE IF NOT EXISTS products (
-    id INTEGER PRIMARY KEY AUTOINCREMENT,
-    name TEXT NOT NULL,
-    description TEXT,
-    image TEXT,
-    gallery TEXT,
-    category TEXT,
-    sizes TEXT,
-    colors TEXT,
-    color TEXT,
-    stock TEXT,
-    badge TEXT,
-    featured INTEGER DEFAULT 0,
-    rating REAL DEFAULT 4.5,
-    reviews INTEGER DEFAULT 0
-  )
-`);
-
-db.exec(`
-  CREATE TABLE IF NOT EXISTS subscribers (
-    id INTEGER PRIMARY KEY AUTOINCREMENT,
-    email TEXT NOT NULL UNIQUE,
-    created_at TEXT NOT NULL
-  )
-`);
-
-try {
-  db.exec(`
-    ALTER TABLE products
-    ADD COLUMN featured INTEGER DEFAULT 0
-  `);
-} catch (error) {
-  if (!error.message.includes('duplicate column name')) {
-    throw error;
-  }
-}
-
-console.log('HK FITTERS database connected.');
-
-
-
-module.exports = db;
+module.exports = pool;
