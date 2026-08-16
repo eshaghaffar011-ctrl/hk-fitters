@@ -174,7 +174,7 @@ useEffect(() => {
                 event.currentTarget.src = FALLBACK_DETAIL_IMAGE;
               }}
             />
-            <button className="zoom-pill" type="button">Zoom view</button>
+      
           </div>
           <div className="thumbnail-row">
             {productGallery.map((image, index) => (
