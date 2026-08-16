@@ -537,6 +537,43 @@ app.post('/api/subscribers', (req, res) => {
   }
 });
 
+// =========================
+// DELETE SUBSCRIBER
+// =========================
+
+app.delete('/api/subscribers/:id', (req, res) => {
+  try {
+    const { id } = req.params;
+
+    const result = db
+      .prepare(`
+        DELETE FROM subscribers
+        WHERE id = ?
+      `)
+      .run(id);
+
+    if (result.changes === 0) {
+      return res.status(404).json({
+        message: 'Subscriber not found',
+      });
+    }
+
+    res.json({
+      success: true,
+      message: 'Subscriber deleted successfully',
+    });
+  } catch (error) {
+    console.error(
+      'Delete subscriber error:',
+      error
+    );
+
+    res.status(500).json({
+      message: 'Failed to delete subscriber',
+    });
+  }
+});
+
 app.listen(PORT, '0.0.0.0',() => {
   console.log(`HK FITTERS backend running on port ${PORT}`);
 });

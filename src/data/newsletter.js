@@ -1,4 +1,4 @@
-const API_URL = 'https://hk-fitters-backend.onrender.com/api/newsletter';
+const API_URL = 'https://hk-fitters-backend.onrender.com/api/subscribers';
 
 export const getSubscribers = async () => {
   try {
@@ -26,12 +26,20 @@ export const subscribeToNewsletter = async (email) => {
     });
 
     if (!response.ok) {
-      throw new Error('Failed to subscribe');
+      const errorData = await response.json().catch(() => ({}));
+
+      throw new Error(
+        errorData.message || 'Failed to subscribe'
+      );
     }
 
     return await response.json();
   } catch (error) {
-    console.error('Newsletter subscription error:', error);
+    console.error(
+      'Newsletter subscription error:',
+      error
+    );
+
     throw error;
   }
 };
@@ -51,7 +59,11 @@ export const deleteSubscriber = async (subscriberId) => {
 
     return await response.json();
   } catch (error) {
-    console.error('Delete subscriber error:', error);
+    console.error(
+      'Delete subscriber error:',
+      error
+    );
+
     throw error;
   }
 };
