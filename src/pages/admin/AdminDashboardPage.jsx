@@ -128,6 +128,8 @@ const refreshSubscribers = async () => {
   try {
     const data = await getSubscribers();
 
+    console.log('SUBSCRIBERS FROM API:', data);
+
     setSubscribers(
       Array.isArray(data) ? data : []
     );
