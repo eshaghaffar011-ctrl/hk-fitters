@@ -30,8 +30,13 @@ const defaultProductForm = {
   
   category: 'Men',
   description: '',
+  features: '',
+  careInstructions: '',
+  shippingInformation: '',
+  returnPolicy: '',
   image: '',
   gallery:[],
+  
   sizes: 'S,M,L',
   colors: '#111111,#e10600,#ffffff',
   stock: 'In Stock',
@@ -401,6 +406,10 @@ const handleGalleryUpload = (event) => {
     name: product.name || '',
     category: product.category || 'Men',
     description: product.description || '',
+    features: product.features || '',
+    careInstructions: product.careInstructions || '',
+    shippingInformation: product.shippingInformation || '',
+    returnPolicy: product.returnPolicy || '',
     image: product.image || '',
     gallery: Array.isArray(product.gallery)
       ? product.gallery
@@ -447,7 +456,10 @@ const handleGalleryUpload = (event) => {
     description,
     image: image || galleryImages[0] || '',
     gallery: galleryImages,
-
+    features: form.features.trim(),
+    careInstructions: form.careInstructions.trim(),
+    shippingInformation: form.shippingInformation.trim(),
+    returnPolicy: form.returnPolicy.trim(),
     category: [
       'Men',
       'Women',
@@ -1481,6 +1493,37 @@ const handleGalleryUpload = (event) => {
                 rows="4"
                 required
               />
+              <textarea
+  name="features"
+  value={form.features}
+  onChange={handleFormChange}
+  placeholder="Product Features"
+  rows="5"
+/>
+
+<textarea
+  name="careInstructions"
+  value={form.careInstructions}
+  onChange={handleFormChange}
+  placeholder="Care Instructions"
+  rows="4"
+/>
+
+<textarea
+  name="shippingInformation"
+  value={form.shippingInformation}
+  onChange={handleFormChange}
+  placeholder="Shipping Information"
+  rows="4"
+/>
+
+<textarea
+  name="returnPolicy"
+  value={form.returnPolicy}
+  onChange={handleFormChange}
+  placeholder="Return Policy"
+  rows="4"
+/>
 
               <label>
   <strong>Product Main Image</strong>

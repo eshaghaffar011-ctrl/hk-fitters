@@ -117,7 +117,6 @@ useEffect(() => {
   }
 
  
-  const relatedProducts = products.slice(0, 4);
   const { whatsappNumber, companyName } = contactInfo;
   const whatsappMessage = [
     `Hi ${companyName},`,
@@ -402,20 +401,7 @@ useEffect(() => {
         </div>
       </section>
 
-      <section className="section related-section">
-        <div className="section-heading related-heading">
-          <h2>Related Products</h2>
-        </div>
-        <div className="related-grid">
-          {relatedProducts.map((item) => (
-            <article className="related-card" key={item.id}>
-              <div className="related-image" />
-              <h3>{item.name}</h3>
-              
-            </article>
-          ))}
-        </div>
-      </section>
+     
     </div>
   );
 }

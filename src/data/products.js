@@ -64,6 +64,10 @@ export const normalizeProduct = (product = {}, index = 0) => {
         : `Product ${productId}`,
 
     description: product.description || '',
+    features: product.features || '',
+careInstructions: product.careInstructions || '',
+shippingInformation: product.shippingInformation || '',
+returnPolicy: product.returnPolicy || '',
 
     image,
 
@@ -158,6 +162,10 @@ export const createProductAPI = async (product) => {
       body: JSON.stringify({
         name: product.name || '',
         description: product.description || '',
+        features: product.features || '',
+careInstructions: product.careInstructions || '',
+shippingInformation: product.shippingInformation || '',
+returnPolicy: product.returnPolicy || '',
         image: product.image || '',
 
         gallery:
@@ -238,6 +246,10 @@ export const updateProductAPI = async (
       body: JSON.stringify({
         name: product.name || '',
         description: product.description || '',
+        features: product.features || '',
+careInstructions: product.careInstructions || '',
+shippingInformation: product.shippingInformation || '',
+returnPolicy: product.returnPolicy || '',
         image: product.image || '',
 
         gallery:
