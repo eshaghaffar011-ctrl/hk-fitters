@@ -51,7 +51,7 @@ function ProductCard({ product }) {
       <div className="product-body">
         <p className="product-category">{product.category}</p>
         <h3>{product.name}</h3>
-        <p className="product-meta">{product.description || product.color}</p>
+        
 
         <div className="size-pills">
           {sizeOptions.map((size) => (
