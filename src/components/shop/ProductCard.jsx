@@ -40,6 +40,7 @@ function ProductCard({ product }) {
         onError={handleImageError}
         style={{
           width: '100%',
+          aspectRatio: '1 / 1',
           height: 'auto',
           display: 'block',
           objectFit: 'contain',
