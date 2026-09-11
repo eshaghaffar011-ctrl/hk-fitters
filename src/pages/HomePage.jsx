@@ -4,9 +4,9 @@ import { fetchProductsFromAPI } from '../data/products';
 
 
 const featuredCategories = [
-  { title: 'Men', subtitle: 'Tailored athletic essentials and elevated layering.', accent: 'Precision tailoring' },
-  { title: 'Women', subtitle: 'Sculpted silhouettes with premium comfort and movement.', accent: 'Luxury fit' },
-  { title: 'Accessories', subtitle: 'Refined pieces to complete every global wardrobe.', accent: 'Signature details' }
+  { title: 'Men', subtitle: 'Premium men sportswear and performance wear designed for comfort, movement, and durability.', accent: 'Precision tailoring' },
+  { title: 'Women', subtitle: 'Premium women activewear and sportswear designed for performance, comfort, and a refined fit.', accent: 'Luxury fit' },
+  { title: 'Accessories', subtitle: 'Sportswear accessories and performance essentials to complete your active collection.', accent: 'Signature details' }
 ];
 
 
@@ -63,10 +63,10 @@ function HomePage() {
       <section className="hero-home">
         <div className="hero-content">
           <p className="eyebrow">International Performance Wear</p>
-          <h1>Train Hard. Wear HK FITTERS.</h1>
+          <h1>Premium Sportswear & Activewear Manufacturer</h1>
           <p className="hero-text">
-            HK FITTERS is a premium international sportswear export brand delivering refined performance wear, elevated craftsmanship, and dependable global service for modern athletes and business partners.
-          </p>
+            HK FITTERS is a premium sportswear and activewear manufacturer delivering high-quality performance wear, custom gym wear, and reliable global manufacturing solutions for brands, retailers, and businesses worldwide.
+            </p>
           <div className="hero-actions">
             <Link to="/shop" className="btn btn-primary">Shop Collection</Link>
             <a href="#featured" className="btn btn-secondary">Explore Categories</a>
@@ -83,8 +83,8 @@ function HomePage() {
         <section id="featured" className="section home-section">
           <div className="section-title">
             <div>
-              <p className="section-label">Curated collections</p>
-              <h2>Premium categories tailored for modern movement.</h2>
+              <h2 className="section-label">Sportswear & Activewear Collections</h2>
+              <p className="section-description">Explore premium sportswear, activewear, and performance apparel designed for brands, retailers, and modern athletes.</p>
             </div>
             <p>From refined training layers to signature accessories, every piece is designed with distinction.</p>
           </div>
@@ -92,7 +92,15 @@ function HomePage() {
             {featuredCategories.map((item) => (
               <article className="category-card" key={item.title}>
                 <span className="category-badge">{item.accent}</span>
-                <h3>{item.title}</h3>
+                <h3>
+                  <Link to={`/shop?category=${item.title}`}>
+                    {item.title === 'Men'
+                      ? "Men's Sportswear"
+                      : item.title === 'Women'
+                        ? "Women's Activewear"
+                        : 'Sportswear Accessories'}
+                  </Link>
+                </h3>
                 <p>{item.subtitle}</p>
               </article>
             ))}
@@ -102,8 +110,8 @@ function HomePage() {
        <section className="section home-section alt-panel">
   <div className="section-title">
     <div>
-      <p className="section-label">Featured products</p>
-      <h2>Modern essentials with elevated performance.</h2>
+      <h2 className="section-label">Featured Sportswear & Activewear</h2>
+      <p className="section-description">Discover premium sportswear, activewear, and performance apparel crafted for quality, comfort, and lasting performance.</p>
     </div>
 
     <p>
@@ -123,7 +131,7 @@ function HomePage() {
          <div className={`product-image product-image-${index + 1}`}>
   <img
     src={product.image}
-    alt={product.name}
+    alt={`${product.name} sportswear by HK FITTERS`}
   />
 </div>
 
@@ -138,10 +146,10 @@ function HomePage() {
         <section className="section home-section">
           <div className="section-title">
             <div>
-              <p className="section-label">Why HK FITTERS</p>
-              <h2>Crafted to impress and engineered to endure.</h2>
+              <h2 className="section-label">Why Choose HK FITTERS for Sportswear Manufacturing?</h2>
+              <p className="section-description">We combine premium materials, precise craftsmanship, performance-focused design, and reliable global service to deliver sportswear and activewear that meets the needs of modern brands and businesses.</p>
             </div>
-            <p>Every experience is designed around quality, comfort, and confident global delivery.</p>
+            <p>Every experience is designed around quality, comfort, and confident sportswear manufacturing and global delivery.</p>
           </div>
           <div className="why-grid">
             <article className="feature-card">
@@ -150,7 +158,7 @@ function HomePage() {
               </div>
               <div>
                 <h3>Luxury quality</h3>
-                <p>Premium fabrics and meticulous detailing that elevate every look from the first wear.</p>
+                <p>Premium fabrics and meticulous craftsmanship for durable, high-quality sportswear.</p>
               </div>
             </article>
             <article className="feature-card">
@@ -159,7 +167,7 @@ function HomePage() {
               </div>
               <div>
                 <h3>Performance-first</h3>
-                <p>Built for movement, resilience, and all-day comfort without compromising on style.</p>
+                <p>Performance-driven designs built for movement, comfort, durability, and everyday wear.</p>
               </div>
             </article>
             <article className="feature-card">
@@ -168,7 +176,7 @@ function HomePage() {
               </div>
               <div>
                 <h3>Global service</h3>
-                <p>From export-ready packaging to responsive support, your order arrives with confidence.</p>
+                <p>Reliable manufacturing, export-ready packaging, and worldwide delivery for business partners.</p>
               </div>
             </article>
           </div>
@@ -177,8 +185,8 @@ function HomePage() {
         <section className="section home-section">
           <div className="split-layout">
             <article className="highlight-card">
-              <p className="section-label">Best sellers & new arrivals</p>
-              <h2>Signature pieces arriving for the season ahead.</h2>
+              <h2 className="section-label">Best-Selling Sportswear & New Arrivals</h2>
+              <p className="section-description">Explore our latest sportswear and activewear collections, featuring performance-focused designs, premium fabrics, and modern styles.</p>
               <p>Seasonal drops designed to stand at the intersection of athletic performance and elevated luxury.</p>
               <div className="insight-list">
                 {products.filter((product) => product.badge === 'Best Seller').map((item) => (
@@ -192,9 +200,9 @@ function HomePage() {
               </div>
             </article>
             <article className="stack-card">
-              <p className="section-label">Worldwide shipping</p>
-              <h3>International delivery with export-ready care.</h3>
-              <p>We support streamlined shipping, secure packaging, and refined service for retailers and direct customers alike.</p>
+              <h2 className="section-label">Worldwide Sportswear Manufacturing & Delivery</h2>
+              <p className="section-description">We provide reliable worldwide delivery with export-ready packaging and professional service for sportswear brands, retailers, and business partners.</p>
+              <p>We support streamlined shipping, secure packaging, and refined service for sportswear manufacturing partners and direct customers alike.</p>
               <div className="stats-row">
                 <div>
                   <strong>40+</strong>
@@ -216,8 +224,8 @@ function HomePage() {
         <section className="section home-section review-section">
           <div className="section-title">
             <div>
-              <p className="section-label">Customer reviews</p>
-              <h2>Trusted by clients who value style and substance.</h2>
+              <h2 className="section-label">What Our Sportswear Clients Say</h2>
+              <p className="section-description">See why brands and business partners trust HK FITTERS for quality sportswear, activewear, and reliable service.</p>
             </div>
           </div>
           <div className="review-shell">
@@ -248,8 +256,8 @@ function HomePage() {
         <section className="section home-section newsletter-section">
           <div className="newsletter-card">
             <div>
-              <p className="section-label">Stay connected</p>
-              <h2>Join the HK FITTERS newsletter.</h2>
+              <h2 className="section-label">Stay Connected with HK FITTERS</h2>
+              <p className="section-description">Get updates on new sportswear and activewear collections, product launches, and exclusive offers.</p>
               <p>Receive early access to new arrivals, private offers, and exclusive export drops.</p>
             </div>
             <form

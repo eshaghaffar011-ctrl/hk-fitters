@@ -195,7 +195,7 @@ function Layout({ children }) {
                 }}
                 onMouseEnter={(e) => {
                   e.currentTarget.style.transform = 'translateY(-1px) scale(1.08)';
-                  e.currentTarget.style.background = '#b80c0c';
+                  e.currentTarget.style.background = '#a50803';
                   e.currentTarget.style.color = '#ffffff';
                 }}
                 onMouseLeave={(e) => {
@@ -403,7 +403,7 @@ function Layout({ children }) {
           <div style={{ display: 'grid', gap: '8px' }}>
             <h4 style={{ margin: 0, color: '#ffffff' }}>Quick Links</h4>
             <Link to="/" style={{ color: 'rgba(255,255,255,0.8)', textDecoration: 'none' }}>Home</Link>
-            <Link to="/shop" style={{ color: 'rgba(255,255,255,0.8)', textDecoration: 'none' }}>Shop</Link>
+            <Link to="/shop" style={{ color: 'rgba(255,255,255,0.8)', textDecoration: 'none' }}>Shop Sportswear</Link>
             <Link to="/about" style={{ color: 'rgba(255,255,255,0.8)', textDecoration: 'none' }}>About</Link>
             <Link to="/contact" style={{ color: 'rgba(255,255,255,0.8)', textDecoration: 'none' }}>Contact</Link>
             <Link to="/faq" style={{ color: 'rgba(255,255,255,0.8)', textDecoration: 'none' }}>FAQ</Link>
@@ -411,18 +411,18 @@ function Layout({ children }) {
 
           <div style={{ display: 'grid', gap: '8px' }}>
             <h4 style={{ margin: 0, color: '#ffffff' }}>Product Categories</h4>
-            <Link to="/shop?category=Men" style={{ color: 'rgba(255,255,255,0.8)', textDecoration: 'none' }}>Men</Link>
-            <Link to="/shop?category=Women" style={{ color: 'rgba(255,255,255,0.8)', textDecoration: 'none' }}>Women</Link>
-            <Link to="/shop?category=Accessories" style={{ color: 'rgba(255,255,255,0.8)', textDecoration: 'none' }}>Accessories</Link>
+            <Link to="/shop?category=Men" style={{ color: 'rgba(255,255,255,0.8)', textDecoration: 'none' }}>Men's Sportswear</Link>
+            <Link to="/shop?category=Women" style={{ color: 'rgba(255,255,255,0.8)', textDecoration: 'none' }}>Women's Activewear</Link>
+            <Link to="/shop?category=Accessories" style={{ color: 'rgba(255,255,255,0.8)', textDecoration: 'none' }}>Sportswear Accessories</Link>
             <Link to="/shop?category=Kids" style={{ color: 'rgba(255,255,255,0.8)', textDecoration: 'none' }}>Kids</Link>
           </div>
 
           <div style={{ display: 'grid', gap: '8px' }}>
             <h4 style={{ margin: 0, color: '#ffffff' }}>Export Services</h4>
-            <span style={{ color: 'rgba(255,255,255,0.8)' }}>OEM Manufacturing</span>
-            <span style={{ color: 'rgba(255,255,255,0.8)' }}>Private Label</span>
-            <span style={{ color: 'rgba(255,255,255,0.8)' }}>Bulk Orders</span>
-            <span style={{ color: 'rgba(255,255,255,0.8)' }}>Worldwide Shipping</span>
+            <Link to="/contact" style={{ color: 'rgba(255,255,255,0.8)', textDecoration: 'none' }}>OEM Manufacturing</Link>
+            <Link to="/contact" style={{ color: 'rgba(255,255,255,0.8)', textDecoration: 'none' }}>Private Label Sportswear</Link>
+            <Link to="/contact" style={{ color: 'rgba(255,255,255,0.8)', textDecoration: 'none' }}>Bulk Sportswear Orders</Link>
+            <Link to="/contact" style={{ color: 'rgba(255,255,255,0.8)', textDecoration: 'none' }}>Worldwide Shipping</Link>
           </div>
 
           <div style={{ display: 'grid', gap: '8px' }}>
@@ -455,7 +455,7 @@ function Layout({ children }) {
                   }}
                   onMouseEnter={(e) => {
                     e.currentTarget.style.transform = 'translateY(-1px) scale(1.08)';
-                    e.currentTarget.style.background = '#b80c0c';
+                    e.currentTarget.style.background = '#a50803';
                     e.currentTarget.style.color = '#ffffff';
                   }}
                   onMouseLeave={(e) => {
@@ -503,7 +503,7 @@ function Layout({ children }) {
             }}
             onMouseEnter={(e) => {
               e.currentTarget.style.transform = 'translateY(-1px)';
-              e.currentTarget.style.background = '#b80c0c';
+                  e.currentTarget.style.background = '#a50803';
               e.currentTarget.style.color = '#ffffff';
             }}
             onMouseLeave={(e) => {

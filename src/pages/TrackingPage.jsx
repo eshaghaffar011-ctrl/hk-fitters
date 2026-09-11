@@ -65,7 +65,7 @@ function TrackingPage() {
             <p
               style={{
                 marginTop: '16px',
-                color: '#b80c0c',
+                color: '#a50803',
                 fontWeight: '600',
               }}
             >

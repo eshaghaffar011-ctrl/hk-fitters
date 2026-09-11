@@ -175,7 +175,7 @@ function App() {
 
         <div className="hero-content">
           <p className="eyebrow">International Performancewear</p>
-          <h1>Train Hard. Wear HK FITTERS.</h1>
+          <h1>Premium Sportswear & Activewear Manufacturer</h1>
           <p className="hero-text">
             Premium sportswear for athletes, founders, and modern movers who demand comfort, precision, and style.
           </p>
@@ -300,22 +300,22 @@ function App() {
               <div className="why-card" key={f.id}>
                 <div className="why-icon" aria-hidden>
                   {f.id === 1 && (
-                    <svg width="36" height="36" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M12 2l3 6 6 .5-4.5 3 1.5 6L12 15l-6 3 1.5-6L3 8.5 9 8 12 2z" fill="#E10600"/></svg>
+                    <svg width="36" height="36" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M12 2l3 6 6 .5-4.5 3 1.5 6L12 15l-6 3 1.5-6L3 8.5 9 8 12 2z" fill="#a50803"/></svg>
                   )}
                   {f.id === 2 && (
-                    <svg width="36" height="36" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M12 2a10 10 0 100 20 10 10 0 000-20zm1 4v2h3v2h-3v6h-2v-6H8V8h3V6h2z" fill="#E10600"/></svg>
+                    <svg width="36" height="36" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M12 2a10 10 0 100 20 10 10 0 000-20zm1 4v2h3v2h-3v6h-2v-6H8V8h3V6h2z" fill="#a50803"/></svg>
                   )}
                   {f.id === 3 && (
-                    <svg width="36" height="36" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><rect x="4" y="11" width="16" height="9" rx="2" stroke="#E10600" strokeWidth="1.5" fill="none"/><path d="M7 11V8a5 5 0 0110 0v3" stroke="#E10600" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/></svg>
+                    <svg width="36" height="36" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><rect x="4" y="11" width="16" height="9" rx="2" stroke="#a50803" strokeWidth="1.5" fill="none"/><path d="M7 11V8a5 5 0 0110 0v3" stroke="#a50803" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/></svg>
                   )}
                   {f.id === 4 && (
-                    <svg width="36" height="36" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M21 10v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6" stroke="#E10600" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/><path d="M16 10V7a4 4 0 10-8 0v3" stroke="#E10600" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/></svg>
+                    <svg width="36" height="36" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M21 10v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6" stroke="#a50803" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/><path d="M16 10V7a4 4 0 10-8 0v3" stroke="#a50803" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/></svg>
                   )}
                   {f.id === 5 && (
-                    <svg width="36" height="36" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M22 16.92V21l-4.1-1.1a10 10 0 01-6.9-6.9L10 9" stroke="#E10600" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/><path d="M21 10a9 9 0 11-18 0 9 9 0 0118 0z" stroke="#E10600" strokeWidth="1.2"/></svg>
+                    <svg width="36" height="36" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M22 16.92V21l-4.1-1.1a10 10 0 01-6.9-6.9L10 9" stroke="#a50803" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/><path d="M21 10a9 9 0 11-18 0 9 9 0 0118 0z" stroke="#a50803" strokeWidth="1.2"/></svg>
                   )}
                   {f.id === 6 && (
-                    <svg width="36" height="36" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M3 12l2-2 4 4 8-8 4 4v6H3z" fill="#E10600"/></svg>
+                    <svg width="36" height="36" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M3 12l2-2 4 4 8-8 4 4v6H3z" fill="#a50803"/></svg>
                   )}
                 </div>
 

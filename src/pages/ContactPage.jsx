@@ -171,7 +171,7 @@ function ContactPage() {
 
               <div style={{ border: '1px solid rgba(0,0,0,0.08)', borderRadius: '12px', padding: '16px', background: '#f8f8f8' }}>
                 <p style={{ margin: '0 0 8px', fontWeight: 700 }}>Google Maps Placeholder</p>
-                <div style={{ height: '220px', borderRadius: '10px', background: 'linear-gradient(135deg, #111111, #b80c0c)', color: '#ffffff', display: 'flex', alignItems: 'center', justifyContent: 'center', textAlign: 'center', padding: '16px' }}>
+                <div style={{ height: '220px', borderRadius: '10px', background: 'linear-gradient(135deg, #111111, #a50803)', color: '#ffffff', display: 'flex', alignItems: 'center', justifyContent: 'center', textAlign: 'center', padding: '16px' }}>
                   Map Preview Placeholder for {companyName}
                 </div>
               </div>
@@ -202,7 +202,7 @@ function ContactPage() {
                       }}
                       onMouseEnter={(e) => {
                         e.currentTarget.style.transform = 'translateY(-2px) scale(1.05)';
-                        e.currentTarget.style.background = '#b80c0c';
+                        e.currentTarget.style.background = '#a50803';
                       }}
                       onMouseLeave={(e) => {
                         e.currentTarget.style.transform = 'translateY(0) scale(1)';

@@ -36,7 +36,7 @@ function AuthForm({ type, onSubmit }) {
   return (
     <form className="auth-card" onSubmit={handleSubmit} noValidate>
       <h2>{type === 'login' ? 'Login' : 'Register'}</h2>
-      {error && <p style={{ color: '#b80c0c', marginBottom: '12px' }}>{error}</p>}
+      {error && <p style={{ color: '#a50803', marginBottom: '12px' }}>{error}</p>}
       {success && <p style={{ color: '#0d7b4f', marginBottom: '12px' }}>{success}</p>}
       <input type="email" placeholder="Email" value={email} onChange={(e) => setEmail(e.target.value)} required />
       <input type="password" placeholder="Password" value={password} onChange={(e) => setPassword(e.target.value)} required />

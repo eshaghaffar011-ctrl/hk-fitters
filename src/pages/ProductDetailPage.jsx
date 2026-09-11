@@ -20,7 +20,7 @@ const getColorLabel = (value) => {
   }
 
   if (
-    normalized === '#e10600' ||
+    normalized === '#a50803' ||
     normalized.includes('red')
   ) {
     return 'Red';
@@ -250,7 +250,7 @@ useEffect(() => {
           borderRadius: '999px',
           border:
             selectedColor === color.name
-              ? '2px solid #e10600'
+              ? '2px solid #a50803'
               : '1px solid #ccc',
           background: 'transparent',
           cursor: 'pointer',

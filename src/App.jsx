@@ -16,6 +16,7 @@ import ContactPage from './pages/ContactPage';
 import AdminLoginPage from './pages/admin/AdminLoginPage';
 import AdminDashboardPage from './pages/admin/AdminDashboardPage';
 import Layout from './components/Layout';
+import SeoHead from './components/SeoHead';
 
 function AdminProtectedRoute({ children }) {
   const isAuthenticated = localStorage.getItem('hkfitters_admin') === 'true';
@@ -25,6 +26,7 @@ function AdminProtectedRoute({ children }) {
 function App() {
   return (
     <Layout>
+      <SeoHead />
       <Routes>
         <Route path="/" element={<HomePage />} />
         <Route path="/shop" element={<ShopPage />} />

@@ -1,3 +1,14 @@
 # https://www.robotstxt.org/robotstxt.html
 User-agent: *
-Disallow:
+Allow: /
+Disallow: /admin
+Disallow: /cart
+Disallow: /wishlist
+Disallow: /checkout
+Disallow: /login
+Disallow: /register
+Disallow: /profile
+Disallow: /track
+Disallow: /tracking
+
+Sitemap: https://hk-fitters.vercel.app/sitemap.xml

@@ -118,7 +118,7 @@ function AboutPage() {
             <div className="about-stats-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(4, minmax(0, 1fr))', gap: '12px' }}>
               {stats.map((stat) => (
                 <div key={stat.label} style={{ border: '1px solid rgba(0,0,0,0.08)', borderRadius: '10px', padding: '16px', textAlign: 'center', background: '#fafafa' }}>
-                  <div style={{ fontSize: '1.5rem', fontWeight: 800, color: '#b80c0c' }}>{stat.value}</div>
+                  <div style={{ fontSize: '1.5rem', fontWeight: 800, color: '#a50803' }}>{stat.value}</div>
                   <div style={{ marginTop: '6px' }}>{stat.label}</div>
                 </div>
               ))}

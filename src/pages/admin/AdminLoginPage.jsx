@@ -45,7 +45,7 @@ function AdminLoginPage() {
           {error && (
             <p
               style={{
-                color: '#b80c0c',
+                color: '#a50803',
                 marginBottom: '12px',
               }}
             >
