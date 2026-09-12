@@ -272,6 +272,7 @@ button {
   display: grid;
   gap: 18px;
   text-align: left;
+  animation: none;
 }
 
 .home-page .eyebrow {

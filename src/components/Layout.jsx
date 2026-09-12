@@ -232,7 +232,7 @@ function Layout({ children }) {
       }}
     >
       <img
-        src="/logo/hk-logo.png"
+        src="/logo/hk-logo-256.png"
         alt="HK FITTERS Logo"
         style={{
           width: '100%',
