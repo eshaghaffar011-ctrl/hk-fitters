@@ -9,6 +9,8 @@ const PAGE_SIZE = 6;
 function ShopPage() {
   const[products, setProducts] = useState([]);
   const[loading, setLoading] = useState(true);
+  const [loadError, setLoadError] = useState('');
+  const [retryCount, setRetryCount] = useState(0);
   const [searchParams] = useSearchParams();
   const [selectedCategory, setSelectedCategory] = 
   useState(
@@ -20,24 +22,42 @@ function ShopPage() {
   const [visibleCount, setVisibleCount] = useState(PAGE_SIZE);
 
   useEffect(() => {
-  const loadProducts = async () => {
-    try {
-      setLoading(true);
+    let isMounted = true;
+    const controller = new AbortController();
+    const timeoutId = window.setTimeout(() => controller.abort(), 12000);
 
-      const data = await fetchProductsFromAPI();
-      console.log('SHOP API PRODUCTS:', data);
+    const loadProducts = async () => {
+      try {
+        setLoading(true);
+        setLoadError('');
 
-      setProducts(data);
-    } catch (error) {
-      console.error('Failed to load shop products:', error);
-      setProducts([]);
-    } finally {
-      setLoading(false);
-    }
-  };
+        const data = await fetchProductsFromAPI(controller.signal);
 
-  loadProducts();
-}, []);
+        if (isMounted) {
+          setProducts(data);
+        }
+      } catch (error) {
+        console.error('Failed to load shop products:', error);
+
+        if (isMounted) {
+          setProducts([]);
+          setLoadError('We could not load the product collection right now. Please try again.');
+        }
+      } finally {
+        if (isMounted) {
+          setLoading(false);
+        }
+      }
+    };
+
+    loadProducts();
+
+    return () => {
+      isMounted = false;
+      window.clearTimeout(timeoutId);
+      controller.abort();
+    };
+  }, [retryCount]);
 
   const categoryFromUrl = searchParams.get('category') || 'All';
 
@@ -103,7 +123,10 @@ function ShopPage() {
         <div className="section-heading shop-banner">
           <div>
             <p className="eyebrow">Shop Collection</p>
-            <h1>Premium Sportswear for Every Performance</h1>
+            <h1>Premium Sportswear &amp; Activewear Shop</h1>
+            <p className="shop-intro">
+              Explore premium sportswear, activewear, and gym wear collections for training, performance, and everyday movement.
+            </p>
           </div>
         </div>
 
@@ -120,23 +143,30 @@ function ShopPage() {
         />
 
         {loading ? (
-  <div className="empty-state">
-    Loading products...
-  </div>
-) : (
-  <div className="card-grid shop-grid">
-    {visibleProducts.map((product) => (
-      <ProductCard
-        key={product.id}
-        product={product}
-      />
-    ))}
-  </div>
-)}
-
-        {filteredProducts.length === 0 ? (
+          <div className="empty-state" role="status" aria-live="polite">
+            Loading the latest sportswear and activewear collection...
+          </div>
+        ) : loadError ? (
+          <div className="empty-state" role="alert">
+            <p>{loadError}</p>
+            <button type="button" className="btn btn-primary" onClick={() => setRetryCount((current) => current + 1)}>
+              Try Again
+            </button>
+          </div>
+        ) : filteredProducts.length === 0 ? (
           <div className="empty-state">No products match your current filters.</div>
-        ) : hasMore ? (
+        ) : (
+          <div className="card-grid shop-grid">
+            {visibleProducts.map((product) => (
+              <ProductCard
+                key={product.id}
+                product={product}
+              />
+            ))}
+          </div>
+        )}
+
+        {!loading && !loadError && filteredProducts.length > 0 && hasMore ? (
           <div className="shop-load-more-wrap">
             <button
               type="button"

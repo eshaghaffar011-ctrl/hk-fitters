@@ -117,9 +117,10 @@ export const normalizeProduct = (product = {}, index = 0) => {
 /*
   GET ALL PRODUCTS
 */
-export const fetchProductsFromAPI = async () => {
+export const fetchProductsFromAPI = async (signal) => {
   const response = await fetch(
-    PRODUCTS_API_URL
+    PRODUCTS_API_URL,
+    signal ? { signal } : undefined
   );
 
   if (!response.ok) {
