@@ -231,11 +231,23 @@ app.delete('/api/inquiries/:id', async (req, res) => {
 app.get('/api/products', async (req, res) => {
   try {
     const includeGallery = req.query.includeGallery !== 'false';
+    const featuredOnly = req.query.featured === 'true';
+    const requestedLimit = Number.parseInt(req.query.limit, 10);
+    const limit = Number.isInteger(requestedLimit) && requestedLimit > 0
+      ? Math.min(requestedLimit, 100)
+      : null;
+    const fields = includeGallery
+      ? 'id, name, description, image, gallery, category, sizes, colors, color, stock, badge, featured, rating, reviews'
+      : 'id, name, image, category, sizes, colors, color, stock, badge, featured, rating, reviews';
+    const conditions = featuredOnly ? "WHERE featured::text IN ('1', 'true')" : '';
+    const limitClause = limit ? 'LIMIT $1' : '';
     const result = await db.query(`
-      SELECT *
+      SELECT ${fields}
       FROM products
+      ${conditions}
       ORDER BY id DESC
-    `);
+      ${limitClause}
+    `, limit ? [limit] : []);
 
     const products = result.rows;
 

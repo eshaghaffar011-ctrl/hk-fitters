@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+
 :root {
   font-family: Inter, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
   line-height: 1.5;
@@ -592,13 +594,25 @@ button {
 }
 
 .home-page .dot {
+  width: 44px;
+  height: 44px;
+  padding: 0;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  background: transparent;
+  position: relative;
+}
+
+.home-page .dot::before {
+  content: '';
   width: 10px;
   height: 10px;
   border-radius: 50%;
   background: rgba(17,17,17,0.24);
 }
 
-.home-page .dot.active {
+.home-page .dot.active::before {
   background: #a50803;
 }
 

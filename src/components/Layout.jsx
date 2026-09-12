@@ -275,8 +275,8 @@ function Layout({ children }) {
 
         <div className="top-actions">
           <Link to="/shop" className="icon-btn" aria-label="Search products" onClick={() => setMobileMenuOpen(false)}>🔍</Link>
-          <Link to="/wishlist" className="icon-btn" onClick={() => setMobileMenuOpen(false)}>♡ {wishlistItems.length}</Link>
-          <Link to="/cart" className="icon-btn" onClick={() => setMobileMenuOpen(false)}>🛒 {cartCount}</Link>
+          <Link to="/wishlist" className="icon-btn" aria-label="Wishlist" onClick={() => setMobileMenuOpen(false)}>♡ {wishlistItems.length}</Link>
+          <Link to="/cart" className="icon-btn" aria-label="Shopping Cart" onClick={() => setMobileMenuOpen(false)}>🛒 {cartCount}</Link>
           {user ? (
             <>
              <div

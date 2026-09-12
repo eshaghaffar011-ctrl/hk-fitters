@@ -29,7 +29,11 @@ function HomePage() {
   useEffect(() => {
     const loadProducts = async () => {
       try {
-        const data = await fetchProductsFromAPI(undefined, { includeGallery: false });
+        const data = await fetchProductsFromAPI(undefined, {
+          includeGallery: false,
+          featuredOnly: true,
+          limit: 8,
+        });
         setProducts(data);
       } catch (error) {
         console.error('Failed to load home products:', error);

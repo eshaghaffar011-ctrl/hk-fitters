@@ -118,7 +118,21 @@ export const normalizeProduct = (product = {}, index = 0) => {
   GET ALL PRODUCTS
 */
 export const fetchProductsFromAPI = async (signal, options = {}) => {
-  const query = options.includeGallery === false ? '?includeGallery=false' : '';
+  const params = new URLSearchParams();
+
+  if (options.includeGallery === false) {
+    params.set('includeGallery', 'false');
+  }
+
+  if (options.featuredOnly) {
+    params.set('featured', 'true');
+  }
+
+  if (Number.isInteger(options.limit) && options.limit > 0) {
+    params.set('limit', String(options.limit));
+  }
+
+  const query = params.toString() ? `?${params.toString()}` : '';
   const response = await fetch(
     `${PRODUCTS_API_URL}${query}`,
     signal ? { signal } : undefined
