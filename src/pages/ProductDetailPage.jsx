@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import { fetchProductsFromAPI } from '../data/products';
 import contactInfo from '../config/contact';
@@ -56,6 +56,28 @@ const reviewCards = [
   { name: 'Ava S.', role: 'Creative Director', text: 'It looks sharp, performs beautifully, and feels effortless to wear.' },
 ];
 
+const PRODUCT_FALLBACK_DESCRIPTION = 'Explore this premium HK FITTERS sportswear product, designed for comfort, performance, and everyday movement.';
+
+const getProductDescription = (product) => {
+  const description = typeof product?.description === 'string'
+    ? product.description.replace(/\s+/g, ' ').trim()
+    : '';
+
+  return description || PRODUCT_FALLBACK_DESCRIPTION;
+};
+
+const getMetaDescription = (description) => {
+  if (description.length <= 160) return description;
+  return `${description.slice(0, 157).replace(/\s+$/, '')}...`;
+};
+
+const getAvailabilityUrl = (stock) => {
+  const normalizedStock = String(stock || '').toLowerCase();
+  return normalizedStock.includes('out')
+    ? 'https://schema.org/OutOfStock'
+    : 'https://schema.org/InStock';
+};
+
 function ProductDetailPage() {
   const { id } = useParams();
   
@@ -85,7 +107,12 @@ useEffect(() => {
   loadProduct();
 }, [id]);
   const { addToCart, toggleWishlist, wishlistItems } = useCartWishlist();
-  const productGallery = Array.isArray(product?.gallery) && product.gallery.length ? product.gallery : [product?.image || FALLBACK_DETAIL_IMAGE];
+  const productGallery = useMemo(
+    () => Array.isArray(product?.gallery) && product.gallery.length
+      ? product.gallery
+      : [product?.image || FALLBACK_DETAIL_IMAGE],
+    [product]
+  );
   const availableColors = Array.isArray(product?.colors) && product.colors.length
     ? product.colors.map((colorValue) => ({ name: getColorLabel(colorValue), value: colorValue }))
     : [{ name: product?.color || 'Black', value: product?.color || '#111111' }];
@@ -94,6 +121,51 @@ useEffect(() => {
   const [selectedColor, setSelectedColor] = useState(product?.color || availableColors[0]?.name || 'Black');
   const [quantity, setQuantity] = useState(1);
   const isWishlisted = wishlistItems.some((item) => item.id === product?.id);
+  const productDescription = getProductDescription(product);
+
+  useEffect(() => {
+    if (!product) return undefined;
+
+    const canonicalUrl = `https://hk-fitters.vercel.app/product/${product.id}`;
+    const metadataDescription = getMetaDescription(productDescription);
+
+    document.title = `${product.name} | HK FITTERS`;
+
+    const descriptionTag = document.head.querySelector('meta[name="description"]');
+    if (descriptionTag) {
+      descriptionTag.setAttribute('content', metadataDescription);
+    }
+
+    const canonicalTag = document.head.querySelector('link[rel="canonical"]');
+    if (canonicalTag) {
+      canonicalTag.setAttribute('href', canonicalUrl);
+    }
+
+    const existingSchema = document.head.querySelector('#product-jsonld');
+    existingSchema?.remove();
+
+    const schemaTag = document.createElement('script');
+    schemaTag.id = 'product-jsonld';
+    schemaTag.type = 'application/ld+json';
+    schemaTag.textContent = JSON.stringify({
+      '@context': 'https://schema.org',
+      '@type': 'Product',
+      name: product.name,
+      image: productGallery,
+      description: productDescription,
+      brand: {
+        '@type': 'Brand',
+        name: 'HK FITTERS',
+      },
+      productID: String(product.id),
+      availability: getAvailabilityUrl(product.stock),
+    });
+    document.head.appendChild(schemaTag);
+
+    return () => {
+      schemaTag.remove();
+    };
+  }, [product, productDescription, productGallery]);
 
   if (loading) {
   return (
@@ -218,7 +290,7 @@ useEffect(() => {
           </div>
           
           <span className="export-badge">Export Quality</span>
-          <p className="product-intro">Premium sportswear crafted for speed, comfort, and a sharp athletic silhouette built for both performance and presence.</p>
+          <p className="product-intro">{productDescription}</p>
           <p className="stock-pill">{product.stock}</p>
 
           <div className="option-block">
