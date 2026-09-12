@@ -170,8 +170,15 @@ useEffect(() => {
             <img
               src={productGallery[selectedImage] || product.image || FALLBACK_DETAIL_IMAGE}
               alt={product.name}
+              width="1200"
+              height="1200"
+              loading="eager"
+              fetchPriority="high"
+              decoding="async"
               onError={(event) => {
-                event.currentTarget.src = FALLBACK_DETAIL_IMAGE;
+                if (event.currentTarget.src !== FALLBACK_DETAIL_IMAGE) {
+                  event.currentTarget.src = FALLBACK_DETAIL_IMAGE;
+                }
               }}
             />
       
@@ -187,8 +194,14 @@ useEffect(() => {
                 <img
                   src={image}
                   alt={`${product.name} view ${index + 1}`}
+                  width="160"
+                  height="160"
+                  loading="lazy"
+                  decoding="async"
                   onError={(event) => {
-                    event.currentTarget.src = FALLBACK_DETAIL_IMAGE;
+                    if (event.currentTarget.src !== FALLBACK_DETAIL_IMAGE) {
+                      event.currentTarget.src = FALLBACK_DETAIL_IMAGE;
+                    }
                   }}
                 />
               </button>

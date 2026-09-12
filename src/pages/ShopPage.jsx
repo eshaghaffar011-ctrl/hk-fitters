@@ -31,7 +31,7 @@ function ShopPage() {
         setLoading(true);
         setLoadError('');
 
-        const data = await fetchProductsFromAPI(controller.signal);
+        const data = await fetchProductsFromAPI(controller.signal, { includeGallery: false });
 
         if (isMounted) {
           setProducts(data);
@@ -157,10 +157,11 @@ function ShopPage() {
           <div className="empty-state">No products match your current filters.</div>
         ) : (
           <div className="card-grid shop-grid">
-            {visibleProducts.map((product) => (
+            {visibleProducts.map((product, index) => (
               <ProductCard
                 key={product.id}
                 product={product}
+                priority={index < 2}
               />
             ))}
           </div>

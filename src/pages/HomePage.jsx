@@ -29,7 +29,7 @@ function HomePage() {
   useEffect(() => {
     const loadProducts = async () => {
       try {
-        const data = await fetchProductsFromAPI();
+        const data = await fetchProductsFromAPI(undefined, { includeGallery: false });
         setProducts(data);
       } catch (error) {
         console.error('Failed to load home products:', error);
@@ -132,6 +132,17 @@ function HomePage() {
   <img
     src={product.image}
     alt={`${product.name} sportswear by HK FITTERS`}
+    width="900"
+    height="900"
+    loading={index < 2 ? 'eager' : 'lazy'}
+    fetchPriority={index < 2 ? 'high' : 'auto'}
+    decoding="async"
+    onError={(event) => {
+      if (event.currentTarget.dataset.fallbackApplied !== 'true') {
+        event.currentTarget.dataset.fallbackApplied = 'true';
+        event.currentTarget.src = 'https://images.unsplash.com/photo-1521572267360-ee0c2909d518?auto=format&fit=crop&w=900&q=80';
+      }
+    }}
   />
 </div>
 

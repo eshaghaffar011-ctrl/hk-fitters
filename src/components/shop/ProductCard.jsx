@@ -4,7 +4,7 @@ import contactInfo from '../../config/contact';
 
 const FALLBACK_PRODUCT_IMAGE = 'https://images.unsplash.com/photo-1521572267360-ee0c2909d518?auto=format&fit=crop&w=900&q=80';
 
-function ProductCard({ product }) {
+function ProductCard({ product, priority = false }) {
   const { addToCart, toggleWishlist, wishlistItems } = useCartWishlist();
   const isWishlisted = wishlistItems.some((item) => item.id === product.id);
   const { whatsappNumber, companyName } = contactInfo;
@@ -17,7 +17,9 @@ function ProductCard({ product }) {
   )}`;
 
   const handleImageError = (event) => {
-    event.currentTarget.src = FALLBACK_PRODUCT_IMAGE;
+    if (event.currentTarget.src !== FALLBACK_PRODUCT_IMAGE) {
+      event.currentTarget.src = FALLBACK_PRODUCT_IMAGE;
+    }
   };
 
   return (
@@ -34,9 +36,14 @@ function ProductCard({ product }) {
       </div>
 
       <div className="product-media modern-media">
-        <img 
-        src={productImage} 
-        alt={product.name} 
+        <img
+        src={productImage}
+        alt={product.name}
+        width="900"
+        height="900"
+        loading={priority ? 'eager' : 'lazy'}
+        fetchPriority={priority ? 'high' : 'auto'}
+        decoding="async"
         onError={handleImageError}
         style={{
           width: '100%',

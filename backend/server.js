@@ -230,6 +230,7 @@ app.delete('/api/inquiries/:id', async (req, res) => {
 // =========================
 app.get('/api/products', async (req, res) => {
   try {
+    const includeGallery = req.query.includeGallery !== 'false';
     const result = await db.query(`
       SELECT *
       FROM products
@@ -243,10 +244,10 @@ app.get('/api/products', async (req, res) => {
       name: product.name,
       description: product.description || '',
       image: product.image || '',
-      gallery: product.gallery
+      gallery: includeGallery && product.gallery
         ? JSON.parse(product.gallery)
         : [],
-      galleryImages: product.gallery
+      galleryImages: includeGallery && product.gallery
         ? JSON.parse(product.gallery)
         : [],
       category: product.category || 'Men',
@@ -267,6 +268,7 @@ app.get('/api/products', async (req, res) => {
       reviews: Number(product.reviews) || 0,
     }));
 
+    res.set('Cache-Control', 'public, max-age=60, s-maxage=300');
     res.json(formatted);
 
   } catch (error) {
