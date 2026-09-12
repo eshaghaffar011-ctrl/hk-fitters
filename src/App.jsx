@@ -15,6 +15,7 @@ import AboutPage from './pages/AboutPage';
 import ContactPage from './pages/ContactPage';
 import AdminLoginPage from './pages/admin/AdminLoginPage';
 import AdminDashboardPage from './pages/admin/AdminDashboardPage';
+import NotFoundPage from './pages/NotFoundPage';
 import Layout from './components/Layout';
 import SeoHead from './components/SeoHead';
 
@@ -45,6 +46,7 @@ function App() {
         <Route path="/terms" element={<PolicyPage title="Terms & Conditions"><p>By using our website, you agree to use our services lawfully and responsibly. All purchases are subject to availability and shipping terms.</p></PolicyPage>} />
         <Route path="/admin" element={<AdminLoginPage />} />
         <Route path="/admin/dashboard" element={<AdminProtectedRoute><AdminDashboardPage /></AdminProtectedRoute>} />
+        <Route path="*" element={<NotFoundPage />} />
       </Routes>
     </Layout>
   );
