@@ -7,6 +7,89 @@ const app = express();
 
 const PORT = process.env.PORT || 5000;
 
+
+/*
+  PRODUCT DATABASE MIGRATION
+  --------------------------
+  Adds the new SEO, image, sizing,
+  color, customization and
+  manufacturing fields.
+
+  IF NOT EXISTS makes this safe
+  for existing products.
+*/
+const ensureProductColumns = async () => {
+  try {
+    await db.query(`
+      ALTER TABLE products
+
+      ADD COLUMN IF NOT EXISTS short_description TEXT,
+
+      ADD COLUMN IF NOT EXISTS product_type TEXT,
+
+      ADD COLUMN IF NOT EXISTS subcategory TEXT,
+
+      ADD COLUMN IF NOT EXISTS collection TEXT,
+
+      ADD COLUMN IF NOT EXISTS seo_title TEXT,
+
+      ADD COLUMN IF NOT EXISTS seo_description TEXT,
+
+      ADD COLUMN IF NOT EXISTS seo_tags TEXT,
+
+      ADD COLUMN IF NOT EXISTS slug TEXT,
+
+      ADD COLUMN IF NOT EXISTS image_alt TEXT,
+
+      ADD COLUMN IF NOT EXISTS gallery_alt TEXT,
+
+      ADD COLUMN IF NOT EXISTS custom_size_available BOOLEAN DEFAULT FALSE,
+
+      ADD COLUMN IF NOT EXISTS custom_size_instructions TEXT,
+
+      ADD COLUMN IF NOT EXISTS color_options TEXT,
+
+      ADD COLUMN IF NOT EXISTS customization_available BOOLEAN DEFAULT FALSE,
+
+      ADD COLUMN IF NOT EXISTS custom_logo BOOLEAN DEFAULT FALSE,
+
+      ADD COLUMN IF NOT EXISTS custom_design BOOLEAN DEFAULT FALSE,
+
+      ADD COLUMN IF NOT EXISTS private_label BOOLEAN DEFAULT FALSE,
+
+      ADD COLUMN IF NOT EXISTS customization_details TEXT,
+
+      ADD COLUMN IF NOT EXISTS material TEXT,
+
+      ADD COLUMN IF NOT EXISTS fabric TEXT,
+
+      ADD COLUMN IF NOT EXISTS features TEXT,
+
+      ADD COLUMN IF NOT EXISTS specifications TEXT,
+
+      ADD COLUMN IF NOT EXISTS care_instructions TEXT,
+
+      ADD COLUMN IF NOT EXISTS manufacturing_details TEXT,
+
+      ADD COLUMN IF NOT EXISTS moq TEXT,
+
+      ADD COLUMN IF NOT EXISTS lead_time TEXT
+    `);
+
+    console.log(
+      'Product SEO/customization database fields are ready.'
+    );
+  } catch (error) {
+    console.error(
+      'Product database migration failed:',
+      error
+    );
+
+    throw error;
+  }
+};
+
+
 app.use(cors());
 app.use(express.json({limit:'20mb'}));
 
@@ -572,6 +655,23 @@ app.delete('/api/subscribers/:id', async (req, res) => {
   }
 });
 
-app.listen(PORT, '0.0.0.0',() => {
-  console.log(`HK FITTERS backend running on port ${PORT}`);
-});
+const startServer = async () => {
+  try {
+    await ensureProductColumns();
+
+    app.listen(PORT, '0.0.0.0', () => {
+      console.log(
+        `HK FITTERS backend running on port ${PORT}`
+      );
+    });
+  } catch (error) {
+    console.error(
+      'Backend startup failed:',
+      error
+    );
+
+    process.exit(1);
+  }
+};
+
+startServer();
