@@ -28,12 +28,7 @@ function Layout({ children }) {
 
   ];
 
-  const categoryLinks = [
-    { label: 'Men', path: '/shop?category=Men' },
-    { label: 'Women', path: '/shop?category=Women' },
-    { label: 'Accessories', path: '/shop?category=Accessories' },
-    { label: 'Kids', path: '/shop?category=Kids' },
-  ];
+  
 
   return (
     <div className="app-shell">
@@ -162,7 +157,14 @@ function Layout({ children }) {
             <span className="top-header-hours" style={{ opacity: 0.85 }}>{businessHours}</span>
           </div>
 
-          <div
+          <Link
+  to="/track"
+  className="top-header-track"
+  onClick={() => setMobileMenuOpen(false)}
+>
+  Order Tracking
+</Link>
+<div
             className="top-header-social"
             style={{
               display: 'flex',
@@ -228,7 +230,7 @@ function Layout({ children }) {
         alignItems: 'center',
         justifyContent: 'center',
         flexShrink: 0,
-        background: '#ffffff',
+        background: '#000000',
       }}
     >
       <img
@@ -258,22 +260,43 @@ function Layout({ children }) {
         </button>
 
         <nav className={`topnav ${mobileMenuOpen ? 'open' : ''}`}>
-          <Link to="/" onClick={() => setMobileMenuOpen(false)}>Home</Link>
-          <Link to="/shop" onClick={() => setMobileMenuOpen(false)}>Shop</Link>
-          {categoryLinks.map((category) => (
-            <Link
-              key={category.label}
-              to={category.path}
-              onClick={() => setMobileMenuOpen(false)}
-            >
-              {category.label}
-            </Link>
-          ))}
-          <Link to="/track" onClick={() => setMobileMenuOpen(false)}>Track</Link>
-          <Link to="/admin" onClick={() => setMobileMenuOpen(false)}>Admin</Link>
-        </nav>
+  <Link to="/" onClick={() => setMobileMenuOpen(false)}>
+    Home
+  </Link>
+
+  <Link to="/shop" onClick={() => setMobileMenuOpen(false)}>
+    Products
+  </Link>
+
+  <Link to="/shop?category=Men" onClick={() => setMobileMenuOpen(false)}>
+    Men's
+  </Link>
+
+  <Link to="/shop?category=Women" onClick={() => setMobileMenuOpen(false)}>
+    Women's
+  </Link>
+
+  <Link to="/shop?category=Kids" onClick={() => setMobileMenuOpen(false)}>
+    Kids'
+  </Link>
+
+  <Link to="/shop?category=Accessories" onClick={() => setMobileMenuOpen(false)}>
+    Accessories
+  </Link>
+
+  <Link to="/about" onClick={() => setMobileMenuOpen(false)}>
+    About
+  </Link>
+</nav>
 
         <div className="top-actions">
+          <Link
+  to="/contact"
+  className="quote-nav-btn"
+  onClick={() => setMobileMenuOpen(false)}
+>
+  Request a Quote
+</Link>
           <Link to="/shop" className="icon-btn" aria-label="Search products" onClick={() => setMobileMenuOpen(false)}>🔍</Link>
           <Link to="/wishlist" className="icon-btn" aria-label="Wishlist" onClick={() => setMobileMenuOpen(false)}>♡ {wishlistItems.length}</Link>
           <Link to="/cart" className="icon-btn" aria-label="Shopping Cart" onClick={() => setMobileMenuOpen(false)}>🛒 {cartCount}</Link>
@@ -361,161 +384,420 @@ function Layout({ children }) {
       <main>{children}</main>
 
       <footer
-        className="footer"
+  className="footer"
+  style={{
+    background: '#0b0b0b',
+    color: '#ffffff',
+    padding: '52px 20px 22px',
+    borderTop: '1px solid rgba(165, 8, 3, 0.35)',
+  }}
+>
+  <style>{`
+    .footer-main-grid {
+      display: grid;
+      grid-template-columns: 1.35fr 0.85fr 1fr 1fr 1.15fr;
+      gap: 42px;
+      max-width: 1400px;
+      margin: 0 auto;
+    }
+
+    .footer-column {
+      display: grid;
+      align-content: start;
+      gap: 10px;
+    }
+
+    .footer-heading {
+      position: relative;
+      margin: 0 0 8px;
+      padding-bottom: 10px;
+      color: #ffffff;
+      font-size: 0.92rem;
+      font-weight: 800;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+    }
+
+    .footer-heading::after {
+      content: '';
+      position: absolute;
+      left: 0;
+      bottom: 0;
+      width: 30px;
+      height: 2px;
+      background: #a50803;
+      border-radius: 2px;
+    }
+
+    .footer-link {
+      width: fit-content;
+      color: rgba(255,255,255,0.72);
+      text-decoration: none;
+      font-size: 0.88rem;
+      line-height: 1.55;
+      transition: color 0.2s ease, transform 0.2s ease;
+    }
+
+    .footer-link:hover {
+      color: #ffffff;
+      transform: translateX(3px);
+    }
+
+    .footer-company-text {
+      max-width: 310px;
+      margin: 0;
+      color: rgba(255,255,255,0.68);
+      font-size: 0.9rem;
+      line-height: 1.7;
+    }
+
+    .footer-contact-item {
+      color: rgba(255,255,255,0.72);
+      font-size: 0.86rem;
+      line-height: 1.55;
+      word-break: break-word;
+    }
+
+    .footer-contact-link {
+      color: rgba(255,255,255,0.72);
+      text-decoration: none;
+      transition: color 0.2s ease;
+    }
+
+    .footer-contact-link:hover {
+      color: #ffffff;
+    }
+
+    .footer-socials {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin-top: 5px;
+    }
+
+    .footer-social {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 34px;
+      height: 34px;
+      border: 1px solid rgba(255,255,255,0.14);
+      border-radius: 50%;
+      background: rgba(255,255,255,0.04);
+      color: #ffffff;
+      text-decoration: none;
+      font-size: 0.78rem;
+      font-weight: 800;
+      transition:
+        transform 0.2s ease,
+        background 0.2s ease,
+        border-color 0.2s ease;
+    }
+
+    .footer-social:hover {
+      transform: translateY(-2px);
+      background: #a50803;
+      border-color: #a50803;
+    }
+
+    .footer-bottom {
+      max-width: 1400px;
+      margin: 38px auto 0;
+      padding-top: 18px;
+      border-top: 1px solid rgba(255,255,255,0.09);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 18px;
+      flex-wrap: wrap;
+    }
+
+    .footer-bottom-text {
+      display: grid;
+      gap: 4px;
+    }
+
+    .footer-bottom-text p {
+      margin: 0;
+      color: rgba(255,255,255,0.55);
+      font-size: 0.78rem;
+      line-height: 1.5;
+    }
+
+    .footer-top-button {
+      border: 1px solid rgba(255,255,255,0.16);
+      background: transparent;
+      color: #ffffff;
+      border-radius: 999px;
+      padding: 9px 16px;
+      cursor: pointer;
+      font-size: 0.8rem;
+      font-weight: 700;
+      transition:
+        transform 0.2s ease,
+        background 0.2s ease,
+        border-color 0.2s ease;
+    }
+
+    .footer-top-button:hover {
+      transform: translateY(-2px);
+      background: #a50803;
+      border-color: #a50803;
+    }
+
+    @media (max-width: 1100px) {
+      .footer-main-grid {
+        grid-template-columns: 1.3fr 1fr 1fr;
+        gap: 34px 28px;
+      }
+    }
+
+    @media (max-width: 700px) {
+      .footer-main-grid {
+        grid-template-columns: 1fr 1fr;
+        gap: 32px 22px;
+      }
+
+      .footer-company {
+        grid-column: 1 / -1;
+      }
+
+      .footer-bottom {
+        align-items: flex-start;
+        flex-direction: column;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .footer-main-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .footer-company {
+        grid-column: auto;
+      }
+
+      .footer {
+        padding-left: 16px !important;
+        padding-right: 16px !important;
+      }
+    }
+  `}</style>
+
+  <div className="footer-main-grid">
+
+    {/* Company */}
+    <div className="footer-column footer-company">
+      <div
         style={{
-          background: '#111111',
-          color: '#ffffff',
-          padding: '32px 16px 20px',
-          borderTop: '1px solid rgba(255,255,255,0.08)',
+          display: 'flex',
+          alignItems: 'center',
+          gap: '12px',
+          marginBottom: '2px',
         }}
       >
-        <style>{`
-          @media (max-width: 900px) {
-            .footer-export-grid {
-              grid-template-columns: 1fr 1fr !important;
-            }
-          }
-
-          @media (max-width: 640px) {
-            .footer-export-grid {
-              grid-template-columns: 1fr !important;
-            }
-          }
-        `}</style>
-
         <div
-          className="footer-export-grid"
           style={{
-            display: 'grid',
-            gridTemplateColumns: '1.2fr 0.9fr 0.9fr 1fr 1fr',
-            gap: '18px',
-            maxWidth: '1400px',
-            margin: '0 auto 18px',
+            width: '46px',
+            height: '46px',
+            borderRadius: '50%',
+            overflow: 'hidden',
+            background: '#000000',
+            flexShrink: 0,
           }}
         >
-          <div style={{ display: 'grid', gap: '10px' }}>
-            <h3 style={{ margin: 0, color: '#ffffff' }}>{companyName}</h3>
-            <p style={{ margin: 0, color: 'rgba(255,255,255,0.8)' }}>
-              Designed for global sportswear export with premium quality, reliable service, and polished international support.
-            </p>
-          </div>
-
-          <div style={{ display: 'grid', gap: '8px' }}>
-            <h4 style={{ margin: 0, color: '#ffffff' }}>Quick Links</h4>
-            <Link to="/" style={{ color: 'rgba(255,255,255,0.8)', textDecoration: 'none' }}>Home</Link>
-            <Link to="/shop" style={{ color: 'rgba(255,255,255,0.8)', textDecoration: 'none' }}>Shop Sportswear</Link>
-            <Link to="/about" style={{ color: 'rgba(255,255,255,0.8)', textDecoration: 'none' }}>About</Link>
-            <Link to="/contact" style={{ color: 'rgba(255,255,255,0.8)', textDecoration: 'none' }}>Contact</Link>
-            <Link to="/faq" style={{ color: 'rgba(255,255,255,0.8)', textDecoration: 'none' }}>FAQ</Link>
-          </div>
-
-          <div style={{ display: 'grid', gap: '8px' }}>
-            <h4 style={{ margin: 0, color: '#ffffff' }}>Product Categories</h4>
-            <Link to="/shop?category=Men" style={{ color: 'rgba(255,255,255,0.8)', textDecoration: 'none' }}>Men's Sportswear</Link>
-            <Link to="/shop?category=Women" style={{ color: 'rgba(255,255,255,0.8)', textDecoration: 'none' }}>Women's Activewear</Link>
-            <Link to="/shop?category=Accessories" style={{ color: 'rgba(255,255,255,0.8)', textDecoration: 'none' }}>Sportswear Accessories</Link>
-            <Link to="/shop?category=Kids" style={{ color: 'rgba(255,255,255,0.8)', textDecoration: 'none' }}>Kids</Link>
-          </div>
-
-          <div style={{ display: 'grid', gap: '8px' }}>
-            <h4 style={{ margin: 0, color: '#ffffff' }}>Export Services</h4>
-            <Link to="/contact" style={{ color: 'rgba(255,255,255,0.8)', textDecoration: 'none' }}>OEM Manufacturing</Link>
-            <Link to="/contact" style={{ color: 'rgba(255,255,255,0.8)', textDecoration: 'none' }}>Private Label Sportswear</Link>
-            <Link to="/contact" style={{ color: 'rgba(255,255,255,0.8)', textDecoration: 'none' }}>Bulk Sportswear Orders</Link>
-            <Link to="/contact" style={{ color: 'rgba(255,255,255,0.8)', textDecoration: 'none' }}>Worldwide Shipping</Link>
-          </div>
-
-          <div style={{ display: 'grid', gap: '8px' }}>
-            <h4 style={{ margin: 0, color: '#ffffff' }}>Contact</h4>
-            <a href={whatsappHref} target="_blank" rel="noreferrer" style={{ color: 'rgba(255,255,255,0.8)', textDecoration: 'none' }}>WhatsApp: {whatsappNumber}</a>
-            <a href={`mailto:${businessEmail}`} style={{ color: 'rgba(255,255,255,0.8)', textDecoration: 'none' }}>{businessEmail}</a>
-            <span style={{ color: 'rgba(255,255,255,0.8)' }}>{businessAddress}</span>
-            <span style={{ color: 'rgba(255,255,255,0.8)' }}>{businessHours}</span>
-            <div style={{ display: 'flex', gap: '8px', marginTop: '2px', flexWrap: 'wrap' }}>
-              {socialLinks.map((item) => (
-                <a
-                  key={item.label}
-                  href={item.href}
-                  target="_blank"
-                  rel="noreferrer"
-                  aria-label={item.label}
-                  title={item.label}
-                  style={{
-                    display: 'inline-flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    width: '26px',
-                    height: '26px',
-                    borderRadius: '50%',
-                    background: '#ffffff',
-                    color: '#111111',
-                    textDecoration: 'none',
-                    fontWeight: 700,
-                    transition: 'transform 0.2s ease, background 0.2s ease, color 0.2s ease',
-                  }}
-                  onMouseEnter={(e) => {
-                    e.currentTarget.style.transform = 'translateY(-1px) scale(1.08)';
-                    e.currentTarget.style.background = '#a50803';
-                    e.currentTarget.style.color = '#ffffff';
-                  }}
-                  onMouseLeave={(e) => {
-                    e.currentTarget.style.transform = 'translateY(0) scale(1)';
-                    e.currentTarget.style.background = '#ffffff';
-                    e.currentTarget.style.color = '#111111';
-                  }}
-                >
-                  {item.icon}
-                </a>
-              ))}
-            </div>
-          </div>
+          <img
+            src="/logo/hk-logo-256.png"
+            alt="HK FITTERS Sportswear Manufacturer Logo"
+            style={{
+              width: '100%',
+              height: '100%',
+              objectFit: 'cover',
+              display: 'block',
+            }}
+          />
         </div>
 
-        <div
-          style={{
-            maxWidth: '1400px',
-            margin: '0 auto',
-            borderTop: '1px solid rgba(255,255,255,0.08)',
-            paddingTop: '14px',
-            display: 'flex',
-            justifyContent: 'space-between',
-            alignItems: 'center',
-            gap: '12px',
-            flexWrap: 'wrap',
-          }}
-        >
-          <div style={{ display: 'grid', gap: '4px' }}>
-            <p style={{ margin: 0, color: 'rgba(255,255,255,0.75)' }}>© 2026 HK FITTERS. All Rights Reserved.</p>
-            <p style={{ margin: 0, color: 'rgba(255,255,255,0.75)' }}>Designed for Global Sportswear Export.</p>
-          </div>
-
-          <button
-            type="button"
-            onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+        <div>
+          <h3
             style={{
-              border: '1px solid rgba(255,255,255,0.2)',
-              background: '#ffffff',
-              color: '#111111',
-              borderRadius: '999px',
-              padding: '8px 14px',
-              cursor: 'pointer',
-              transition: 'transform 0.2s ease, background 0.2s ease, color 0.2s ease',
-            }}
-            onMouseEnter={(e) => {
-              e.currentTarget.style.transform = 'translateY(-1px)';
-                  e.currentTarget.style.background = '#a50803';
-              e.currentTarget.style.color = '#ffffff';
-            }}
-            onMouseLeave={(e) => {
-              e.currentTarget.style.transform = 'translateY(0)';
-              e.currentTarget.style.background = '#ffffff';
-              e.currentTarget.style.color = '#111111';
+              margin: 0,
+              color: '#ffffff',
+              fontSize: '1.15rem',
+              fontWeight: 800,
+              letterSpacing: '0.02em',
             }}
           >
-            Back to Top
-          </button>
+            {companyName}
+          </h3>
+
+          <span
+            style={{
+              color: '#a50803',
+              fontSize: '0.7rem',
+              fontWeight: 700,
+              letterSpacing: '0.08em',
+              textTransform: 'uppercase',
+            }}
+          >
+            Sportswear Manufacturer & Exporter
+          </span>
         </div>
-      </footer>
+      </div>
+
+      <p className="footer-company-text">
+        Custom sportswear manufacturing and worldwide export for brands,
+        wholesalers, retailers, teams, and bulk buyers.
+      </p>
+
+      <p className="footer-company-text">
+        OEM manufacturing, private label sportswear, custom designs, and
+        reliable bulk production from Pakistan.
+      </p>
+    </div>
+
+    {/* Quick Links */}
+    <div className="footer-column">
+      <h4 className="footer-heading">Quick Links</h4>
+
+      <Link className="footer-link" to="/">
+        Home
+      </Link>
+
+      <Link className="footer-link" to="/shop">
+        Sportswear Products
+      </Link>
+
+      <Link className="footer-link" to="/about">
+        About HK FITTERS
+      </Link>
+
+      <Link className="footer-link" to="/contact">
+        Request a Quote
+      </Link>
+
+      <Link className="footer-link" to="/track">
+        Order Tracking
+      </Link>
+
+      <Link className="footer-link" to="/faq">
+        FAQ
+      </Link>
+    </div>
+
+    {/* Categories */}
+    <div className="footer-column">
+      <h4 className="footer-heading">Product Categories</h4>
+
+      <Link className="footer-link" to="/shop?category=Men">
+        Men's Sportswear
+      </Link>
+
+      <Link className="footer-link" to="/shop?category=Women">
+        Women's Activewear
+      </Link>
+
+      <Link className="footer-link" to="/shop?category=Kids">
+        Kids' Sportswear
+      </Link>
+
+      <Link className="footer-link" to="/shop?category=Accessories">
+        Sportswear Accessories
+      </Link>
+
+      <Link className="footer-link" to="/shop">
+        Custom Sportswear
+      </Link>
+    </div>
+
+    {/* Manufacturing */}
+    <div className="footer-column">
+      <h4 className="footer-heading">Manufacturing</h4>
+
+      <Link className="footer-link" to="/contact">
+        Custom Sportswear
+      </Link>
+
+      <Link className="footer-link" to="/contact">
+        OEM Manufacturing
+      </Link>
+
+      <Link className="footer-link" to="/contact">
+        Private Label
+      </Link>
+
+      <Link className="footer-link" to="/contact">
+        Bulk Orders
+      </Link>
+
+      <Link className="footer-link" to="/contact">
+        Worldwide Export
+      </Link>
+    </div>
+
+    {/* Contact */}
+    <div className="footer-column">
+      <h4 className="footer-heading">Contact & Export</h4>
+
+      <a
+        className="footer-contact-link footer-contact-item"
+        href={whatsappHref}
+        target="_blank"
+        rel="noreferrer"
+      >
+        WhatsApp: {whatsappNumber}
+      </a>
+
+      <a
+        className="footer-contact-link footer-contact-item"
+        href={`mailto:${businessEmail}`}
+      >
+        {businessEmail}
+      </a>
+
+      <span className="footer-contact-item">
+        {businessAddress}
+      </span>
+
+      <span className="footer-contact-item">
+        {businessHours}
+      </span>
+
+      <div className="footer-socials">
+        {socialLinks.map((item) => (
+          <a
+            key={item.label}
+            className="footer-social"
+            href={item.href}
+            target="_blank"
+            rel="noreferrer"
+            aria-label={item.label}
+            title={item.label}
+          >
+            {item.icon}
+          </a>
+        ))}
+      </div>
+    </div>
+  </div>
+
+  <div className="footer-bottom">
+    <div className="footer-bottom-text">
+      <p>© 2026 HK FITTERS. All Rights Reserved.</p>
+      <p>
+        Custom Sportswear Manufacturer • OEM • Private Label • Worldwide Export
+      </p>
+    </div>
+
+    <button
+      type="button"
+      className="footer-top-button"
+      onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+    >
+      Back to Top ↑
+    </button>
+  </div>
+</footer>
 
       <a
         href={whatsappHref}

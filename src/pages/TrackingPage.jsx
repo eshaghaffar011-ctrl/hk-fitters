@@ -1,12 +1,16 @@
 import { useState } from 'react';
 import { getInquiries } from '../data/inquiries';
+import contactInfo from '../config/contact';
+import './TrackingPage.css';
+
+const { whatsappNumber } = contactInfo;
 
 function TrackingPage() {
   const [orderId, setOrderId] = useState('');
   const [inquiry, setInquiry] = useState(null);
   const [message, setMessage] = useState('');
 
-  const handleTrackOrder = () => {
+ const handleTrackOrder = async () => {
     const searchId = orderId.trim().toUpperCase();
 
     if (!searchId) {
@@ -15,7 +19,7 @@ function TrackingPage() {
       return;
     }
 
-    const inquiries = getInquiries();
+    const inquiries = await getInquiries();
 
     const found = inquiries.find(
       (item) => item.id.toUpperCase() === searchId
@@ -31,103 +35,300 @@ function TrackingPage() {
     setMessage('');
   };
 
+  const getStatusClass = (status) => {
+    const normalized = (status || 'New').toLowerCase();
+
+    if (
+      normalized.includes('complete') ||
+      normalized.includes('deliver')
+    ) {
+      return 'is-complete';
+    }
+
+    if (
+      normalized.includes('process') ||
+      normalized.includes('production') ||
+      normalized.includes('ship')
+    ) {
+      return 'is-progress';
+    }
+
+    return 'is-new';
+  };
+
   return (
-    <div className="page">
-      <section className="section">
-        <h1>Order Tracking</h1>
+    <main className="tracking-page">
 
-        <div className="summary-card">
-          <p>
-            Enter your order number to track your inquiry.
-          </p>
+      {/* HERO */}
+      <section className="tracking-hero">
+        <div className="tracking-hero-overlay" />
 
-          <input
-            placeholder="Order ID e.g. INQ-123456789"
-            className="full-width-input"
-            value={orderId}
-            onChange={(event) => setOrderId(event.target.value)}
-            onKeyDown={(event) => {
-              if (event.key === 'Enter') {
-                handleTrackOrder();
-              }
-            }}
-          />
+        <div className="tracking-container tracking-hero-inner">
+          <div>
+            <span className="tracking-eyebrow">
+              ORDER & INQUIRY SUPPORT
+            </span>
 
-          <button
-            type="button"
-            className="btn btn-primary"
-            onClick={handleTrackOrder}
-          >
-            Track Order
-          </button>
+            <h1>
+              Track Your
+              <span> Order Inquiry</span>
+            </h1>
 
-          {message && (
-            <p
-              style={{
-                marginTop: '16px',
-                color: '#a50803',
-                fontWeight: '600',
-              }}
-            >
-              {message}
+            <p>
+              Enter your Order ID to check the current status of your
+              sportswear inquiry and review your submitted order details.
             </p>
-          )}
+          </div>
 
-          {inquiry && (
-            <div
-              className="summary-card"
-              style={{
-                marginTop: '20px',
-              }}
-            >
-              <h2>Inquiry Found</h2>
-
-              <p>
-                <strong>Order ID:</strong>{' '}
-                {inquiry.id}
-              </p>
-
-              <p>
-                <strong>Customer:</strong>{' '}
-                {inquiry.customer?.fullName || 'N/A'}
-              </p>
-
-              <p>
-                <strong>Date:</strong>{' '}
-                {new Date(
-                  inquiry.createdAt
-                ).toLocaleString()}
-              </p>
-
-              <p>
-                <strong>Status:</strong>{' '}
-                {inquiry.status || 'New'}
-              </p>
-
-              <p>
-                <strong>Products:</strong>{' '}
-                {Array.isArray(inquiry.items)
-                  ? inquiry.items
-                      .map(
-                        (item) =>
-                          `${item.name} × ${item.quantity}`
-                      )
-                      .join(', ')
-                  : 'N/A'}
-              </p>
-
-              <p>
-                <strong>Total:</strong>{' '}
-                $
-                {Number(
-                  inquiry.total || 0
-                ).toFixed(2)}
-              </p>
-            </div>
-          )}
+          <div className="tracking-hero-badge">
+            <strong>HK FITTERS</strong>
+            <span>Sportswear Manufacturing & Export</span>
+          </div>
         </div>
       </section>
-    </div>
+
+      {/* TRACKING AREA */}
+      <section className="tracking-main-section">
+        <div className="tracking-container">
+
+          <div className="tracking-search-card">
+
+            <div className="tracking-search-header">
+              <span className="tracking-eyebrow-dark">
+                CHECK YOUR STATUS
+              </span>
+
+              <h2>Track Your Inquiry</h2>
+
+              <p>
+                Enter the Order ID provided with your inquiry confirmation.
+              </p>
+            </div>
+
+            <div className="tracking-search-form">
+
+              <label htmlFor="tracking-order-id">
+                Order ID
+              </label>
+
+              <div className="tracking-input-row">
+                <input
+                  id="tracking-order-id"
+                  type="text"
+                  placeholder="e.g. INQ-123456789"
+                  value={orderId}
+                  onChange={(event) => {
+                    setOrderId(event.target.value);
+                    if (message) {
+                      setMessage('');
+                    }
+                  }}
+                  onKeyDown={(event) => {
+                    if (event.key === 'Enter') {
+                      handleTrackOrder();
+                    }
+                  }}
+                />
+
+                <button
+                  type="button"
+                  onClick={handleTrackOrder}
+                >
+                  Track Order
+                </button>
+              </div>
+
+              {message && (
+                <div className="tracking-error">
+                  {message}
+                </div>
+              )}
+
+            </div>
+
+          </div>
+
+          {/* RESULT */}
+          {inquiry && (
+            <section className="tracking-result-section">
+
+              <div className="tracking-result-header">
+                <div>
+                  <span className="tracking-eyebrow-dark">
+                    INQUIRY FOUND
+                  </span>
+
+                  <h2>Order Details</h2>
+                </div>
+
+                <span
+                  className={`tracking-status ${getStatusClass(
+                    inquiry.status
+                  )}`}
+                >
+                  {inquiry.status || 'New'}
+                </span>
+              </div>
+
+              <div className="tracking-order-grid">
+
+                <div className="tracking-detail-card">
+                  <span>ORDER ID</span>
+                  <strong>{inquiry.id}</strong>
+                </div>
+
+                <div className="tracking-detail-card">
+                  <span>CUSTOMER</span>
+                  <strong>
+                    {inquiry.customer?.fullName || 'N/A'}
+                  </strong>
+                </div>
+
+                <div className="tracking-detail-card">
+                  <span>DATE SUBMITTED</span>
+                  <strong>
+                    {new Date(
+                      inquiry.createdAt
+                    ).toLocaleString()}
+                  </strong>
+                </div>
+
+                <div className="tracking-detail-card">
+                  <span>STATUS</span>
+                  <strong>
+                    {inquiry.status || 'New'}
+                  </strong>
+                </div>
+
+              </div>
+
+              <div className="tracking-products-card">
+
+                <div className="tracking-card-heading">
+                  <span>PRODUCTS</span>
+                  <h3>Items in This Inquiry</h3>
+                </div>
+
+                {Array.isArray(inquiry.items) &&
+                inquiry.items.length > 0 ? (
+                  <div className="tracking-product-list">
+
+                    {inquiry.items.map((item, index) => (
+                      <div
+                        className="tracking-product-row"
+                        key={`${item.name}-${index}`}
+                      >
+                        <div>
+                          <strong>{item.name}</strong>
+                        </div>
+
+                        <span>
+                          Quantity: {item.quantity}
+                        </span>
+                      </div>
+                    ))}
+
+                  </div>
+                ) : (
+                  <p className="tracking-empty">
+                    No product information available.
+                  </p>
+                )}
+
+                <div className="tracking-total">
+                  <span>Total</span>
+                  <strong>
+                    $
+                    {Number(
+                      inquiry.total || 0
+                    ).toFixed(2)}
+                  </strong>
+                </div>
+
+              </div>
+
+            </section>
+          )}
+
+          {/* HOW IT WORKS */}
+          <section className="tracking-process-section">
+
+            <div className="tracking-section-heading">
+              <span className="tracking-eyebrow-dark">
+                HOW IT WORKS
+              </span>
+
+              <h2>Simple Order Tracking</h2>
+
+              <p>
+                Use your inquiry ID to quickly access the latest
+                information available for your request.
+              </p>
+            </div>
+
+            <div className="tracking-process-grid">
+
+              <article>
+                <span>01</span>
+                <h3>Submit Your Inquiry</h3>
+                <p>
+                  Send your sportswear requirements through our
+                  inquiry or quotation process.
+                </p>
+              </article>
+
+              <article>
+                <span>02</span>
+                <h3>Receive Your Order ID</h3>
+                <p>
+                  Your inquiry is assigned an identification number
+                  for future reference.
+                </p>
+              </article>
+
+              <article>
+                <span>03</span>
+                <h3>Check Your Status</h3>
+                <p>
+                  Enter the Order ID above to review the information
+                  currently available.
+                </p>
+              </article>
+
+            </div>
+
+          </section>
+
+          {/* SUPPORT */}
+          <section className="tracking-support">
+
+            <div>
+              <span className="tracking-eyebrow">
+                NEED ASSISTANCE?
+              </span>
+
+              <h2>Have a Question About Your Order?</h2>
+
+              <p>
+                If you need help with your inquiry, production
+                requirements or export order, contact our team
+                directly.
+              </p>
+            </div>
+
+           <a
+  href={`https://wa.me/${whatsappNumber.replace(/\D/g, '')}`}
+  target="_blank"
+  rel="noreferrer"
+>
+  Contact Support
+</a>
+          </section>
+
+        </div>
+      </section>
+
+    </main>
   );
 }
 

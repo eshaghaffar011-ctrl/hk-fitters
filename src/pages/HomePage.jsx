@@ -4,9 +4,30 @@ import { fetchProductsFromAPI } from '../data/products';
 
 
 const featuredCategories = [
-  { title: 'Men', subtitle: 'Premium men sportswear and performance wear designed for comfort, movement, and durability.', accent: 'Precision tailoring' },
-  { title: 'Women', subtitle: 'Premium women activewear and sportswear designed for performance, comfort, and a refined fit.', accent: 'Luxury fit' },
-  { title: 'Accessories', subtitle: 'Sportswear accessories and performance essentials to complete your active collection.', accent: 'Signature details' }
+  {
+    title: 'Men',
+    subtitle:
+      'Custom men’s sportswear and performance apparel designed for training, competition, comfort, and durability.',
+    accent: 'Men’s Sportswear'
+  },
+  {
+    title: 'Women',
+    subtitle:
+      'Custom women’s activewear and sportswear designed for performance, comfort, movement, and a refined fit.',
+    accent: 'Women’s Activewear'
+  },
+  {
+    title: 'Kids',
+    subtitle:
+      'Quality kids’ sportswear designed for active movement, comfort, durability, and everyday performance.',
+    accent: 'Kids’ Sportswear'
+  },
+  {
+    title: 'Accessories',
+    subtitle:
+      'Sportswear accessories and performance essentials designed to complete custom team and activewear collections.',
+    accent: 'Sportswear Accessories'
+  }
 ];
 
 
@@ -64,7 +85,15 @@ function HomePage() {
 
   return (
     <div className="page home-page">
-      <section className="hero-home">
+      <section  className="hero-home"
+   style={{
+    backgroundImage:
+      "linear-gradient(90deg, rgba(0,0,0,0.96) 0%, rgba(0,0,0,0.88) 32%, rgba(0,0,0,0.48) 55%, rgba(0,0,0,0.15) 75%), url('/logo/s-hero.png')",
+     backgroundPosition: 'center center, right center',
+    backgroundSize: '100% 100%, 68% 100%',
+    backgroundRepeat: 'no-repeat, no-repeat',
+    backgroundColor: '#050505',
+  }}>
         <div className="hero-content">
           <p className="eyebrow">International Performance Wear</p>
           <h1>Premium Sportswear & Activewear Manufacturer</h1>
@@ -92,17 +121,27 @@ function HomePage() {
             </div>
             <p>From refined training layers to signature accessories, every piece is designed with distinction.</p>
           </div>
-          <div className="category-grid">
+          <div
+  className="home-category-grid"
+  style={{
+    display: 'grid',
+    gridTemplateColumns: 'repeat(4, minmax(0, 1fr))',
+    gap: '20px',
+    width: '100%',
+  }}
+>
             {featuredCategories.map((item) => (
               <article className="category-card" key={item.title}>
                 <span className="category-badge">{item.accent}</span>
                 <h3>
                   <Link to={`/shop?category=${item.title}`}>
-                    {item.title === 'Men'
-                      ? "Men's Sportswear"
-                      : item.title === 'Women'
-                        ? "Women's Activewear"
-                        : 'Sportswear Accessories'}
+                   {item.title === 'Men'
+  ? "Men's Sportswear"
+  : item.title === 'Women'
+    ? "Women's Activewear"
+    : item.title === 'Kids'
+      ? "Kids' Sportswear"
+      : 'Sportswear Accessories'}
                   </Link>
                 </h3>
                 <p>{item.subtitle}</p>

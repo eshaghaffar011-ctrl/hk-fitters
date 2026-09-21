@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap');
+
 :root {
   color-scheme: light;
 }
@@ -5,8 +7,6 @@
 * {
   box-sizing: border-box;
 }
-
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap');
 
 
 html {
@@ -618,45 +618,28 @@ body {
   justify-content: center;
   padding: 96px 24px 72px;
   overflow: hidden;
-  background:
-    radial-gradient(circle at top left, rgba(165, 8, 3, 0.35), transparent 30%),
-    linear-gradient(135deg, #060606 0%, #220909 45%, #730707 100%);
+
+ background:
+    linear-gradient(
+      90deg,
+      rgba(0, 0, 0, 0.90) 0%,
+      rgba(0, 0, 0, 0.78) 32%,
+      rgba(0, 0, 0, 0.52) 62%,
+      rgba(0, 0, 0, 0.62) 100%
+    ),
+    url('/logo/s-hero.png') center center / cover no-repeat;
+
   color: #ffffff;
 }
-
-.home-page .hero-home::before,
-.home-page .hero-home::after {
-  content: '';
-  position: absolute;
-  border-radius: 50%;
-  filter: blur(2px);
-  animation: drift 12s ease-in-out infinite alternate;
-}
-
-.home-page .hero-home::before {
-  width: 280px;
-  height: 280px;
-  top: -60px;
-  right: -60px;
-  background: rgba(255, 255, 255, 0.12);
-}
-
-.home-page .hero-home::after {
-  width: 220px;
-  height: 220px;
-  bottom: -70px;
-  left: -40px;
-  background: rgba(165, 8, 3, 0.22);
-}
-
 .home-page .hero-content {
   position: relative;
-  z-index: 1;
+  z-index: 2;
   max-width: 1120px;
   width: 100%;
   display: grid;
   gap: 18px;
   text-align: left;
+  margin: 0 auto;
 }
 
 .home-page .eyebrow {
@@ -780,15 +763,33 @@ body {
   color: #a50803;
 }
 
-.home-page .category-grid,
-.home-page .featured-grid,
-.home-page .why-grid {
-  display: grid;
-  gap: 20px;
-}
+/* =========================================================
+   HOMEPAGE CATEGORY GRID
+   ========================================================= */
 
 .home-page .category-grid {
-  grid-template-columns: repeat(3, minmax(0, 1fr));
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 20px;
+  width: 100%;
+  align-items: stretch;
+}
+
+.home-page .category-card {
+  width: 100%;
+  min-width: 0;
+  min-height: 230px;
+  display: flex;
+  flex-direction: column;
+}
+
+.home-page .category-card h3 {
+  margin: 14px 0 10px;
+}
+
+.home-page .category-card p {
+  margin: 0;
+  line-height: 1.7;
 }
 
 .home-page .featured-grid {
@@ -1180,12 +1181,26 @@ body {
   }
 }
 
-@media (max-width: 900px) {
-  .home-page .category-grid,
+@media (max-width: 1100px) {
+  .home-page .category-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
   .home-page .featured-grid,
-  .home-page .why-grid,
+  .home-page .why-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
   .home-page .split-layout,
   .home-page .footer-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 640px) {
+  .home-page .category-grid,
+  .home-page .featured-grid,
+  .home-page .why-grid {
     grid-template-columns: 1fr;
   }
 
@@ -1202,9 +1217,7 @@ body {
   .home-page .arrow-btn {
     display: none;
   }
-}
 
-@media (max-width: 640px) {
   .home-page .hero-home {
     padding: 80px 18px 58px;
   }
@@ -1316,3 +1329,1261 @@ body {
   font-weight: 600;
 }
 
+/* =========================================================
+   PROFESSIONAL HK FITTERS HEADER
+   ========================================================= */
+
+.topbar {
+  position: relative;
+  z-index: 1000;
+  width: 100%;
+  min-height: 78px;
+  background: #111111;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  padding: 10px 24px;
+}
+
+.brand-mark {
+  flex: 0 0 auto;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  color: #ffffff;
+  text-decoration: none;
+  font-weight: 800;
+  font-size: 1rem;
+  letter-spacing: 0.06em;
+  white-space: nowrap;
+}
+
+.topnav {
+  flex: 1 1 auto;
+  min-width: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+  white-space: nowrap;
+}
+
+.topnav a {
+  color: rgba(255, 255, 255, 0.88);
+  text-decoration: none;
+  font-size: 13px;
+  font-weight: 600;
+  padding: 10px 8px;
+  border-radius: 7px;
+  white-space: nowrap;
+  transition:
+    color 180ms ease,
+    background 180ms ease,
+    transform 180ms ease;
+}
+
+.topnav a:hover {
+  color: #ffffff;
+  background: rgba(165, 8, 3, 0.85);
+  transform: translateY(-1px);
+}
+
+.top-actions {
+  flex: 0 0 auto;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: flex-end;
+  gap: 6px !important;
+  flex-wrap: nowrap !important;
+  white-space: nowrap;
+}
+
+.quote-nav-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 38px;
+  padding: 9px 14px;
+  background: #a50803;
+  color: #ffffff;
+  border: 1px solid #a50803;
+  border-radius: 999px;
+  text-decoration: none;
+  font-size: 12px;
+  font-weight: 700;
+  white-space: nowrap;
+  transition:
+    background 180ms ease,
+    transform 180ms ease,
+    box-shadow 180ms ease;
+}
+
+.quote-nav-btn:hover {
+  background: #c20a04;
+  transform: translateY(-1px);
+  box-shadow: 0 8px 20px rgba(165, 8, 3, 0.25);
+}
+
+.icon-btn {
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  min-width: 38px !important;
+  height: 38px !important;
+  padding: 7px 10px !important;
+  border-radius: 999px !important;
+  white-space: nowrap !important;
+  flex-shrink: 0 !important;
+  color: #ffffff;
+  text-decoration: none;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  transition:
+    background 180ms ease,
+    border-color 180ms ease,
+    transform 180ms ease;
+}
+
+.icon-btn:hover {
+  background: rgba(165, 8, 3, 0.9);
+  border-color: #a50803;
+  transform: translateY(-1px);
+}
+
+.top-header-track {
+  display: inline-flex;
+  align-items: center;
+  color: rgba(255, 255, 255, 0.82);
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 0.70rem;
+  padding: 4px 8px;
+  border-radius: 5px;
+  white-space: nowrap;
+  transition: color 180ms ease, background 180ms ease;
+}
+
+.top-header-track:hover {
+  color: #ffffff;
+  background: rgba(165, 8, 3, 0.8);
+}
+
+
+/* Desktop spacing */
+@media (min-width: 1201px) {
+  .topbar {
+    padding-left: 28px;
+    padding-right: 28px;
+    gap: 22px;
+  }
+
+  .topnav {
+    gap: 3px;
+  }
+
+  .topnav a {
+    padding-left: 9px;
+    padding-right: 9px;
+  }
+}
+
+
+/* Smaller desktop / laptop */
+@media (max-width: 1200px) and (min-width: 901px) {
+  .topbar {
+    padding-left: 16px;
+    padding-right: 16px;
+    gap: 10px;
+  }
+
+  .brand-mark {
+    font-size: 0.9rem;
+  }
+
+  .topnav {
+    gap: 0;
+  }
+
+  .topnav a {
+    font-size: 12px;
+    padding: 9px 5px;
+  }
+
+  .quote-nav-btn {
+    font-size: 11px;
+    padding: 8px 11px;
+  }
+
+  .top-actions {
+    gap: 4px !important;
+  }
+}
+
+
+/* Mobile */
+@media (max-width: 900px) {
+  .topbar {
+    min-height: 68px;
+    padding: 9px 16px;
+    justify-content: space-between;
+  }
+
+  .topnav {
+    display: none;
+    position: absolute;
+    left: 12px;
+    right: 12px;
+    top: calc(100% + 8px);
+    z-index: 1200;
+    padding: 12px;
+    background: #111111;
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: 14px;
+    box-shadow: 0 20px 45px rgba(0, 0, 0, 0.35);
+    flex-direction: column;
+    align-items: stretch;
+    gap: 4px;
+    white-space: normal;
+  }
+
+  .topnav.open {
+    display: flex;
+  }
+
+  .topnav a {
+    width: 100%;
+    padding: 12px 14px;
+    font-size: 14px;
+  }
+
+  .top-actions {
+    margin-left: auto;
+  }
+
+  .quote-nav-btn {
+    padding: 8px 11px;
+    font-size: 11px;
+  }
+
+  .mobile-nav-toggle {
+    display: inline-flex !important;
+    order: 3;
+  }
+}
+
+
+@media (max-width: 640px) {
+  .topbar {
+    padding: 8px 12px;
+  }
+
+  .brand-mark span:last-child {
+    display: none;
+  }
+
+  .top-actions .quote-nav-btn {
+    display: none;
+  }
+
+  .top-actions {
+    gap: 4px !important;
+  }
+
+  .icon-btn {
+    min-width: 36px !important;
+    height: 36px !important;
+    padding: 6px 8px !important;
+  }
+}
+
+/* =========================================================
+   HK FITTERS — FINAL PROFESSIONAL COLLECTION LAYOUT
+   Uses a dedicated high-specificity rule so older generic
+   grid rules cannot collapse the homepage collection.
+   ========================================================= */
+
+.home-page #featured .category-grid {
+  display: grid !important;
+  grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
+  grid-auto-flow: row !important;
+  gap: 18px !important;
+  width: 100% !important;
+  max-width: none !important;
+  margin: 0 !important;
+  align-items: stretch !important;
+}
+
+.home-page #featured .category-card {
+  position: relative;
+  width: 100% !important;
+  min-width: 0 !important;
+  min-height: 245px;
+  margin: 0 !important;
+  padding: 24px 22px 22px !important;
+  display: flex !important;
+  flex-direction: column !important;
+  justify-content: flex-start !important;
+  background: linear-gradient(180deg, #ffffff 0%, #f8f3ee 100%);
+  border: 1px solid rgba(17, 17, 17, 0.08);
+  border-radius: 18px;
+  overflow: hidden;
+  box-shadow: 0 12px 30px rgba(17, 17, 17, 0.07);
+  transition: transform 220ms ease, box-shadow 220ms ease,
+              border-color 220ms ease;
+}
+
+.home-page #featured .category-card::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: linear-gradient(90deg, #111111 0%, #a50803 100%);
+}
+
+.home-page #featured .category-card:hover {
+  transform: translateY(-7px);
+  border-color: rgba(165, 8, 3, 0.22);
+  box-shadow: 0 22px 45px rgba(17, 17, 17, 0.12);
+}
+
+.home-page #featured .category-badge {
+  align-self: flex-start;
+  margin-top: 2px;
+  padding: 7px 10px;
+  background: rgba(165, 8, 3, 0.08);
+  color: #a50803;
+  border: 1px solid rgba(165, 8, 3, 0.08);
+  border-radius: 999px;
+  font-size: 0.68rem;
+  line-height: 1;
+  font-weight: 800;
+  letter-spacing: 0.055em;
+}
+
+.home-page #featured .category-card h3 {
+  margin: 18px 0 10px;
+  font-size: 1.08rem;
+  line-height: 1.3;
+  color: #111111;
+}
+
+.home-page #featured .category-card h3 a {
+  color: inherit;
+  text-decoration: none;
+}
+
+.home-page #featured .category-card p {
+  margin: 0;
+  color: #625b56;
+  font-size: 0.91rem;
+  line-height: 1.7;
+}
+
+@media (max-width: 1100px) and (min-width: 901px) {
+  .home-page #featured .category-grid {
+    grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
+    gap: 12px !important;
+  }
+
+  .home-page #featured .category-card {
+    min-height: 250px;
+    padding: 20px 16px 18px !important;
+  }
+
+  .home-page #featured .category-card h3 {
+    font-size: 0.98rem;
+  }
+
+  .home-page #featured .category-card p {
+    font-size: 0.84rem;
+  }
+}
+
+@media (max-width: 900px) and (min-width: 641px) {
+  .home-page #featured .category-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    gap: 18px !important;
+  }
+}
+
+@media (max-width: 640px) {
+  .home-page #featured .category-grid {
+    grid-template-columns: 1fr !important;
+    gap: 14px !important;
+  }
+
+  .home-page #featured .category-card {
+    min-height: 0;
+    padding: 22px 20px 20px !important;
+  }
+}
+
+/* =========================================================
+   HK FITTERS - HOMEPAGE COLLECTIONS
+   FINAL LAYOUT
+   ========================================================= */
+
+.home-category-grid {
+  display: grid !important;
+  grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
+  gap: 20px !important;
+  width: 100% !important;
+  max-width: 100% !important;
+  margin: 0 !important;
+}
+
+.home-category-grid .category-card {
+  width: 100% !important;
+  min-width: 0 !important;
+  max-width: none !important;
+  margin: 0 !important;
+  box-sizing: border-box !important;
+}
+
+/* Tablet */
+@media (max-width: 1000px) {
+  .home-category-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  }
+}
+
+/* Mobile */
+@media (max-width: 640px) {
+  .home-category-grid {
+    grid-template-columns: 1fr !important;
+    gap: 16px !important;
+  }
+}
+
+/* =========================================================
+   HK FITTERS - FINAL SHOP PRODUCT CARD OVERRIDES
+   Desktop + Tablet + Mobile
+   ========================================================= */
+
+/* ---------- PRODUCT GRID ---------- */
+
+.shop-page .shop-grid {
+  width: 100% !important;
+  max-width: 1180px !important;
+  margin-left: auto !important;
+  margin-right: auto !important;
+
+  display: grid !important;
+  grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+  gap: 28px !important;
+
+  align-items: stretch !important;
+}
+
+
+/* ---------- PRODUCT CARD ---------- */
+
+.shop-page .shop-card {
+  position: relative !important;
+  display: flex !important;
+  flex-direction: column !important;
+
+  width: 100% !important;
+  min-width: 0 !important;
+  height: 100% !important;
+
+  overflow: hidden !important;
+
+  border: 1px solid #e3ded9 !important;
+  border-radius: 18px !important;
+
+  background: #ffffff !important;
+
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.07) !important;
+
+  transition:
+    transform 0.22s ease,
+    box-shadow 0.22s ease,
+    border-color 0.22s ease !important;
+}
+
+.shop-page .shop-card:hover {
+  transform: translateY(-5px) !important;
+
+  border-color: rgba(165, 8, 3, 0.28) !important;
+
+  box-shadow: 0 18px 38px rgba(0, 0, 0, 0.12) !important;
+}
+
+
+/* ---------- IMAGE AREA ---------- */
+
+.shop-page .product-card-visual {
+  position: relative !important;
+  width: 100% !important;
+
+  background: #f5f5f3 !important;
+}
+
+.shop-page .product-card-top {
+  position: absolute !important;
+
+  top: 12px !important;
+  left: 12px !important;
+  right: 12px !important;
+
+  z-index: 5 !important;
+
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+
+  pointer-events: none !important;
+}
+
+.shop-page .product-badge,
+.shop-page .product-stock {
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+
+  min-height: 27px !important;
+
+  padding: 5px 9px !important;
+
+  border-radius: 999px !important;
+
+  font-size: 0.68rem !important;
+  font-weight: 800 !important;
+}
+
+.shop-page .product-badge {
+  background: #a50803 !important;
+  color: #ffffff !important;
+}
+
+.shop-page .product-stock {
+  background: rgba(255, 255, 255, 0.95) !important;
+  color: #16803c !important;
+
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.08) !important;
+}
+
+
+/* ---------- PRODUCT IMAGE ---------- */
+
+.shop-page .product-image-link {
+  display: block !important;
+  width: 100% !important;
+  text-decoration: none !important;
+}
+
+.shop-page .product-media {
+  width: 100% !important;
+
+  /*
+     Desktop image is intentionally shorter.
+     This prevents the product card from becoming too tall.
+  */
+  aspect-ratio: 1 / 0.88 !important;
+
+  overflow: hidden !important;
+
+  background: #f5f5f3 !important;
+}
+
+.shop-page .product-media img {
+  display: block !important;
+
+  width: 100% !important;
+  height: 100% !important;
+
+  object-fit: contain !important;
+
+  transition: transform 0.35s ease !important;
+}
+
+.shop-page .shop-card:hover .product-media img {
+  transform: scale(1.025) !important;
+}
+
+
+/* ---------- PRODUCT BODY ---------- */
+
+.shop-page .shop-card .product-body {
+  display: flex !important;
+  flex: 1 !important;
+
+  flex-direction: column !important;
+
+  min-width: 0 !important;
+
+  padding: 17px 18px 18px !important;
+}
+
+.shop-page .product-heading-row {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+
+  gap: 10px !important;
+}
+
+.shop-page .product-category {
+  margin: 0 !important;
+
+  color: #a50803 !important;
+
+  font-size: 0.68rem !important;
+  font-weight: 800 !important;
+
+  letter-spacing: 0.07em !important;
+  text-transform: uppercase !important;
+}
+
+.shop-page .product-rating {
+  color: #625c57 !important;
+
+  font-size: 0.72rem !important;
+  font-weight: 700 !important;
+}
+
+.shop-page .product-rating span {
+  color: #d58a00 !important;
+}
+
+
+/* ---------- PRODUCT TITLE ---------- */
+
+.shop-page .shop-card .product-title {
+  margin: 6px 0 12px !important;
+
+  font-size: 1rem !important;
+  line-height: 1.32 !important;
+
+  font-weight: 750 !important;
+}
+
+.shop-page .shop-card .product-title a {
+  color: #151515 !important;
+  text-decoration: none !important;
+}
+
+.shop-page .shop-card .product-title a:hover {
+  color: #a50803 !important;
+}
+
+
+/* ---------- SIZES / COLORS ---------- */
+
+.shop-page .product-option-row {
+  display: flex !important;
+  align-items: center !important;
+
+  gap: 8px !important;
+
+  min-height: 26px !important;
+
+  margin-bottom: 7px !important;
+}
+
+.shop-page .product-option-label {
+  flex: 0 0 42px !important;
+
+  color: #77716b !important;
+
+  font-size: 0.64rem !important;
+  font-weight: 800 !important;
+
+  text-transform: uppercase !important;
+}
+
+.shop-page .size-pills,
+.shop-page .color-pills {
+  display: flex !important;
+  flex-wrap: wrap !important;
+  align-items: center !important;
+
+  gap: 4px !important;
+}
+
+.shop-page .size-pill {
+  padding: 3px 6px !important;
+
+  border: 1px solid #ddd8d3 !important;
+  border-radius: 5px !important;
+
+  background: #faf9f7 !important;
+
+  color: #45413e !important;
+
+  font-size: 0.63rem !important;
+  font-weight: 700 !important;
+}
+
+.shop-page .size-pill-more,
+.shop-page .color-count {
+  color: #77716b !important;
+
+  font-size: 0.64rem !important;
+  font-weight: 700 !important;
+}
+
+.shop-page .color-pill {
+  display: block !important;
+
+  width: 15px !important;
+  height: 15px !important;
+
+  border: 2px solid #ffffff !important;
+  border-radius: 50% !important;
+
+  outline: 1px solid #d8d3ce !important;
+}
+
+
+/* ---------- REVIEW ---------- */
+
+.shop-page .product-review-row {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+
+  gap: 8px !important;
+
+  margin-top: 6px !important;
+  padding-top: 10px !important;
+
+  border-top: 1px solid #eeeae6 !important;
+}
+
+.shop-page .product-stars {
+  display: flex !important;
+  align-items: center !important;
+
+  gap: 4px !important;
+
+  color: #4d4945 !important;
+
+  font-size: 0.72rem !important;
+}
+
+.shop-page .product-stars span {
+  color: #d58a00 !important;
+}
+
+.shop-page .product-review-count {
+  color: #88817b !important;
+
+  font-size: 0.65rem !important;
+}
+
+
+/* =========================================================
+   BUTTONS
+   ========================================================= */
+
+.shop-page .shop-card .product-actions {
+  display: grid !important;
+
+  grid-template-columns: 1fr 1fr !important;
+
+  gap: 7px !important;
+
+  width: 100% !important;
+
+  margin-top: 14px !important;
+}
+
+.shop-page .product-action-details,
+.shop-page .product-action-cart,
+.shop-page .product-action-wishlist {
+  min-height: 38px !important;
+
+  display: inline-flex !important;
+
+  align-items: center !important;
+  justify-content: center !important;
+
+  padding: 7px 8px !important;
+
+  border-radius: 8px !important;
+
+  font-family: inherit !important;
+
+  font-size: 0.68rem !important;
+  font-weight: 800 !important;
+
+  line-height: 1 !important;
+
+  text-decoration: none !important;
+
+  cursor: pointer !important;
+
+  box-sizing: border-box !important;
+}
+
+.shop-page .product-action-details {
+  border: 1px solid #151515 !important;
+
+  background: #151515 !important;
+  color: #ffffff !important;
+}
+
+.shop-page .product-action-cart {
+  border: 1px solid #a50803 !important;
+
+  background: #a50803 !important;
+  color: #ffffff !important;
+}
+
+.shop-page .product-action-wishlist {
+  grid-column: 1 / -1 !important;
+
+  border: 1px solid #ddd8d3 !important;
+
+  background: #ffffff !important;
+  color: #35312e !important;
+}
+
+.shop-page .product-action-wishlist.is-saved {
+  border-color: #a50803 !important;
+  color: #a50803 !important;
+}
+
+.shop-page .product-action-details:hover {
+  background: #2b2b2b !important;
+}
+
+.shop-page .product-action-cart:hover {
+  background: #c10a04 !important;
+}
+
+.shop-page .product-action-wishlist:hover {
+  border-color: #a50803 !important;
+}
+
+
+/* =========================================================
+   WHATSAPP BUTTON
+   ========================================================= */
+
+.shop-page .product-whatsapp {
+  width: 100% !important;
+
+  min-height: 39px !important;
+
+  display: inline-flex !important;
+
+  align-items: center !important;
+  justify-content: center !important;
+
+  gap: 7px !important;
+
+  box-sizing: border-box !important;
+
+  margin-top: 8px !important;
+  padding: 8px 10px !important;
+
+  border-radius: 8px !important;
+
+  background: #169b45 !important;
+  color: #ffffff !important;
+
+  font-size: 0.68rem !important;
+  font-weight: 800 !important;
+
+  line-height: 1 !important;
+
+  text-decoration: none !important;
+
+  overflow: hidden !important;
+}
+
+.shop-page .product-whatsapp:hover {
+  background: #12823a !important;
+}
+
+
+/*
+   IMPORTANT:
+   Another existing CSS rule is making the SVG huge.
+   These !important rules force the WhatsApp icon
+   back to its proper size.
+*/
+
+.shop-page .product-whatsapp svg {
+  width: 16px !important;
+  height: 16px !important;
+
+  min-width: 16px !important;
+  max-width: 16px !important;
+
+  min-height: 16px !important;
+  max-height: 16px !important;
+
+  flex: 0 0 16px !important;
+
+  display: block !important;
+
+  fill: currentColor !important;
+}
+
+.shop-page .product-whatsapp svg path {
+  fill: currentColor !important;
+}
+
+
+/* =========================================================
+   TABLET
+   ========================================================= */
+
+@media (max-width: 1000px) {
+
+  .shop-page .shop-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    gap: 22px !important;
+  }
+
+  .shop-page .product-media {
+    aspect-ratio: 1 / 0.92 !important;
+  }
+}
+
+
+/* =========================================================
+   MOBILE
+   ========================================================= */
+
+@media (max-width: 640px) {
+
+  .shop-page .shop-grid {
+    grid-template-columns: 1fr !important;
+    gap: 18px !important;
+  }
+
+  .shop-page .product-media {
+    aspect-ratio: 1 / 0.95 !important;
+  }
+
+  .shop-page .shop-card .product-body {
+    padding: 16px !important;
+  }
+
+  .shop-page .shop-card .product-title {
+    font-size: 0.98rem !important;
+  }
+
+  .shop-page .product-action-details,
+  .shop-page .product-action-cart,
+  .shop-page .product-action-wishlist {
+    min-height: 40px !important;
+    font-size: 0.7rem !important;
+  }
+
+  .shop-page .product-whatsapp {
+    min-height: 40px !important;
+    font-size: 0.7rem !important;
+  }
+}
+
+/* =========================================================
+   FINAL SHOP WIDTH FIX
+   ========================================================= */
+
+.shop-page .shop-products-section {
+  width: 100% !important;
+  max-width: none !important;
+  margin-left: 0 !important;
+  margin-right: 0 !important;
+  box-sizing: border-box !important;
+}
+
+.shop-page .shop-products-section > * {
+  box-sizing: border-box !important;
+}
+
+.shop-page .shop-products-section .shop-grid {
+  width: min(1180px, calc(100% - 48px)) !important;
+  max-width: 1180px !important;
+  margin-left: auto !important;
+  margin-right: auto !important;
+
+  display: grid !important;
+  grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+  gap: 28px !important;
+}
+
+
+/* Make each card fill its grid column */
+.shop-page .shop-products-section .shop-grid .shop-card {
+  width: 100% !important;
+  max-width: none !important;
+  min-width: 0 !important;
+  box-sizing: border-box !important;
+}
+
+
+/* Keep desktop product images compact */
+.shop-page .shop-products-section .product-media {
+  aspect-ratio: 1 / 0.82 !important;
+  height: auto !important;
+}
+
+
+/* Stop the WhatsApp icon from becoming huge */
+.shop-page .shop-products-section .product-whatsapp {
+  display: flex !important;
+  width: 100% !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 7px !important;
+}
+
+.shop-page .shop-products-section .product-whatsapp svg {
+  width: 16px !important;
+  height: 16px !important;
+  min-width: 16px !important;
+  max-width: 16px !important;
+  min-height: 16px !important;
+  max-height: 16px !important;
+  flex: 0 0 16px !important;
+}
+
+
+/* =========================================================
+   TABLET
+   ========================================================= */
+
+@media (max-width: 1000px) {
+  .shop-page .shop-products-section .shop-grid {
+    width: min(900px, calc(100% - 36px)) !important;
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    gap: 22px !important;
+  }
+}
+
+
+/* =========================================================
+   MOBILE
+   ========================================================= */
+
+@media (max-width: 640px) {
+  .shop-page .shop-products-section .shop-grid {
+    width: calc(100% - 24px) !important;
+    grid-template-columns: 1fr !important;
+    gap: 18px !important;
+  }
+
+  .shop-page .shop-products-section .product-media {
+    aspect-ratio: 1 / 0.92 !important;
+  }
+}
+/* =========================================================
+   HK FITTERS - FINAL MOBILE RESPONSIVE SAFETY
+   Keeps existing desktop design unchanged.
+   ========================================================= */
+
+@media (max-width: 640px) {
+
+  /* Prevent horizontal scrolling */
+  html,
+  body,
+  #root,
+  .App {
+    width: 100%;
+    max-width: 100%;
+    overflow-x: hidden;
+  }
+
+  /* General page spacing */
+  .section,
+  .home-page .home-section {
+    width: 100%;
+    max-width: 100%;
+    box-sizing: border-box;
+  }
+
+  /* Homepage hero */
+  .home-page .hero-home {
+    min-height: 680px;
+    padding: 76px 18px 52px;
+  }
+
+  .home-page .hero-content {
+    width: 100%;
+    max-width: 100%;
+  }
+
+  .home-page .hero-home h1 {
+    font-size: clamp(2rem, 9vw, 2.8rem);
+    line-height: 1.08;
+    overflow-wrap: break-word;
+  }
+
+  .home-page .hero-text {
+    font-size: 0.96rem;
+    line-height: 1.65;
+  }
+
+  .home-page .hero-actions {
+    width: 100%;
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .home-page .hero-actions .btn {
+    width: 100%;
+    min-height: 46px;
+  }
+
+  .home-page .hero-stats {
+    display: grid;
+    grid-template-columns: 1fr;
+    width: 100%;
+  }
+
+  .home-page .hero-pill {
+    width: 100%;
+    text-align: center;
+  }
+
+  /* Homepage sections */
+  .home-page .home-section {
+    padding: 48px 16px;
+  }
+
+  .home-page .section-title {
+    display: block;
+  }
+
+  .home-page .section-title h2 {
+    font-size: 1.65rem;
+    line-height: 1.2;
+  }
+
+  .home-page .section-title p {
+    margin-top: 10px;
+    font-size: 0.92rem;
+  }
+
+  /* Homepage product cards */
+  .home-page .product-image {
+    height: auto;
+    aspect-ratio: 1 / 1;
+  }
+
+  .home-page .product-image img {
+    object-fit: cover;
+  }
+
+  .home-page .product-body {
+    padding: 16px;
+  }
+
+  /* Homepage split sections */
+  .home-page .split-layout {
+    grid-template-columns: 1fr !important;
+  }
+
+  /* Homepage stats */
+  .home-page .stats-row {
+    grid-template-columns: 1fr !important;
+  }
+
+  /* Homepage feature cards */
+  .home-page .feature-card {
+    padding: 18px;
+  }
+
+  /* Newsletter */
+  .newsletter-card {
+    width: 100%;
+    padding: 24px 18px !important;
+    box-sizing: border-box;
+  }
+
+  .newsletter-copy {
+    width: 100%;
+  }
+
+  .newsletter-title {
+    font-size: 1.25rem;
+  }
+
+  .newsletter-form {
+    width: 100%;
+    flex-direction: column;
+  }
+
+  .newsletter-form input,
+  .newsletter-form button,
+  .input-wrap,
+  .input-wrap input {
+    width: 100%;
+    min-width: 0 !important;
+    box-sizing: border-box;
+  }
+
+  /* General buttons */
+  .product-actions {
+    width: 100%;
+  }
+
+  .product-actions > * {
+    min-width: 0;
+  }
+
+  /* Shop */
+  .shop-page .shop-grid {
+    width: calc(100% - 24px) !important;
+    max-width: none !important;
+    grid-template-columns: 1fr !important;
+    gap: 18px !important;
+  }
+
+  .shop-page .shop-card {
+    width: 100% !important;
+  }
+
+  /* Shop hero */
+  .shop-hero-inner {
+    width: calc(100% - 28px) !important;
+    min-height: 620px !important;
+    padding: 60px 0 50px !important;
+    grid-template-columns: 1fr !important;
+    gap: 24px !important;
+  }
+
+  .shop-hero h1 {
+    font-size: clamp(2rem, 9vw, 2.8rem) !important;
+    line-height: 1.08 !important;
+  }
+
+  .shop-hero-panel {
+    width: 100%;
+  }
+
+  /* Header */
+  .brand-mark {
+    min-width: 0;
+  }
+
+  .top-actions {
+    max-width: 100%;
+    min-width: 0;
+  }
+
+  .top-actions .icon-btn {
+    font-size: 0.72rem;
+    min-width: 34px !important;
+  }
+
+  /* Footer */
+  .footer-main-grid {
+    width: 100%;
+    max-width: 100%;
+  }
+
+  .footer-company-text {
+    max-width: 100%;
+  }
+}
