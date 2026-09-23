@@ -313,64 +313,175 @@ app.delete('/api/inquiries/:id', async (req, res) => {
 // =========================
 app.get('/api/products', async (req, res) => {
   try {
-    const includeGallery = req.query.includeGallery !== 'false';
-    const featuredOnly = req.query.featured === 'true';
-    const requestedLimit = Number.parseInt(req.query.limit, 10);
-    const limit = Number.isInteger(requestedLimit) && requestedLimit > 0
-      ? Math.min(requestedLimit, 100)
-      : null;
-    const fields = includeGallery
-      ? 'id, name, description, image, gallery, category, sizes, colors, color, stock, badge, featured, rating, reviews'
-      : 'id, name, image, category, sizes, colors, color, stock, badge, featured, rating, reviews';
-    const conditions = featuredOnly ? "WHERE featured::text IN ('1', 'true')" : '';
-    const limitClause = limit ? 'LIMIT $1' : '';
-    const result = await db.query(`
+    const includeGallery =
+      req.query.includeGallery !== 'false';
+
+    const featuredOnly =
+      req.query.featured === 'true';
+
+    const limit =
+      Number.parseInt(req.query.limit, 10);
+
+    const conditions = [];
+    const values = [];
+
+    if (featuredOnly) {
+      conditions.push('featured = 1');
+    }
+
+    const whereClause =
+      conditions.length
+        ? `WHERE ${conditions.join(' AND ')}`
+        : '';
+
+    const limitClause =
+      Number.isInteger(limit) && limit > 0
+        ? `LIMIT ${limit}`
+        : '';
+
+    const fields = `
+      id,
+      name,
+      description,
+      image,
+      gallery,
+      category,
+      sizes,
+      colors,
+      color,
+      stock,
+      badge,
+      featured,
+      rating,
+      reviews
+    `;
+
+    const result = await db.query(
+      `
       SELECT ${fields}
       FROM products
-      ${conditions}
+      ${whereClause}
       ORDER BY id DESC
       ${limitClause}
-    `, limit ? [limit] : []);
+      `,
+      values
+    );
 
-    const products = result.rows;
+    const safeParseArray = (value, fallback = []) => {
+      if (Array.isArray(value)) {
+        return value;
+      }
 
-    const formatted = products.map((product) => ({
-      id: product.id,
-      name: product.name,
-      description: product.description || '',
-      image: product.image || '',
-      gallery: includeGallery && product.gallery
-        ? JSON.parse(product.gallery)
-        : [],
-      galleryImages: includeGallery && product.gallery
-        ? JSON.parse(product.gallery)
-        : [],
-      category: product.category || 'Men',
-      size: product.sizes
-        ? JSON.parse(product.sizes)
-        : ['M'],
-      sizes: product.sizes
-        ? JSON.parse(product.sizes)
-        : ['M'],
-      color: product.color || 'Black',
-      colors: product.colors
-        ? JSON.parse(product.colors)
-        : ['#111111'],
-      stock: product.stock || 'In Stock',
-      badge: product.badge || 'New',
-      featured: Boolean(product.featured),
-      rating: Number(product.rating) || 4.5,
-      reviews: Number(product.reviews) || 0,
-    }));
+      if (value === null || value === undefined || value === '') {
+        return fallback;
+      }
 
-    res.set('Cache-Control', 'public, max-age=60, s-maxage=300');
+      if (typeof value === 'object') {
+        return value;
+      }
+
+      if (typeof value === 'string') {
+        try {
+          const parsed = JSON.parse(value);
+
+          return parsed ?? fallback;
+        } catch (error) {
+          console.error(
+            'JSON parse warning:',
+            error.message
+          );
+
+          return fallback;
+        }
+      }
+
+      return fallback;
+    };
+
+    const formatted = result.rows.map((product) => {
+      const gallery =
+        safeParseArray(product.gallery, []);
+
+      const sizes =
+        safeParseArray(product.sizes, ['M']);
+
+      const colors =
+        safeParseArray(product.colors, ['#111111']);
+
+      return {
+        id: product.id,
+
+        name:
+          product.name || '',
+
+        description:
+          product.description || '',
+
+        image:
+          product.image || '',
+
+        gallery:
+          includeGallery
+            ? gallery
+            : [],
+
+        galleryImages:
+          includeGallery
+            ? gallery
+            : [],
+
+        category:
+          product.category || 'Men',
+
+        size:
+          sizes,
+
+        sizes:
+          sizes,
+
+        color:
+          product.color || 'Black',
+
+        colors:
+          colors,
+
+        stock:
+          product.stock || 'In Stock',
+
+        badge:
+          product.badge || 'New',
+
+        featured:
+          Boolean(product.featured),
+
+        rating:
+          Number(product.rating) || 4.5,
+
+        reviews:
+          Number(product.reviews) || 0,
+      };
+    });
+
+    res.set(
+      'Cache-Control',
+      'public, max-age=60, s-maxage=300'
+    );
+
     res.json(formatted);
 
   } catch (error) {
-    console.error('Get products error:', error);
+    console.error(
+      'GET /api/products ERROR:',
+      error
+    );
 
     res.status(500).json({
+      success: false,
       message: 'Failed to get products',
+      error:
+        process.env.NODE_ENV === 'production'
+          ? undefined
+          : error.message,
     });
   }
 });
