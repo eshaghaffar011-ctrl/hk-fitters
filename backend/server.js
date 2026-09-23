@@ -514,20 +514,22 @@ app.get('/api/products', async (req, res) => {
     res.json(formatted);
 
   } catch (error) {
-    console.error(
-      'GET /api/products ERROR:',
-      error
-    );
+  console.error('================================');
+  console.error('GET /api/products ERROR');
+  console.error('Message:', error.message);
+  console.error('Code:', error.code);
+  console.error('Detail:', error.detail);
+  console.error('Stack:', error.stack);
+  console.error('================================');
 
-    res.status(500).json({
-      success: false,
-      message: 'Failed to get products',
-      error:
-        process.env.NODE_ENV === 'production'
-          ? undefined
-          : error.message,
-    });
-  }
+  res.status(500).json({
+    success: false,
+    message: 'Failed to get products',
+    error: error.message,
+    code: error.code || null,
+    detail: error.detail || null,
+  });
+}
 });
 
 app.post('/api/products', async (req, res) => {
