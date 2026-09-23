@@ -383,22 +383,21 @@ app.get('/api/products', async (req, res) => {
         ? `LIMIT ${limit}`
         : '';
 
-    const fields = `
-      id,
-      name,
-      description,
-      image,
-      gallery,
-      category,
-      sizes,
-      colors,
-      color,
-      stock,
-      badge,
-      featured,
-      rating,
-      reviews
-    `;
+   const fields = `
+  id,
+  name,
+  description,
+  image,
+  category,
+  sizes,
+  colors,
+  color,
+  stock,
+  badge,
+  featured,
+  rating,
+  reviews
+`;
 
     const result = await db.query(
       `
@@ -464,15 +463,9 @@ app.get('/api/products', async (req, res) => {
         image:
           product.image || '',
 
-        gallery:
-          includeGallery
-            ? gallery
-            : [],
+        gallery: [],
 
-        galleryImages:
-          includeGallery
-            ? gallery
-            : [],
+galleryImages: [],
 
         category:
           product.category || 'Men',
