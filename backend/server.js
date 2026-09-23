@@ -99,11 +99,30 @@ app.get('/', (req, res) => {
   });
 });
 
-app.get('/api/health', (req, res) => {
-  res.json({
-    success: true,
-    message: 'Backend is healthy',
-  });
+app.get('/api/health', async (req, res) => {
+  try {
+    const result = await db.query(`
+      SELECT COUNT(*) AS product_count
+      FROM products
+    `);
+
+    res.json({
+      success: true,
+      backend: 'healthy',
+      database: 'connected',
+      productCount: Number(result.rows[0].product_count),
+    });
+
+  } catch (error) {
+    console.error('HEALTH DATABASE ERROR:', error);
+
+    res.status(500).json({
+      success: false,
+      backend: 'running',
+      database: 'failed',
+      error: error.message,
+    });
+  }
 });
 
 /// =========================
@@ -311,6 +330,31 @@ app.delete('/api/inquiries/:id', async (req, res) => {
 // =========================
 // PRODUCT API
 // =========================
+
+app.get('/api/db-test', async (req, res) => {
+  try {
+    const result = await db.query(`
+      SELECT COUNT(*) AS product_count
+      FROM products
+    `);
+
+    res.json({
+      success: true,
+      database: 'connected',
+      productCount: Number(result.rows[0].product_count),
+    });
+
+  } catch (error) {
+    console.error('DATABASE TEST ERROR:', error);
+
+    res.status(500).json({
+      success: false,
+      database: 'failed',
+      error: error.message,
+    });
+  }
+});
+
 app.get('/api/products', async (req, res) => {
   try {
     const includeGallery =
