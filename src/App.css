@@ -2587,3 +2587,773 @@ body {
     max-width: 100%;
   }
 }
+
+/* =========================================================
+   HK FITTERS - MOBILE HOMEPAGE RESPONSIVE FIX
+   Keep desktop design unchanged
+   ========================================================= */
+
+@media (max-width: 640px) {
+
+  /* Prevent any horizontal page overflow */
+  html,
+  body,
+  #root,
+  .App,
+  .home-page {
+    width: 100%;
+    max-width: 100%;
+    overflow-x: hidden !important;
+  }
+
+  /* =========================
+     HERO
+     ========================= */
+
+  .home-page .hero-home {
+    width: 100%;
+    min-height: auto !important;
+    padding: 72px 18px 48px !important;
+
+    /*
+      HomePage.jsx uses an inline background-size.
+      !important is required to override it on mobile.
+    */
+    background-size: 100% 100%, auto 100% !important;
+    background-position: center center, right center !important;
+    background-repeat: no-repeat, no-repeat !important;
+  }
+
+  .home-page .hero-content {
+    width: 100%;
+    max-width: 100%;
+    display: flex !important;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 14px;
+  }
+
+  .home-page .eyebrow {
+    font-size: 0.72rem;
+    line-height: 1.4;
+    letter-spacing: 0.14em;
+  }
+
+  .home-page .hero-home h1 {
+    width: 100%;
+    max-width: 100%;
+    font-size: clamp(2rem, 9vw, 2.65rem) !important;
+    line-height: 1.08 !important;
+    overflow-wrap: anywhere;
+  }
+
+  .home-page .hero-text {
+    width: 100%;
+    max-width: 100%;
+    font-size: 0.95rem;
+    line-height: 1.6;
+  }
+
+  /* Hero buttons */
+  .home-page .hero-actions {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 12px;
+    margin-top: 8px;
+  }
+
+  .home-page .hero-actions .btn {
+    width: 100%;
+    min-height: 48px;
+    padding: 13px 18px;
+  }
+
+  /* Hero pills */
+  .home-page .hero-stats {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-top: 8px;
+  }
+
+  .home-page .hero-pill {
+    width: 100%;
+    text-align: center;
+    padding: 11px 14px;
+    font-size: 0.88rem;
+  }
+
+
+  /* =========================
+     ALL HOMEPAGE SECTIONS
+     ========================= */
+
+  .home-page .home-section {
+    width: 100%;
+    max-width: 100%;
+    padding: 50px 18px !important;
+    margin: 0 !important;
+  }
+
+  .home-page .section-title {
+    width: 100%;
+    display: flex !important;
+    flex-direction: column;
+    align-items: flex-start !important;
+    gap: 12px;
+    margin-bottom: 22px;
+  }
+
+  .home-page .section-title > div,
+  .home-page .section-title > p {
+    width: 100%;
+    max-width: 100%;
+  }
+
+  .home-page .section-label {
+    font-size: clamp(1.65rem, 7vw, 2rem) !important;
+    line-height: 1.18 !important;
+  }
+
+  .home-page .section-description,
+  .home-page .section-title p {
+    font-size: 1rem;
+    line-height: 1.65;
+  }
+
+
+  /* =========================
+     COLLECTION CATEGORY CARDS
+     ========================= */
+
+  .home-page .home-category-grid {
+    display: grid !important;
+    grid-template-columns: 1fr !important;
+    gap: 16px !important;
+    width: 100% !important;
+    max-width: 100% !important;
+  }
+
+  .home-page .home-category-grid .category-card {
+    width: 100% !important;
+    min-width: 0 !important;
+    max-width: 100% !important;
+    min-height: 0 !important;
+    padding: 22px 20px !important;
+  }
+
+  .home-page .category-card h3 {
+    font-size: 1.45rem;
+    line-height: 1.2;
+    overflow-wrap: anywhere;
+  }
+
+  .home-page .category-card p {
+    font-size: 1rem;
+    line-height: 1.65;
+    overflow-wrap: anywhere;
+  }
+
+
+  /* =========================
+     FEATURED PRODUCTS
+     ========================= */
+
+  .home-page .featured-grid {
+    width: 100%;
+    display: grid !important;
+    grid-template-columns: 1fr !important;
+    gap: 18px !important;
+  }
+
+  .home-page .featured-product-card {
+    width: 100%;
+    min-width: 0;
+  }
+
+  .home-page .product-image {
+    width: 100%;
+    height: auto !important;
+    min-height: 0 !important;
+    aspect-ratio: 1 / 1;
+  }
+
+  .home-page .product-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain !important;
+  }
+
+
+  /* =========================
+     WHY CHOOSE HK FITTERS
+     ========================= */
+
+  .home-page .why-grid {
+    width: 100%;
+    display: grid !important;
+    grid-template-columns: 1fr !important;
+    gap: 16px !important;
+  }
+
+  .home-page .feature-card {
+    width: 100%;
+    min-width: 0;
+    padding: 20px !important;
+  }
+
+  .home-page .feature-card p {
+    font-size: 0.96rem;
+    line-height: 1.6;
+  }
+
+
+  /* =========================
+     BEST SELLING / WORLDWIDE
+     ========================= */
+
+  .home-page .split-layout {
+    width: 100%;
+    display: grid !important;
+    grid-template-columns: 1fr !important;
+    gap: 18px !important;
+  }
+
+  .home-page .highlight-card,
+  .home-page .stack-card {
+    width: 100%;
+    min-width: 0;
+    padding: 22px !important;
+  }
+
+  .home-page .stats-row {
+    display: grid !important;
+    grid-template-columns: 1fr !important;
+    gap: 10px;
+  }
+
+
+  /* =========================
+     REVIEWS
+     ========================= */
+
+  .home-page .review-shell {
+    width: 100%;
+    display: grid !important;
+    grid-template-columns: 1fr !important;
+    gap: 12px;
+  }
+
+  .home-page .arrow-btn {
+    display: none !important;
+  }
+
+  .home-page .review-card {
+    width: 100%;
+    min-width: 0;
+    padding: 22px !important;
+  }
+
+
+  /* =========================
+     NEWSLETTER
+     ========================= */
+
+  .home-page .newsletter-card {
+    width: 100%;
+    display: flex !important;
+    flex-direction: column;
+    align-items: flex-start !important;
+    padding: 24px 18px !important;
+    gap: 18px;
+  }
+
+  .home-page .newsletter-form {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .home-page .newsletter-form input,
+  .home-page .newsletter-form button,
+  .home-page .input-wrap,
+  .home-page .input-wrap input {
+    width: 100%;
+    min-width: 0 !important;
+    box-sizing: border-box;
+  }
+}
+
+
+/* =========================================================
+   EXTRA SMALL PHONES
+   ========================================================= */
+
+@media (max-width: 430px) {
+
+  .home-page .home-section {
+    padding-left: 14px !important;
+    padding-right: 14px !important;
+  }
+
+  .home-page .hero-home {
+    padding-left: 14px !important;
+    padding-right: 14px !important;
+  }
+
+  .home-page .hero-home h1 {
+    font-size: 2rem !important;
+  }
+
+  .home-page .hero-text {
+    font-size: 0.92rem;
+  }
+
+  .home-page .hero-pill {
+    font-size: 0.84rem;
+  }
+
+  .home-page .category-card,
+  .home-page .feature-card,
+  .home-page .highlight-card,
+  .home-page .stack-card {
+    padding: 18px !important;
+  }
+}
+
+/* =========================================================
+   HK FITTERS - MOBILE HEADER
+   ========================================================= */
+
+@media (max-width: 760px) {
+
+  /* Top contact bar */
+  .app-shell > div:first-child {
+    padding: 7px 12px !important;
+  }
+
+  .top-header-info {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .top-header-info > a {
+    font-size: 0.68rem !important;
+  }
+
+  .top-header-track {
+    font-size: 0.7rem !important;
+    margin-left: auto;
+  }
+
+
+  /* Main header */
+  .topbar {
+    position: sticky;
+    top: 0;
+    width: 100%;
+    padding: 10px 14px !important;
+    min-height: 62px;
+    z-index: 1200;
+  }
+
+  .brand-mark {
+    min-width: 0;
+    gap: 8px;
+    font-size: 0.9rem !important;
+    letter-spacing: 0.1em;
+  }
+
+  .brand-icon {
+    width: 38px !important;
+    height: 38px !important;
+  }
+
+
+  /* Hamburger */
+  .mobile-nav-toggle {
+    display: inline-flex !important;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    width: 42px !important;
+    height: 42px !important;
+    padding: 8px !important;
+  }
+
+
+  /* Mobile navigation */
+  .topnav {
+    position: absolute !important;
+    top: 62px !important;
+    left: 0 !important;
+    right: 0 !important;
+
+    display: none !important;
+
+    width: 100% !important;
+    padding: 14px !important;
+
+    flex-direction: column !important;
+    align-items: stretch !important;
+    gap: 4px !important;
+
+    background: rgba(15, 15, 15, 0.98) !important;
+    border-top: 1px solid rgba(255,255,255,0.08);
+    border-bottom: 1px solid rgba(255,255,255,0.12);
+
+    box-shadow: 0 18px 35px rgba(0,0,0,0.35);
+    backdrop-filter: blur(14px);
+
+    max-height: calc(100vh - 62px);
+    overflow-y: auto;
+  }
+
+  .topnav.open {
+    display: flex !important;
+  }
+
+  .topnav a {
+    width: 100%;
+    padding: 13px 14px !important;
+    border-radius: 10px;
+    font-size: 0.95rem;
+    color: #ffffff !important;
+  }
+
+  .topnav a:hover {
+    background: rgba(165,8,3,0.2);
+    transform: none !important;
+  }
+
+
+  /* Right-side desktop actions:
+     hide them on mobile because hamburger handles navigation */
+  .top-actions {
+    display: none !important;
+  }
+}
+
+
+/* Very small phones */
+@media (max-width: 430px) {
+
+  .topbar {
+    padding-left: 10px !important;
+    padding-right: 10px !important;
+  }
+
+  .brand-mark {
+    font-size: 0.82rem !important;
+  }
+
+  .brand-icon {
+    width: 36px !important;
+    height: 36px !important;
+  }
+
+  .mobile-nav-toggle {
+    width: 40px !important;
+    height: 40px !important;
+  }
+}
+
+/* =========================================================
+   HK FITTERS - MOBILE HERO FINAL
+   ========================================================= */
+
+@media (max-width: 760px) {
+
+  .home-page .hero-home {
+    min-height: auto !important;
+    height: auto !important;
+    min-height: 690px !important;
+
+    padding: 58px 18px 32px !important;
+
+    /*
+      Keep the dark overlay full width,
+      but make the model image larger on mobile.
+    */
+    background-size: 100% 100%, auto 100% !important;
+    background-position: center center, 82% center !important;
+    background-repeat: no-repeat, no-repeat !important;
+
+    align-items: flex-start !important;
+  }
+
+  .home-page .hero-content {
+    width: 100% !important;
+    max-width: 100% !important;
+
+    display: flex !important;
+    flex-direction: column !important;
+
+    align-items: flex-start !important;
+    justify-content: flex-start !important;
+
+    gap: 0 !important;
+
+    position: relative !important;
+    z-index: 5 !important;
+  }
+
+  .home-page .eyebrow {
+    margin: 4px 0 14px !important;
+    font-size: 0.72rem !important;
+    line-height: 1.45 !important;
+    letter-spacing: 0.16em !important;
+  }
+
+  .home-page .hero-home h1 {
+    width: 100% !important;
+    max-width: 100% !important;
+
+    margin: 0 0 18px !important;
+
+    font-size: clamp(2.05rem, 8.5vw, 2.65rem) !important;
+    line-height: 1.08 !important;
+    letter-spacing: -0.025em !important;
+  }
+
+  .home-page .hero-text {
+    width: 100% !important;
+    max-width: 100% !important;
+
+    margin: 0 !important;
+
+    font-size: 0.94rem !important;
+    line-height: 1.62 !important;
+
+    color: rgba(255,255,255,0.88) !important;
+  }
+
+  .home-page .hero-actions {
+    width: 100% !important;
+
+    display: flex !important;
+    flex-direction: column !important;
+
+    gap: 10px !important;
+    margin-top: 24px !important;
+  }
+
+  .home-page .hero-actions .btn {
+    width: 100% !important;
+    min-height: 46px !important;
+
+    padding: 12px 18px !important;
+
+    font-size: 0.92rem !important;
+  }
+
+  .home-page .hero-stats {
+    width: 100% !important;
+
+    display: flex !important;
+    flex-direction: column !important;
+
+    gap: 9px !important;
+    margin-top: 16px !important;
+  }
+
+  .home-page .hero-pill {
+    width: 100% !important;
+    box-sizing: border-box !important;
+
+    padding: 10px 13px !important;
+
+    text-align: center !important;
+
+    font-size: 0.82rem !important;
+    line-height: 1.35 !important;
+  }
+}
+
+
+/* Smaller phones */
+@media (max-width: 430px) {
+
+  .home-page .hero-home {
+    min-height: 675px !important;
+
+    padding: 50px 14px 28px !important;
+
+    background-position: center center, 84% center !important;
+  }
+
+  .home-page .hero-home h1 {
+    font-size: 2rem !important;
+  }
+
+  .home-page .hero-text {
+    font-size: 0.9rem !important;
+  }
+
+  .home-page .hero-actions {
+    margin-top: 20px !important;
+  }
+
+  .home-page .hero-stats {
+    margin-top: 14px !important;
+  }
+}
+/* =========================================================
+   HK FITTERS - WHY CHOOSE MOBILE FIX
+   ========================================================= */
+
+@media screen and (max-width: 760px) {
+
+  /* Stack the section heading and second paragraph */
+  .home-page main.home-main .section-title {
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: flex-start !important;
+    justify-content: flex-start !important;
+    width: 100% !important;
+    gap: 14px !important;
+  }
+
+  .home-page main.home-main .section-title > div {
+    width: 100% !important;
+    max-width: 100% !important;
+  }
+
+  .home-page main.home-main .section-title > p {
+    width: 100% !important;
+    max-width: 100% !important;
+    margin: 0 !important;
+  }
+
+
+  /* WHY CHOOSE CARDS — ONE CARD PER ROW */
+  .home-page main.home-main .why-grid {
+    display: grid !important;
+    grid-template-columns: 1fr !important;
+    grid-template-rows: none !important;
+    grid-auto-flow: row !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    gap: 16px !important;
+  }
+
+  .home-page main.home-main .why-grid .feature-card {
+    width: 100% !important;
+    min-width: 0 !important;
+    max-width: 100% !important;
+    box-sizing: border-box !important;
+
+    display: flex !important;
+    flex-direction: row !important;
+    align-items: flex-start !important;
+    gap: 14px !important;
+
+    padding: 20px !important;
+  }
+
+  .home-page main.home-main .why-grid .feature-card > div:last-child {
+    min-width: 0 !important;
+    flex: 1 1 auto !important;
+  }
+
+  .home-page main.home-main .why-grid .feature-card h3 {
+    margin-top: 0 !important;
+    font-size: 1.15rem !important;
+    line-height: 1.25 !important;
+  }
+
+  .home-page main.home-main .why-grid .feature-card p {
+    font-size: 0.95rem !important;
+    line-height: 1.6 !important;
+  }
+
+  .home-page main.home-main .why-grid .feature-icon {
+    flex: 0 0 44px !important;
+    width: 44px !important;
+    height: 44px !important;
+  }
+
+  .home-page main.home-main .why-grid .feature-icon svg {
+    width: 44px !important;
+    height: 44px !important;
+  }
+}
+
+
+/* Smaller phones */
+@media screen and (max-width: 430px) {
+
+  .home-page main.home-main .why-grid {
+    gap: 14px !important;
+  }
+
+  .home-page main.home-main .why-grid .feature-card {
+    padding: 18px !important;
+    gap: 12px !important;
+  }
+
+  .home-page main.home-main .why-grid .feature-icon {
+    flex-basis: 40px !important;
+    width: 40px !important;
+    height: 40px !important;
+  }
+
+  .home-page main.home-main .why-grid .feature-icon svg {
+    width: 40px !important;
+    height: 40px !important;
+  }
+
+  .home-page main.home-main .why-grid .feature-card h3 {
+    font-size: 1.05rem !important;
+  }
+
+  .home-page main.home-main .why-grid .feature-card p {
+    font-size: 0.9rem !important;
+  }
+}
+/* =====================================================
+   FINAL FIX — FEATURED / WHY SECTION MOBILE STACK
+   ===================================================== */
+
+@media screen and (max-width: 900px) {
+
+  .home-page .section-title {
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: stretch !important;
+    justify-content: flex-start !important;
+    gap: 16px !important;
+    width: 100% !important;
+    max-width: 100% !important;
+  }
+
+  .home-page .section-title > div {
+    display: block !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    flex: none !important;
+  }
+
+  .home-page .section-title > p {
+    display: block !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    flex: none !important;
+    margin: 0 !important;
+  }
+
+  .home-page .section-title h2 {
+    width: 100% !important;
+    max-width: 100% !important;
+  }
+
+  .home-page .section-title .section-description {
+    width: 100% !important;
+    max-width: 100% !important;
+  }
+}

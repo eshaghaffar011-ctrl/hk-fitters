@@ -3,7 +3,6 @@ import { Link, useParams } from 'react-router-dom';
 import { fetchProductsFromAPI } from '../data/products';
 import contactInfo from '../config/contact';
 import '../ProductDetail.css';
-import { useCartWishlist } from '../context/CartWishlistContext';
 
 
 const FALLBACK_DETAIL_IMAGE =
@@ -74,12 +73,26 @@ const getColorLabel = (value) => {
 };
 
 const getProductDescription = (product) => {
+  const shortDescription =
+    typeof product?.shortDescription === 'string'
+      ? product.shortDescription.replace(/\s+/g, ' ').trim()
+      : '';
+
   const description =
     typeof product?.description === 'string'
       ? product.description.replace(/\s+/g, ' ').trim()
       : '';
 
-  return description || PRODUCT_FALLBACK_DESCRIPTION;
+  return (
+    shortDescription ||
+    description ||
+    PRODUCT_FALLBACK_DESCRIPTION
+  );
+};
+const toDisplayList = (value) => {
+  if (Array.isArray(value)) return value.filter(Boolean);
+  if (typeof value === 'string') return value.split(',').map((item) => item.trim()).filter(Boolean);
+  return [];
 };
 
 const getMetaDescription = (description) => {
@@ -105,13 +118,6 @@ function ProductDetailPage() {
   const [selectedImage, setSelectedImage] = useState(0);
   const [selectedSize, setSelectedSize] = useState('');
   const [selectedColor, setSelectedColor] = useState('Black');
-  const [quantity, setQuantity] = useState(1);
-
-  const {
-    addToCart,
-    toggleWishlist,
-    wishlistItems,
-  } = useCartWishlist();
 
   useEffect(() => {
     const loadProduct = async () => {
@@ -170,9 +176,6 @@ function ProductDetailPage() {
 
   const productDescription = getProductDescription(product);
 
-  const isWishlisted = wishlistItems.some(
-    (item) => item.id === product?.id
-  );
 
   useEffect(() => {
     if (!product) return;
@@ -190,7 +193,6 @@ function ProductDetailPage() {
     setSelectedSize(firstSize);
     setSelectedColor(firstColor);
     setSelectedImage(0);
-    setQuantity(1);
   }, [product]);
 
   useEffect(() => {
@@ -367,24 +369,12 @@ document.head.appendChild(breadcrumbTag);
   } = contactInfo;
 
   const whatsappMessage = [
-    `Hi ${companyName},`,
-    '',
-    "I'm interested in this product.",
-    '',
+    `Hi ${companyName},`, '', "I'm interested in this product.", '',
     `Product Name: ${product.name}`,
     `Category: ${product.category}`,
     `Size: ${selectedSize || 'Not selected'}`,
-    `Color: ${selectedColor}`,
-    `Quantity: ${quantity}`,
-    '',
-    'Please share:',
-    '- Price',
-    '- MOQ',
-    '- Available Colors',
-    '- Available Sizes',
-    '- Production Time',
-    '- Export Details',
-    '- Shipping Information',
+    `Color: ${selectedColor}`, '',
+    'Please share the price, availability, minimum order quantity, production time, and shipping details.',
   ].join('\n');
 
   const whatsappHref =
@@ -395,43 +385,10 @@ document.head.appendChild(breadcrumbTag);
       whatsappMessage
     )}`;
 
-  const handleQuantityChange = (direction) => {
-    setQuantity((current) =>
-      Math.max(1, current + direction)
-    );
-  };
 
-  const handleAddToCart = () => {
-    addToCart({
-      ...product,
-      quantity,
-      selectedSize,
-      selectedColor,
-    });
-  };
-
-  const sizeGuideRows = [
-    {
-      size: 'S',
-      chest: '34–36 in',
-      waist: '28–30 in',
-    },
-    {
-      size: 'M',
-      chest: '37–39 in',
-      waist: '31–33 in',
-    },
-    {
-      size: 'L',
-      chest: '40–42 in',
-      waist: '34–36 in',
-    },
-    {
-      size: 'XL',
-      chest: '43–45 in',
-      waist: '37–39 in',
-    },
-  ];
+  const availableSizes = toDisplayList(product.size || product.sizes);
+  const productFeatures = toDisplayList(product.features);
+  const productSpecifications = toDisplayList(product.specifications);
 
   return (
     <div className="hk-product-page">
@@ -530,47 +487,23 @@ document.head.appendChild(breadcrumbTag);
             </section>
 
 
-            {/* SIZE GUIDE */}
-
+            {/* PRODUCT DETAILS */}
             <section className="hk-detail-card">
-
-              <div className="hk-detail-card-heading">
-                <div>
-                  <span>FIT & SIZING</span>
-                  <h2>Size Guide</h2>
-                </div>
-              </div>
-
-              <div className="hk-table-wrap">
-
-                <table className="hk-size-table">
-
-                  <thead>
-                    <tr>
-                      <th>Size</th>
-                      <th>Chest</th>
-                      <th>Waist</th>
-                    </tr>
-                  </thead>
-
-                  <tbody>
-                    {sizeGuideRows.map(
-                      (row) => (
-                        <tr key={row.size}>
-                          <td>{row.size}</td>
-                          <td>{row.chest}</td>
-                          <td>{row.waist}</td>
-                        </tr>
-                      )
-                    )}
-                  </tbody>
-
-                </table>
-
-              </div>
-
+              <div className="hk-detail-card-heading"><div><span>PRODUCT DETAILS</span><h2>Product Information</h2></div></div>
+              {product.shortDescription && <p>{product.shortDescription}</p>}
+              {productFeatures.length > 0 && <div style={{ marginTop: '18px' }}><strong>Key Features</strong><ul style={{ marginTop: '10px', paddingLeft: '20px' }}>{productFeatures.map((feature,index)=><li key={`${feature}-${index}`}>{feature}</li>)}</ul></div>}
+              {(product.material || product.fabric || product.fitStyle) && <div style={{ display:'grid', gap:'10px', marginTop:'18px' }}>
+                {(product.material || product.fabric) && <p><strong>Material:</strong> {product.material || product.fabric}</p>}
+                {product.fitStyle && <p><strong>Fit / Style:</strong> {product.fitStyle}</p>}
+              </div>}
+              {productSpecifications.length > 0 && <div style={{ marginTop:'18px' }}><strong>Specifications</strong><ul style={{ marginTop:'10px', paddingLeft:'20px' }}>{productSpecifications.map((spec,index)=><li key={`${spec}-${index}`}>{spec}</li>)}</ul></div>}
             </section>
 
+            {/* AVAILABLE SIZES */}
+            <section className="hk-detail-card">
+              <div className="hk-detail-card-heading"><div><span>AVAILABLE OPTIONS</span><h2>Available Sizes</h2></div></div>
+              {availableSizes.length > 0 ? <div className="hk-size-options">{availableSizes.map((size)=><span key={size} className="hk-size-button active" style={{display:'inline-flex',alignItems:'center',justifyContent:'center',cursor:'default'}}>{size}</span>)}</div> : <p>Size options are available on request.</p>}
+            </section>
 
             {/* SHIPPING */}
 
@@ -727,90 +660,13 @@ document.head.appendChild(breadcrumbTag);
               </div>
 
 
-              {/* QUANTITY */}
-
-              <div className="hk-option-section">
-
-                <div className="hk-option-title">
-                  <span>03</span>
-                  <strong>Quantity</strong>
-                </div>
-
-                <div className="hk-quantity">
-
-                  <button
-                    type="button"
-                    onClick={() =>
-                      handleQuantityChange(-1)
-                    }
-                  >
-                    −
-                  </button>
-
-                  <span>{quantity}</span>
-
-                  <button
-                    type="button"
-                    onClick={() =>
-                      handleQuantityChange(1)
-                    }
-                  >
-                    +
-                  </button>
-
-                </div>
-
-              </div>
-
-
-              {/* ACTIONS */}
-
+              {/* WHATSAPP ACTION */}
               <div className="hk-product-actions">
-
-                <button
-                  type="button"
-                  className="hk-add-cart"
-                  onClick={handleAddToCart}
-                >
-                  Add to Cart
-                </button>
-
-                <button
-                  type="button"
-                  className={
-                    `hk-wishlist ${
-                      isWishlisted
-                        ? 'active'
-                        : ''
-                    }`
-                  }
-                  onClick={() =>
-                    toggleWishlist(product)
-                  }
-                >
-                  {isWishlisted
-                    ? '★ Saved'
-                    : '♡ Wishlist'}
-                </button>
-
-                <a
-                  href={whatsappHref}
-                  target="_blank"
-                  rel="noreferrer"
-                  className="hk-whatsapp-button"
-                >
-                  <svg
-                    viewBox="0 0 24 24"
-                    aria-hidden="true"
-                  >
-                    <path d="M20.52 3.48A11.76 11.76 0 0 0 12.15 1C6.35 1 1.66 5.7 1.66 11.5c0 2.03.53 4.02 1.53 5.78L1.5 23l5.91-1.55a10.46 10.46 0 0 0 5.06 1.24h.01c5.8 0 10.49-4.69 10.49-10.49 0-2.8-1.09-5.42-3.06-7.39Zm-8.37 16.1c-1.63 0-3.24-.44-4.67-1.28l-.34-.19-3.5.92 1-3.4-.22-.35a8.4 8.4 0 0 1-1.29-4.45c0-4.66 3.79-8.45 8.45-8.45 2.26 0 4.38.88 5.98 2.47a8.42 8.42 0 0 1 2.48 5.98c0 4.66-3.79 8.45-8.45 8.45Zm4.64-6.34c-.25-.12-1.49-.73-1.72-.81-.23-.08-.4-.12-.57.12-.17.24-.66.81-.81 1-.15.17-.3.2-.55.07-.25-.12-1.05-.39-2-1.25-.74-.66-1.24-1.47-1.38-1.72-.14-.25-.02-.39.11-.52.11-.11.25-.3.37-.45.12-.15.17-.26.25-.43.08-.17.04-.32-.02-.45-.06-.12-.57-1.38-.78-1.88-.2-.5-.41-.43-.57-.43h-.48c-.16 0-.43.06-.66.31-.23.25-.88.86-.88 2.1 0 1.24.9 2.43.1 3.37.1.15.75 1.21 1.89 1.91 1.14.7 2.07.82 2.69.84.71.02 1.3-.15 1.5-.28.2-.13.52-.52.63-1.02.11-.5.11-.92.08-1.02-.03-.1-.1-.16-.24-.29Z" />
-                  </svg>
-
-                  Contact on WhatsApp
+                <a href={whatsappHref} target="_blank" rel="noreferrer" className="hk-whatsapp-button" style={{ width: '100%', justifyContent: 'center' }}>
+                  <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20.52 3.48A11.76 11.76 0 0 0 12.15 1C6.35 1 1.66 5.7 1.66 11.5c0 2.03.53 4.02 1.53 5.78L1.5 23l5.91-1.55a10.46 10.46 0 0 0 5.06 1.24h.01c5.8 0 10.49-4.69 10.49-10.49 0-2.8-1.09-5.42-3.06-7.39Z" /></svg>
+                  Contact on WhatsApp for Price & Order Details
                 </a>
-
               </div>
-
             </section>
 
 
@@ -826,12 +682,7 @@ document.head.appendChild(breadcrumbTag);
                 Care Instructions
               </h2>
 
-              <p>
-                Machine wash cold with like
-                colors. Avoid bleach. Line dry
-                and iron on low heat if needed.
-                Store in a cool, dry place.
-              </p>
+              <p>{product.careInstructions || 'Care instructions will be confirmed with your order inquiry.'}</p>
 
             </section>
 

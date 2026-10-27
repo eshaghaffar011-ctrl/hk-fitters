@@ -1703,3 +1703,26 @@ button {
   object-fit: cover;
   object-position: center;
 }
+/* MOBILE FIX - WHY CHOOSE SECTION */
+@media (max-width: 640px) {
+  .home-page .why-section .section-title {
+    display: block !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    margin: 0 0 24px !important;
+  }
+
+  .home-page .why-section .section-title > div {
+    display: block !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    margin: 0 !important;
+  }
+
+  .home-page .why-section .section-title > p {
+    display: block !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    margin: 18px 0 0 !important;
+  }
+}

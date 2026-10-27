@@ -85,6 +85,120 @@ function HomePage() {
 
   return (
     <div className="page home-page">
+      <style>{`
+  @media (max-width: 640px) {
+
+    .home-page .alt-panel .section-title {
+      display: flex !important;
+      flex-direction: column !important;
+      align-items: flex-start !important;
+      justify-content: flex-start !important;
+      width: 100% !important;
+      max-width: 100% !important;
+      gap: 18px !important;
+    }
+
+    .home-page .alt-panel .section-title > div {
+      display: block !important;
+      width: 100% !important;
+      max-width: 100% !important;
+      flex: none !important;
+    }
+
+    .home-page .alt-panel .section-title > p {
+      display: block !important;
+      width: 100% !important;
+      max-width: 100% !important;
+      flex: none !important;
+      margin: 0 !important;
+    }
+
+    .home-page .alt-panel .section-title h2 {
+      width: 100% !important;
+    }
+
+    .home-page .alt-panel .section-description {
+      width: 100% !important;
+      max-width: 100% !important;
+    }
+  }
+
+  @media (max-width: 640px) {
+
+  .home-page .newsletter-card {
+    width: 100% !important;
+    max-width: 100% !important;
+    box-sizing: border-box !important;
+
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: stretch !important;
+    gap: 20px !important;
+
+    padding: 24px 18px !important;
+    overflow: hidden !important;
+  }
+
+  .home-page .newsletter-card > div {
+    width: 100% !important;
+    max-width: 100% !important;
+    min-width: 0 !important;
+  }
+
+  .home-page .newsletter-form {
+    width: 100% !important;
+    max-width: 100% !important;
+    min-width: 0 !important;
+
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: stretch !important;
+
+    gap: 10px !important;
+    margin: 0 !important;
+  }
+
+  .home-page .newsletter-form input {
+    width: 100% !important;
+    min-width: 0 !important;
+    max-width: 100% !important;
+    box-sizing: border-box !important;
+
+    height: 48px !important;
+    padding: 12px 16px !important;
+  }
+
+  .home-page .newsletter-form button {
+    width: 100% !important;
+    min-width: 0 !important;
+    max-width: 100% !important;
+    box-sizing: border-box !important;
+
+    height: 48px !important;
+  }
+}
+
+@media (max-width: 640px) {
+
+  .home-page .why-section .section-title {
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: stretch !important;
+    justify-content: flex-start !important;
+    gap: 16px !important;
+    width: 100% !important;
+  }
+
+  .home-page .why-section .section-title > div,
+  .home-page .why-section .section-title > p {
+    width: 100% !important;
+    max-width: 100% !important;
+    flex: none !important;
+    margin: 0 !important;
+  }
+}
+`}</style>
+
       <section  className="hero-home"
    style={{
     backgroundImage:
@@ -113,7 +227,7 @@ function HomePage() {
       </section>
 
       <main className="home-main">
-        <section id="featured" className="section home-section">
+        <section className="section home-section why-section">
           <div className="section-title">
             <div>
               <h2 className="section-label">Sportswear & Activewear Collections</h2>
@@ -123,12 +237,6 @@ function HomePage() {
           </div>
           <div
   className="home-category-grid"
-  style={{
-    display: 'grid',
-    gridTemplateColumns: 'repeat(4, minmax(0, 1fr))',
-    gap: '20px',
-    width: '100%',
-  }}
 >
             {featuredCategories.map((item) => (
               <article className="category-card" key={item.title}>
@@ -197,7 +305,7 @@ function HomePage() {
       ))}
   </div>
 </section>
-        <section className="section home-section">
+        <section className="section home-section why-section">
           <div className="section-title">
             <div>
               <h2 className="section-label">Why Choose HK FITTERS for Sportswear Manufacturing?</h2>
@@ -205,7 +313,14 @@ function HomePage() {
             </div>
             <p>Every experience is designed around quality, comfort, and confident sportswear manufacturing and global delivery.</p>
           </div>
-          <div className="why-grid">
+          <div className="why-grid"
+  style={{
+    display: 'grid',
+    gridTemplateColumns: '1fr',
+    gap: '16px',
+    width: '100%',
+  }}
+>
             <article className="feature-card">
               <div className="feature-icon" aria-hidden="true">
                 <svg viewBox="0 0 24 24" fill="none"><path d="M12 3l7 4v5c0 4.3-2.7 7.9-7 9-4.3-1.1-7-4.7-7-9V7l7-4z" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" /></svg>
@@ -237,7 +352,15 @@ function HomePage() {
         </section>
 
         <section className="section home-section">
-          <div className="split-layout">
+          <div
+  className="split-layout"
+  style={{
+    display: 'grid',
+    gridTemplateColumns: '1fr',
+    gap: '18px',
+    width: '100%',
+  }}
+>
             <article className="highlight-card">
               <h2 className="section-label">Best-Selling Sportswear & New Arrivals</h2>
               <p className="section-description">Explore our latest sportswear and activewear collections, featuring performance-focused designs, premium fabrics, and modern styles.</p>

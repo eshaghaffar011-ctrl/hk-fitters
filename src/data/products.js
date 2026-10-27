@@ -3,10 +3,11 @@ const PRODUCTS_API_URL =
 
 
 /*
-  Convert values like:
-  "S,M,L" → ["S", "M", "L"]
-  ["S","M"] → ["S", "M"]
+  ============================================================
+  BASIC HELPERS
+  ============================================================
 */
+
 const parseArrayValue = (value) => {
   if (Array.isArray(value)) {
     return value.filter(Boolean);
@@ -23,24 +24,20 @@ const parseArrayValue = (value) => {
 };
 
 
-/*
-  Convert color data into a consistent structure.
-
-  Supported formats:
-  [
-    { name: "Black", code: "#111111" }
-  ]
-
-  Or:
-  "Black:#111111,Red:#a50803"
-*/
 const parseColorOptions = (value) => {
   if (Array.isArray(value)) {
     return value
       .map((color) => {
-        if (typeof color === 'object' && color !== null) {
+        if (
+          typeof color === 'object' &&
+          color !== null
+        ) {
           return {
-            name: color.name || color.label || 'Color',
+            name:
+              color.name ||
+              color.label ||
+              'Color',
+
             code:
               color.code ||
               color.hex ||
@@ -54,8 +51,13 @@ const parseColorOptions = (value) => {
           .map((item) => item.trim());
 
         return {
-          name: parts[0] || 'Color',
-          code: parts[1] || '#111111',
+          name:
+            parts[0] ||
+            'Color',
+
+          code:
+            parts[1] ||
+            '#111111',
         };
       })
       .filter(Boolean);
@@ -67,11 +69,18 @@ const parseColorOptions = (value) => {
       .map((item) => item.trim())
       .filter(Boolean)
       .map((item) => {
-        const parts = item.split(':').map((part) => part.trim());
+        const parts = item
+          .split(':')
+          .map((part) => part.trim());
 
         return {
-          name: parts[0] || 'Color',
-          code: parts[1] || '#111111',
+          name:
+            parts[0] ||
+            'Color',
+
+          code:
+            parts[1] ||
+            '#111111',
         };
       });
   }
@@ -81,25 +90,72 @@ const parseColorOptions = (value) => {
 
 
 /*
-  Make sure every product has the same structure
-  throughout the website.
+  ============================================================
+  IMAGE HELPERS
+  ============================================================
 */
+
+/*
+  Admin currently stores selected images as
+  browser data URLs.
+
+  We keep them intact and make sure they are
+  always valid strings before sending them.
+*/
+
+const cleanImageValue = (value) => {
+  if (
+    typeof value !== 'string'
+  ) {
+    return '';
+  }
+
+  return value.trim();
+};
+
+
+const cleanGallery = (value) => {
+  if (!Array.isArray(value)) {
+    return [];
+  }
+
+  return value
+    .filter(
+      (image) =>
+        typeof image === 'string' &&
+        image.trim()
+    )
+    .map((image) => image.trim());
+};
+
+
+/*
+  ============================================================
+  NORMALIZE PRODUCT
+  ============================================================
+*/
+
 export const normalizeProduct = (
   product = {},
   index = 0
 ) => {
-  const sizes = parseArrayValue(
-    product.sizes ?? product.size ?? []
-  );
+  const sizes =
+    parseArrayValue(
+      product.sizes ??
+      product.size ??
+      []
+    );
 
-  const gallery = parseArrayValue(
-    product.gallery ??
-    product.galleryImages ??
-    []
-  );
+  const gallery =
+    cleanGallery(
+      product.gallery ??
+      product.galleryImages ??
+      []
+    );
 
   const productId = Number(
-    product.id ?? index + 1
+    product.id ??
+    index + 1
   );
 
   const categoryOptions = [
@@ -109,14 +165,17 @@ export const normalizeProduct = (
     'Accessories',
   ];
 
-  const category = categoryOptions.includes(
-    product.category
-  )
-    ? product.category
-    : 'Men';
+  const category =
+    categoryOptions.includes(
+      product.category
+    )
+      ? product.category
+      : 'Men';
 
   const image =
-    product.image ||
+    cleanImageValue(
+      product.image
+    ) ||
     gallery[0] ||
     '';
 
@@ -127,53 +186,66 @@ export const normalizeProduct = (
       []
     );
 
-  const colors = colorOptions.length
-    ? colorOptions.map((color) => color.code)
-    : parseArrayValue(product.colors);
+  const colors =
+    colorOptions.length
+      ? colorOptions.map(
+          (color) =>
+            color.code
+        )
+      : parseArrayValue(
+          product.colors
+        );
 
   return {
-    /* =========================
-       BASIC PRODUCT DATA
-       ========================= */
+    /*
+      BASIC
+    */
 
     id: productId,
 
     name:
-      typeof product.name === 'string' &&
+      typeof product.name ===
+        'string' &&
       product.name.trim()
         ? product.name.trim()
         : `Product ${productId}`,
 
     description:
-      product.description || '',
+      product.description ||
+      '',
 
     shortDescription:
-      product.shortDescription || '',
+      product.shortDescription ||
+      '',
 
     image,
 
     gallery,
 
-    galleryImages: gallery,
+    galleryImages:
+      gallery,
 
-    /* =========================
-       CATEGORY
-       ========================= */
+    /*
+      CATEGORY
+    */
 
     category,
 
     productType:
-      product.productType || '',
+      product.productType ||
+      '',
 
     subcategory:
-      product.subcategory || '',
+      product.subcategory ||
+      '',
 
     collection:
-      product.collection || '',
+      product.collection ||
+      '',
 
-    /* =========================
-       SEO
-       ========================= */
+    /*
+      SEO
+    */
 
     seoTitle:
       product.seoTitle ||
@@ -195,16 +267,23 @@ export const normalizeProduct = (
     slug:
       product.slug ||
       String(
-        product.name || `product-${productId}`
+        product.name ||
+        `product-${productId}`
       )
         .toLowerCase()
         .trim()
-        .replace(/[^a-z0-9]+/g, '-')
-        .replace(/^-+|-+$/g, ''),
+        .replace(
+          /[^a-z0-9]+/g,
+          '-'
+        )
+        .replace(
+          /^-+|-+$/g,
+          ''
+        ),
 
-    /* =========================
-       IMAGE SEO
-       ========================= */
+    /*
+      IMAGE SEO
+    */
 
     imageAlt:
       product.imageAlt ||
@@ -219,17 +298,17 @@ export const normalizeProduct = (
         []
       ),
 
-    /* =========================
-       SIZES
-       ========================= */
+    /*
+      SIZES
+    */
 
     size:
-      sizes.length > 0
+      sizes.length
         ? sizes
         : ['M'],
 
     sizes:
-      sizes.length > 0
+      sizes.length
         ? sizes
         : ['M'],
 
@@ -242,9 +321,9 @@ export const normalizeProduct = (
       product.customSizeInstructions ||
       '',
 
-    /* =========================
-       COLORS
-       ========================= */
+    /*
+      COLORS
+    */
 
     color:
       product.color ||
@@ -252,12 +331,12 @@ export const normalizeProduct = (
       '#111111',
 
     colors:
-      colors.length > 0
+      colors.length
         ? colors
         : ['#111111'],
 
     colorOptions:
-      colorOptions.length > 0
+      colorOptions.length
         ? colorOptions
         : [
             {
@@ -266,9 +345,9 @@ export const normalizeProduct = (
             },
           ],
 
-    /* =========================
-       CUSTOMIZATION
-       ========================= */
+    /*
+      CUSTOMIZATION
+    */
 
     customizationAvailable:
       Boolean(
@@ -276,58 +355,77 @@ export const normalizeProduct = (
       ),
 
     customLogo:
-      Boolean(product.customLogo),
+      Boolean(
+        product.customLogo
+      ),
 
     customDesign:
-      Boolean(product.customDesign),
+      Boolean(
+        product.customDesign
+      ),
 
     privateLabel:
-      Boolean(product.privateLabel),
+      Boolean(
+        product.privateLabel
+      ),
 
     customizationDetails:
       product.customizationDetails ||
       '',
 
-    /* =========================
-       MANUFACTURING
-       ========================= */
+    /*
+      MANUFACTURING
+    */
 
     material:
-      product.material || '',
+      product.material ||
+      '',
 
     fabric:
-      product.fabric || '',
+      product.fabric ||
+      '',
+
+    fitStyle:
+      product.fitStyle ||
+      product.fit ||
+      product.style ||
+      '',
 
     features:
       parseArrayValue(
-        product.features || []
+        product.features ||
+        []
       ),
 
     specifications:
       parseArrayValue(
-        product.specifications || []
+        product.specifications ||
+        []
       ),
 
     careInstructions:
-      product.careInstructions || '',
+      product.careInstructions ||
+      '',
 
     manufacturingDetails:
       product.manufacturingDetails ||
       '',
 
-    /* =========================
-       BUSINESS / BULK
-       ========================= */
+    /*
+      BUSINESS
+    */
 
     moq:
-      product.moq || '',
+      product.moq ||
+      '',
 
     leadTime:
-      product.leadTime || '',
+      product.leadTime ||
+      '',
 
-    /* =========================
-       INVENTORY
-       ========================= */
+    /*
+      INVENTORY
+    */
 
     stock:
       product.stock ||
@@ -337,339 +435,495 @@ export const normalizeProduct = (
       product.badge ||
       'New',
 
-    /* =========================
-       REVIEWS
-       ========================= */
+    /*
+      REVIEWS
+    */
 
     rating:
-      Number(product.rating) || 4.5,
+      Number(product.rating) ||
+      4.5,
 
     reviews:
-      Number(product.reviews) || 0,
+      Number(product.reviews) ||
+      0,
 
-    /* =========================
-       PUBLISHING
-       ========================= */
+    /*
+      FEATURED
+    */
 
     featured:
-      Number(product.featured) === 1 ||
+      Number(product.featured) ===
+        1 ||
       product.featured === true,
   };
 };
 
 
 /*
-  GET ALL PRODUCTS
+  ============================================================
+  FETCH PRODUCTS
+  ============================================================
 */
-export const fetchProductsFromAPI = async (
-  signal,
-  options = {}
-) => {
-  const params = new URLSearchParams();
 
-  if (options.includeGallery === false) {
-    params.set(
-      'includeGallery',
-      'false'
-    );
-  }
+export const fetchProductsFromAPI =
+  async (
+    signal,
+    options = {}
+  ) => {
 
-  if (options.featuredOnly) {
-    params.set(
-      'featured',
-      'true'
-    );
-  }
+    const params =
+      new URLSearchParams();
 
-  if (
-    Number.isInteger(options.limit) &&
-    options.limit > 0
-  ) {
-    params.set(
-      'limit',
-      String(options.limit)
-    );
-  }
+    if (
+      options.includeGallery ===
+      false
+    ) {
+      params.set(
+        'includeGallery',
+        'false'
+      );
+    }
 
-  const query =
-    params.toString()
-      ? `?${params.toString()}`
-      : '';
+    if (
+      options.featuredOnly
+    ) {
+      params.set(
+        'featured',
+        'true'
+      );
+    }
 
-  const response = await fetch(
-    `${PRODUCTS_API_URL}${query}`,
-    signal
-      ? { signal }
-      : undefined
-  );
-
-  if (!response.ok) {
-    throw new Error(
-      `Failed to fetch products: ${response.status}`
-    );
-  }
-
-  const data =
-    await response.json();
-
-  if (!Array.isArray(data)) {
-    return [];
-  }
-
-  return data.map(
-    (product, index) =>
-      normalizeProduct(
-        product,
-        index
-      )
-  );
-};
-
-
-/*
-  Prepare product data before sending
-  it to the backend.
-*/
-const prepareProductPayload = (
-  product = {}
-) => {
-  const sizes =
-    parseArrayValue(
-      product.sizes ??
-      product.size ??
-      []
-    );
-
-  const gallery =
-    parseArrayValue(
-      product.gallery ??
-      product.galleryImages ??
-      []
-    );
-
-  const colorOptions =
-    parseColorOptions(
-      product.colorOptions ??
-      product.colors ??
-      []
-    );
-
-  const colors =
-    colorOptions.length
-      ? colorOptions.map(
-          (color) => color.code
+    if (
+      Number.isInteger(
+        options.limit
+      ) &&
+      options.limit > 0
+    ) {
+      params.set(
+        'limit',
+        String(
+          options.limit
         )
-      : parseArrayValue(
-          product.colors
+      );
+    }
+
+    const query =
+      params.toString()
+        ? `?${params.toString()}`
+        : '';
+
+    /*
+      Retry because Render backend
+      can take time to wake up.
+    */
+
+    let lastError = null;
+
+    for (
+      let attempt = 1;
+      attempt <= 3;
+      attempt += 1
+    ) {
+      try {
+        const controller =
+          new AbortController();
+
+        const timeoutId =
+          setTimeout(() => {
+            controller.abort();
+          }, 30000);
+
+        const fetchOptions =
+          signal
+            ? {
+                signal,
+              }
+            : {
+                signal:
+                  controller.signal,
+              };
+
+        let response;
+
+        try {
+          response =
+            await fetch(
+              `${PRODUCTS_API_URL}${query}`,
+              fetchOptions
+            );
+        } finally {
+          clearTimeout(
+            timeoutId
+          );
+        }
+
+        if (!response.ok) {
+          const errorText =
+            await response
+              .text();
+
+          throw new Error(
+            `Products API error ${response.status}: ${errorText}`
+          );
+        }
+
+        const data =
+          await response.json();
+
+        if (
+          !Array.isArray(data)
+        ) {
+          throw new Error(
+            'Products API returned invalid data.'
+          );
+        }
+
+        return data.map(
+          (
+            product,
+            index
+          ) =>
+            normalizeProduct(
+              product,
+              index
+            )
         );
 
-  return {
-    /* =========================
-       BASIC
-       ========================= */
+      } catch (error) {
+        lastError = error;
 
-    name:
-      product.name || '',
+        /*
+          If caller cancelled request,
+          do not retry.
+        */
 
-    description:
-      product.description || '',
+        if (
+          signal?.aborted
+        ) {
+          throw error;
+        }
 
-    shortDescription:
-      product.shortDescription || '',
+        console.error(
+          `Products API attempt ${attempt} failed:`,
+          error
+        );
 
-    image:
-      product.image ||
-      gallery[0] ||
-      '',
+        if (
+          attempt < 3
+        ) {
+          await new Promise(
+            (resolve) =>
+              setTimeout(
+                resolve,
+                1500
+              )
+          );
+        }
+      }
+    }
 
-    gallery,
-
-    /* =========================
-       CATEGORY
-       ========================= */
-
-    category:
-      product.category ||
-      'Men',
-
-    productType:
-      product.productType || '',
-
-    subcategory:
-      product.subcategory || '',
-
-    collection:
-      product.collection || '',
-
-    /* =========================
-       SEO
-       ========================= */
-
-    seoTitle:
-      product.seoTitle ||
-      product.name ||
-      '',
-
-    seoDescription:
-      product.seoDescription ||
-      product.description ||
-      '',
-
-    seoTags:
-      parseArrayValue(
-        product.seoTags ??
-        product.tags ??
-        []
-      ),
-
-    slug:
-      product.slug || '',
-
-    /* =========================
-       IMAGE SEO
-       ========================= */
-
-    imageAlt:
-      product.imageAlt ||
-      product.altText ||
-      product.name ||
-      '',
-
-    galleryAlt:
-      parseArrayValue(
-        product.galleryAlt ??
-        product.galleryAltText ??
-        []
-      ),
-
-    /* =========================
-       SIZES
-       ========================= */
-
-    sizes,
-
-    size: sizes,
-
-    customSizeAvailable:
-      Boolean(
-        product.customSizeAvailable
-      ),
-
-    customSizeInstructions:
-      product.customSizeInstructions ||
-      '',
-
-    /* =========================
-       COLORS
-       ========================= */
-
-    colors,
-
-    color:
-      product.color ||
-      colors[0] ||
-      '#111111',
-
-    colorOptions,
-
-    /* =========================
-       CUSTOMIZATION
-       ========================= */
-
-    customizationAvailable:
-      Boolean(
-        product.customizationAvailable
-      ),
-
-    customLogo:
-      Boolean(product.customLogo),
-
-    customDesign:
-      Boolean(product.customDesign),
-
-    privateLabel:
-      Boolean(product.privateLabel),
-
-    customizationDetails:
-      product.customizationDetails ||
-      '',
-
-    /* =========================
-       MANUFACTURING
-       ========================= */
-
-    material:
-      product.material || '',
-
-    fabric:
-      product.fabric || '',
-
-    features:
-      parseArrayValue(
-        product.features || []
-      ),
-
-    specifications:
-      parseArrayValue(
-        product.specifications || []
-      ),
-
-    careInstructions:
-      product.careInstructions || '',
-
-    manufacturingDetails:
-      product.manufacturingDetails ||
-      '',
-
-    /* =========================
-       BUSINESS / BULK
-       ========================= */
-
-    moq:
-      product.moq || '',
-
-    leadTime:
-      product.leadTime || '',
-
-    /* =========================
-       INVENTORY
-       ========================= */
-
-    stock:
-      product.stock ||
-      'In Stock',
-
-    badge:
-      product.badge ||
-      'New',
-
-    /* =========================
-       REVIEWS
-       ========================= */
-
-    rating:
-      Number(product.rating) || 4.5,
-
-    reviews:
-      Number(product.reviews) || 0,
-
-    /* =========================
-       FEATURED
-       ========================= */
-
-    featured:
-      product.featured
-        ? 1
-        : 0,
+    throw (
+      lastError ||
+      new Error(
+        'Unable to load products.'
+      )
+    );
   };
-};
 
 
 /*
-  CREATE PRODUCT
+  ============================================================
+  PREPARE PRODUCT PAYLOAD
+  ============================================================
 */
+
+const prepareProductPayload =
+  (product = {}) => {
+
+    const sizes =
+      parseArrayValue(
+        product.sizes ??
+        product.size ??
+        []
+      );
+
+    const gallery =
+      cleanGallery(
+        product.gallery ??
+        product.galleryImages ??
+        []
+      );
+
+    const mainImage =
+      cleanImageValue(
+        product.image
+      ) ||
+      gallery[0] ||
+      '';
+
+    const colorOptions =
+      parseColorOptions(
+        product.colorOptions ??
+        product.colors ??
+        []
+      );
+
+    const colors =
+      colorOptions.length
+        ? colorOptions.map(
+            (color) =>
+              color.code
+          )
+        : parseArrayValue(
+            product.colors
+          );
+
+    return {
+
+      /*
+        BASIC
+      */
+
+      name:
+        product.name ||
+        '',
+
+      description:
+        product.description ||
+        '',
+
+      shortDescription:
+        product.shortDescription ||
+        '',
+
+      /*
+        IMAGE
+      */
+
+      image:
+        mainImage,
+
+      gallery,
+
+      /*
+        CATEGORY
+      */
+
+      category:
+        product.category ||
+        'Men',
+
+      productType:
+        product.productType ||
+        '',
+
+      subcategory:
+        product.subcategory ||
+        '',
+
+      collection:
+        product.collection ||
+        '',
+
+      /*
+        SEO
+      */
+
+      seoTitle:
+        product.seoTitle ||
+        product.name ||
+        '',
+
+      seoDescription:
+        product.seoDescription ||
+        product.description ||
+        '',
+
+      seoTags:
+        parseArrayValue(
+          product.seoTags ??
+          product.tags ??
+          []
+        ),
+
+      slug:
+        product.slug ||
+        '',
+
+      /*
+        IMAGE SEO
+      */
+
+      imageAlt:
+        product.imageAlt ||
+        product.altText ||
+        product.name ||
+        '',
+
+      galleryAlt:
+        parseArrayValue(
+          product.galleryAlt ??
+          product.galleryAltText ??
+          []
+        ),
+
+      /*
+        SIZES
+      */
+
+      sizes,
+
+      size:
+        sizes,
+
+      customSizeAvailable:
+        Boolean(
+          product.customSizeAvailable
+        ),
+
+      customSizeInstructions:
+        product.customSizeInstructions ||
+        '',
+
+      /*
+        COLORS
+      */
+
+      colors,
+
+      color:
+        product.color ||
+        colors[0] ||
+        '#111111',
+
+      colorOptions,
+
+      /*
+        CUSTOMIZATION
+      */
+
+      customizationAvailable:
+        Boolean(
+          product.customizationAvailable
+        ),
+
+      customLogo:
+        Boolean(
+          product.customLogo
+        ),
+
+      customDesign:
+        Boolean(
+          product.customDesign
+        ),
+
+      privateLabel:
+        Boolean(
+          product.privateLabel
+        ),
+
+      customizationDetails:
+        product.customizationDetails ||
+        '',
+
+      /*
+        MANUFACTURING
+      */
+
+      material:
+        product.material ||
+        '',
+
+      fabric:
+        product.fabric ||
+        '',
+
+      fitStyle:
+        product.fitStyle ||
+        product.fit ||
+        product.style ||
+        '',
+
+      features:
+        parseArrayValue(
+          product.features ||
+          []
+        ),
+
+      specifications:
+        parseArrayValue(
+          product.specifications ||
+          []
+        ),
+
+      careInstructions:
+        product.careInstructions ||
+        '',
+
+      manufacturingDetails:
+        product.manufacturingDetails ||
+        '',
+
+      /*
+        BUSINESS
+      */
+
+      moq:
+        product.moq ||
+        '',
+
+      leadTime:
+        product.leadTime ||
+        '',
+
+      /*
+        INVENTORY
+      */
+
+      stock:
+        product.stock ||
+        'In Stock',
+
+      badge:
+        product.badge ||
+        'New',
+
+      /*
+        REVIEWS
+      */
+
+      rating:
+        Number(
+          product.rating
+        ) || 4.5,
+
+      reviews:
+        Number(
+          product.reviews
+        ) || 0,
+
+      /*
+        FEATURED
+      */
+
+      featured:
+        product.featured
+          ? 1
+          : 0,
+    };
+  };
+
+
+/*
+  ============================================================
+  CREATE PRODUCT
+  ============================================================
+*/
+
 export const createProductAPI =
-  async (product) => {
+  async (
+    product
+  ) => {
 
     const productPayload =
       prepareProductPayload(
@@ -677,8 +931,28 @@ export const createProductAPI =
       );
 
     console.log(
-      'PRODUCT DATA BEFORE API:',
+      'CREATE PRODUCT PAYLOAD:',
       productPayload
+    );
+
+    /*
+      Check image size before
+      sending to backend.
+    */
+
+    const payloadText =
+      JSON.stringify(
+        productPayload
+      );
+
+    console.log(
+      'PRODUCT PAYLOAD SIZE:',
+      (
+        payloadText.length /
+        1024 /
+        1024
+      ).toFixed(2),
+      'MB'
     );
 
     const response =
@@ -690,12 +964,13 @@ export const createProductAPI =
           headers: {
             'Content-Type':
               'application/json',
+
+            Accept:
+              'application/json',
           },
 
           body:
-            JSON.stringify(
-              productPayload
-            ),
+            payloadText,
         }
       );
 
@@ -704,7 +979,7 @@ export const createProductAPI =
         await response.text();
 
       console.error(
-        'Create product backend error:',
+        'CREATE PRODUCT BACKEND ERROR:',
         errorText
       );
 
@@ -718,8 +993,11 @@ export const createProductAPI =
 
 
 /*
+  ============================================================
   UPDATE PRODUCT
+  ============================================================
 */
+
 export const updateProductAPI =
   async (
     productId,
@@ -732,8 +1010,23 @@ export const updateProductAPI =
       );
 
     console.log(
-      'UPDATE PRODUCT DATA:',
+      'UPDATE PRODUCT PAYLOAD:',
       productPayload
+    );
+
+    const payloadText =
+      JSON.stringify(
+        productPayload
+      );
+
+    console.log(
+      'UPDATE PAYLOAD SIZE:',
+      (
+        payloadText.length /
+        1024 /
+        1024
+      ).toFixed(2),
+      'MB'
     );
 
     const response =
@@ -745,12 +1038,13 @@ export const updateProductAPI =
           headers: {
             'Content-Type':
               'application/json',
+
+            Accept:
+              'application/json',
           },
 
           body:
-            JSON.stringify(
-              productPayload
-            ),
+            payloadText,
         }
       );
 
@@ -759,7 +1053,7 @@ export const updateProductAPI =
         await response.text();
 
       console.error(
-        'Update product backend error:',
+        'UPDATE PRODUCT BACKEND ERROR:',
         errorText
       );
 
@@ -773,16 +1067,26 @@ export const updateProductAPI =
 
 
 /*
+  ============================================================
   DELETE PRODUCT
+  ============================================================
 */
+
 export const deleteProductAPI =
-  async (productId) => {
+  async (
+    productId
+  ) => {
 
     const response =
       await fetch(
         `${PRODUCTS_API_URL}/${productId}`,
         {
           method: 'DELETE',
+
+          headers: {
+            Accept:
+              'application/json',
+          },
         }
       );
 
@@ -791,7 +1095,7 @@ export const deleteProductAPI =
         await response.text();
 
       console.error(
-        'Delete product backend error:',
+        'DELETE PRODUCT BACKEND ERROR:',
         errorText
       );
 
@@ -805,22 +1109,30 @@ export const deleteProductAPI =
 
 
 /*
-  Compatibility helpers
+  ============================================================
+  COMPATIBILITY HELPERS
+  ============================================================
 */
-export const getProducts = () => {
-  return [];
-};
 
-export const saveProducts = () => {
-  return [];
-};
+export const getProducts =
+  () => {
+    return [];
+  };
+
+
+export const saveProducts =
+  () => {
+    return [];
+  };
 
 
 /*
-  Empty initial list.
-  Real products come from
-  the SQLite backend.
+  ============================================================
+  EMPTY INITIAL LIST
+  ============================================================
 */
+
 export const products = [];
+
 
 export default products;

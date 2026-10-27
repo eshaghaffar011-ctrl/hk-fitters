@@ -63,7 +63,107 @@ function Layout({ children }) {
   gap: 6px !important;
   flex-wrap: wrap !important;
 }
+/* Mobile header final fix */
+@media (max-width: 760px) {
 
+  .topbar {
+    position: sticky !important;
+    top: 0 !important;
+    z-index: 1200 !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: space-between !important;
+    flex-wrap: nowrap !important;
+    padding: 10px 12px !important;
+    gap: 10px !important;
+  }
+
+  .brand-mark {
+    flex: 1 1 auto !important;
+    min-width: 0 !important;
+  }
+
+  .brand-mark > span:last-child {
+    display: inline !important;
+    white-space: nowrap !important;
+  }
+
+  .mobile-nav-toggle {
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    flex: 0 0 42px !important;
+    width: 42px !important;
+    height: 42px !important;
+    padding: 0 !important;
+    border-radius: 50% !important;
+    background: rgba(255,255,255,0.12) !important;
+    border: 1px solid rgba(255,255,255,0.28) !important;
+    color: #ffffff !important;
+    font-size: 26px !important;
+    line-height: 1 !important;
+    cursor: pointer !important;
+  }
+
+  .top-actions {
+    display: none !important;
+  }
+
+  .topnav {
+    display: none !important;
+    position: absolute !important;
+    top: 100% !important;
+    left: 10px !important;
+    right: 10px !important;
+    width: auto !important;
+    padding: 10px !important;
+    flex-direction: column !important;
+    gap: 3px !important;
+    background: #111111 !important;
+    border: 1px solid rgba(255,255,255,0.12) !important;
+    border-radius: 14px !important;
+    box-shadow: 0 18px 40px rgba(0,0,0,0.4) !important;
+  }
+
+  .topnav.open {
+    display: flex !important;
+  }
+
+  .topnav a {
+    width: 100% !important;
+    padding: 12px 14px !important;
+    color: #ffffff !important;
+    border-radius: 9px !important;
+  }
+
+  .topnav a:hover {
+    background: rgba(165,8,3,0.25) !important;
+  }
+}
+
+@media (max-width: 430px) {
+
+  .topbar {
+    padding: 9px 10px !important;
+  }
+
+  .brand-mark {
+    gap: 7px !important;
+    font-size: 0.84rem !important;
+  }
+
+  .brand-icon {
+    width: 38px !important;
+    height: 38px !important;
+  }
+
+  .mobile-nav-toggle {
+    flex-basis: 40px !important;
+    width: 40px !important;
+    height: 40px !important;
+    font-size: 24px !important;
+  }
+}
       `}</style>
       <div
         style={{
@@ -249,15 +349,14 @@ function Layout({ children }) {
   </Link>
 
         <button
-          type="button"
-          className="mobile-nav-toggle"
-          aria-label="Toggle navigation"
-          onClick={() => setMobileMenuOpen((current) => !current)}
-        >
-          <span />
-          <span />
-          <span />
-        </button>
+  type="button"
+  className="mobile-nav-toggle"
+  aria-label="Toggle navigation"
+  aria-expanded={mobileMenuOpen}
+  onClick={() => setMobileMenuOpen((current) => !current)}
+>
+  ☰
+</button>
 
         <nav className={`topnav ${mobileMenuOpen ? 'open' : ''}`}>
   <Link to="/" onClick={() => setMobileMenuOpen(false)}>
